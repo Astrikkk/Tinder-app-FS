@@ -16,13 +16,24 @@ builder.Services.AddDbContext<TinderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-builder.Services.AddIdentityCore<User>()
-    .AddEntityFrameworkStores<TinderDbContext>()
-    .AddApiEndpoints();
+//builder.Services.AddIdentityCore<User>()
+//    .AddEntityFrameworkStores<TinderDbContext>()
+//    .AddApiEndpoints();
 
-builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
-builder.Services.AddAuthorizationBuilder();
+//builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+//builder.Services.AddAuthorizationBuilder();
 
+
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") // React app's URL
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,8 +47,11 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+// Use CORS policy
+app.UseCors("AllowReactApp");
+
 app.MapControllers();
 
-app.MapIdentityApi<User>();
+//app.MapIdentityApi<User>();
 
 app.Run();

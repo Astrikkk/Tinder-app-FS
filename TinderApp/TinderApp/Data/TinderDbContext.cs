@@ -4,7 +4,7 @@ using TinderApp.Data.Entities;
 
 namespace TinderApp.Data
 {
-    public class TinderDbContext : IdentityDbContext<User>
+    public class TinderDbContext : DbContext //IdentityDbContext<User>
     {
         public TinderDbContext(DbContextOptions<TinderDbContext> options) : base(options)
         {
@@ -16,11 +16,10 @@ namespace TinderApp.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure the one-to-one relationship
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Profile)
-                .WithOne(p => p.User)
-                .HasForeignKey<Profile>(p => p.UserId);
+            //modelBuilder.Entity<User>()
+            //    .HasOne(u => u.Profile)
+            //    .WithOne(p => p.User)
+            //    .HasForeignKey<Profile>(p => p.UserId);
         }
     }
 }

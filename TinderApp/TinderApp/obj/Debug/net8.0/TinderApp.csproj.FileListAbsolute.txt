@@ -147,3 +147,4 @@ D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\obj\Debug\net8.0\refi
 D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\obj\Debug\net8.0\TinderApp.pdb
 D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\obj\Debug\net8.0\TinderApp.genruntimeconfig.cache
 D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\obj\Debug\net8.0\ref\TinderApp.dll
+D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

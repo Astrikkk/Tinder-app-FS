@@ -1,59 +1,75 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using TinderApp.Data;
+using TinderApp.Data.DTOs;
 using TinderApp.Data.Entities;
-using System.Threading.Tasks;
+using TinderApp.Data;
 
-namespace TinderApp.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class HomeController : Controller
 {
-    [Authorize]
-    public class HomeController : Controller
+    //private readonly UserManager<User> _userManager;
+    private readonly TinderDbContext _dbContext;
+
+    public HomeController(/*UserManager<User> userManager,*/ TinderDbContext dbContext)
     {
-        private readonly UserManager<User> _userManager;
-        private readonly TinderDbContext _dbContext;
+        //_userManager = userManager;
+        _dbContext = dbContext;
+    }
 
-        public HomeController(UserManager<User> userManager, TinderDbContext dbContext)
+    [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    //[Authorize]
+    public async Task<IActionResult> CreateProfile([FromBody] ProfileCreateRequest request)
+    {
+        //var currentUser = await _userManager.GetUserAsync(User);
+
+        //if (currentUser == null)
+        //{
+        //    return Unauthorized(new { message = "User is not logged in." });
+        //}
+
+        //if (currentUser.ProfileID != 0)
+        //{
+        //    return BadRequest(new { message = "You already have a profile." });
+        //}
+
+        var profile = new Profile
         {
-            _userManager = userManager;
-            _dbContext = dbContext;
-        }
+            Bio = request.Bio,
+            PhotoUrl = request.PhotoUrl,
+            //UserId = currentUser.Id
+        };
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        _dbContext.Profiles.Add(profile);
+        await _dbContext.SaveChangesAsync();
 
-        [HttpPost]
-        public async Task<IActionResult> CreateProfile(string bio, string photoUrl)
-        {
-            var currentUser = await _userManager.GetUserAsync(User);
+        //currentUser.ProfileID = profile.Id;
+        //_dbContext.Users.Update(currentUser);
+        await _dbContext.SaveChangesAsync();
 
-            if (currentUser == null)
+        return Ok(new { message = "Profile created successfully!", profile });
+    }
+
+    [HttpGet("profiles")]
+    public IActionResult GetAllProfiles()
+    {
+        var profiles = _dbContext.Profiles
+            .Select(p => new
             {
-                return Unauthorized(); 
-            }
+                p.Id,
+                p.Bio,
+                p.PhotoUrl,
+                //UserName = p.User.UserName
+            })
+            .ToList();
 
-            if (currentUser.ProfileID != 0)
-            {
-                return BadRequest("You already have a profile.");
-            }
-
-            var profile = new Profile
-            {
-                Bio = bio,
-                PhotoUrl = photoUrl,
-                UserId = currentUser.Id
-            };
-
-            _dbContext.Profiles.Add(profile);
-            await _dbContext.SaveChangesAsync();
-
-            currentUser.ProfileID = profile.Id;
-            _dbContext.Users.Update(currentUser);
-            await _dbContext.SaveChangesAsync();
-
-            return Ok("Profile created successfully!");
-        }
+        return Json(profiles);
     }
 }
