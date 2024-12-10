@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TinderApp.Data.DTOs;
 using TinderApp.Data.Entities;
 using TinderApp.Data;
@@ -9,49 +7,23 @@ using TinderApp.Data;
 [ApiController]
 public class HomeController : Controller
 {
-    //private readonly UserManager<User> _userManager;
     private readonly TinderDbContext _dbContext;
 
-    public HomeController(/*UserManager<User> userManager,*/ TinderDbContext dbContext)
+    public HomeController(TinderDbContext dbContext)
     {
-        //_userManager = userManager;
         _dbContext = dbContext;
     }
 
-    [HttpGet]
-    public IActionResult Index()
-    {
-        return View();
-    }
-
     [HttpPost]
-    //[Authorize]
     public async Task<IActionResult> CreateProfile([FromBody] ProfileCreateRequest request)
     {
-        //var currentUser = await _userManager.GetUserAsync(User);
-
-        //if (currentUser == null)
-        //{
-        //    return Unauthorized(new { message = "User is not logged in." });
-        //}
-
-        //if (currentUser.ProfileID != 0)
-        //{
-        //    return BadRequest(new { message = "You already have a profile." });
-        //}
-
         var profile = new Profile
         {
             Bio = request.Bio,
             PhotoUrl = request.PhotoUrl,
-            //UserId = currentUser.Id
         };
 
         _dbContext.Profiles.Add(profile);
-        await _dbContext.SaveChangesAsync();
-
-        //currentUser.ProfileID = profile.Id;
-        //_dbContext.Users.Update(currentUser);
         await _dbContext.SaveChangesAsync();
 
         return Ok(new { message = "Profile created successfully!", profile });
@@ -65,10 +37,14 @@ public class HomeController : Controller
             {
                 p.Id,
                 p.Bio,
-                p.PhotoUrl,
-                //UserName = p.User.UserName
+                p.PhotoUrl
             })
             .ToList();
+
+        if (!profiles.Any())
+        {
+            return NotFound(new { message = "No profiles found in the database." });
+        }
 
         return Json(profiles);
     }

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6f6ee830-83dc-45fb-ad9e-7ff7601770c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Card.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Content.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CreateProfile.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Login.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Navbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Register.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/ProjectEvaluation/tinderapp.metadata.v9.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/ProjectEvaluation/tinderapp.projects.v9.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/ProjectEvaluation/tinderapp.strings.v9.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/DesignTimeBuild/.dtbcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/DesignTimeBuild/.dtbcache.v2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/0d9d296c-d921-4252-8bd7-a287c13361a8.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/26ea0e62-5dbb-4eb3-a9d9-7bd6214001ba.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/805ec3af-2dc3-4949-8225-78fc00813a87.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/973b668a-2656-4602-996f-9263020b4ce5.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/d23b915e-2f15-4d4c-b7b8-c027378281cf.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.futdcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.futdcache.v2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.suo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/DocumentLayout.backup.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/DocumentLayout.backup.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/DocumentLayout.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/DocumentLayout.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/Controllers/HomeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/ApiEndpoints.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/ApiEndpoints.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.genruntimeconfig.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/apphost.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/ref/TinderApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/ref/TinderApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/refint/TinderApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/refint/TinderApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/TinderApp.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/TinderApp.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/TinderApp.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/TinderApp.csproj.nuget.g.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/robots.txt" beforeDir="false" afterPath="$PROJECT_DIR$/public/robots.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Card" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Content.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Login.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Navbar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Register.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2q1wjmyPkU2PQ8UsSvh4nsj9AUP" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/Дипломниу проект/Project/Tinder-app-FS/tinder-front/src",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "D:\\WebStorm 2024.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Дипломниу проект\Project\Tinder-app-FS\tinder-front\src" />
+      <recent name="D:\Дипломниу проект\Project\Tinder-app-FS\tinder-front\src\components" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-WS-243.21565.180" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6f6ee830-83dc-45fb-ad9e-7ff7601770c8" name="Changes" comment="" />
+      <created>1733843527787</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733843527787</updated>
+      <workItem from="1733843529557" duration="2928000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/index.tsx</url>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

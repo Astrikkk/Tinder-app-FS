@@ -1,16 +1,6 @@
 [
   {
     "ContainingType": "HomeController",
-    "Method": "Index",
-    "RelativePath": "api/Home",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HomeController",
     "Method": "CreateProfile",
     "RelativePath": "api/Home",
     "HttpMethod": "POST",
