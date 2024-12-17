@@ -1,8 +1,8 @@
-﻿namespace TinderApp.Data.DTOs
+﻿namespace TinderApp.DTOs
 {
     public class ProfileCreateRequest
     {
         public string Bio { get; set; }
-        public string PhotoUrl { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }

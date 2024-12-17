@@ -298,3 +298,6 @@ D:\Дипломниу проект\Project\Tinder-app-FS\TinderApp\TinderApp\obj
 D:\Дипломниу проект\Project\Tinder-app-FS\TinderApp\TinderApp\obj\Debug\net8.0\TinderApp.pdb
 D:\Дипломниу проект\Project\Tinder-app-FS\TinderApp\TinderApp\obj\Debug\net8.0\TinderApp.genruntimeconfig.cache
 D:\Дипломниу проект\Project\Tinder-app-FS\TinderApp\TinderApp\obj\Debug\net8.0\ref\TinderApp.dll
+D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\AutoMapper.dll
+D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\SixLabors.ImageSharp.dll
+D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\TinderApp.staticwebassets.runtime.json

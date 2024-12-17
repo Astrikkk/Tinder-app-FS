@@ -1,51 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TinderApp.Data.DTOs;
-using TinderApp.Data.Entities;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Mvc;
 using TinderApp.Data;
+using TinderApp.DTOs;
+using TinderApp.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HomeController : Controller
+public class HomeController(TinderDbContext _dbContext, IMapper _mapper, IConfiguration configuration) : ControllerBase
 {
-    private readonly TinderDbContext _dbContext;
 
-    public HomeController(TinderDbContext dbContext)
+    [HttpGet]
+    public async Task<IActionResult> GetAllProfiles()
     {
-        _dbContext = dbContext;
+        var model = await _dbContext.Profiles
+            .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+        return Ok(model);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<TinderApp.Data.Entities.Profile>> GetCategory(int id)
+    {
+        var category = await _dbContext.Profiles.FindAsync(id);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        return category;
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProfile([FromBody] ProfileCreateRequest request)
+    public async Task<IActionResult> PostCategory([FromForm] ProfileCreateRequest model)
     {
-        var profile = new Profile
+        string imageName = String.Empty;
+        if (model.Image != null)
         {
-            Bio = request.Bio,
-            PhotoUrl = request.PhotoUrl,
-        };
-
-        _dbContext.Profiles.Add(profile);
-        await _dbContext.SaveChangesAsync();
-
-        return Ok(new { message = "Profile created successfully!", profile });
-    }
-
-    [HttpGet("profiles")]
-    public IActionResult GetAllProfiles()
-    {
-        var profiles = _dbContext.Profiles
-            .Select(p => new
-            {
-                p.Id,
-                p.Bio,
-                p.PhotoUrl
-            })
-            .ToList();
-
-        if (!profiles.Any())
-        {
-            return NotFound(new { message = "No profiles found in the database." });
+            imageName = Guid.NewGuid().ToString() + ".jpg";
+            var dir = configuration["ImageDir"];
+            var fileSave = Path.Combine(Directory.GetCurrentDirectory(), dir, imageName);
+            using (var stream = new FileStream(fileSave, FileMode.Create))
+                await model.Image.CopyToAsync(stream);
         }
-
-        return Json(profiles);
+        var entity = _mapper.Map<TinderApp.Data.Entities.Profile>(model);
+        entity.Image = imageName;
+        _dbContext.Profiles.Add(entity);
+        await _dbContext.SaveChangesAsync();
+        return Ok(entity.Id);
     }
 }

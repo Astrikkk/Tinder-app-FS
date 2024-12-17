@@ -2,23 +2,29 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 
 const CreateProfile: React.FC = () => {
     const [bio, setBio] = useState<string>('');
-    const [photoUrl, setPhotoUrl] = useState<string>('');
+    const [photo, setPhoto] = useState<File | null>(null); // Store the uploaded file
     const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
+        if (!photo) {
+            setMessage('Please upload a photo.');
+            return;
+        }
+
         setIsLoading(true);
         setMessage('');
 
-        const profileData = { Bio: bio, PhotoUrl: photoUrl };
+        const formData = new FormData();
+        formData.append('Bio', bio);
+        formData.append('Image', photo); // Attach the file under the "Image" key
 
         try {
             const response = await fetch('https://localhost:7034/api/Home', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(profileData),
+                body: formData, // Send the form data with the file
             });
 
             if (!response.ok) {
@@ -26,7 +32,7 @@ const CreateProfile: React.FC = () => {
             }
 
             const data = await response.json();
-            setMessage(data.message);
+            setMessage(data.message); // Display a success message or response from the server
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setMessage(error.message);
@@ -53,12 +59,10 @@ const CreateProfile: React.FC = () => {
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium">Photo URL</label>
+                    <label className="block text-sm font-medium">Photo</label>
                     <input
-                        type="url"
-                        value={photoUrl}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setPhotoUrl(e.target.value)}
-                        placeholder="Enter your photo URL"
+                        type="file"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setPhoto(e.target.files ? e.target.files[0] : null)}
                         className="w-full p-2 border border-gray-300 rounded"
                         required
                     />

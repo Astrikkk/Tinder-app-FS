@@ -1,11 +1,39 @@
 {
   "Version": 1,
-  "Hash": "yr4Df2QTd5rC0VEquBjy/ZB7iVdFMwP24unqRU0YOpo=",
+  "Hash": "3LExMSzz02bMvVc+LSSp0JjnKKkECB1OTsQ6K57QZPs=",
   "Source": "TinderApp",
   "BasePath": "_content/TinderApp",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "TinderApp\\wwwroot",
+      "Source": "TinderApp",
+      "ContentRoot": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
+      "BasePath": "_content/TinderApp",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\noimage.jpg",
+      "SourceId": "TinderApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
+      "BasePath": "_content/TinderApp",
+      "RelativePath": "images/profiles/noimage.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\profiles\\noimage.jpg"
+    }
+  ]
 }

@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\noimage.jpg",
+      "PackagePath": "staticwebassets\\images\\profiles\\noimage.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.TinderApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.TinderApp.props",
+      "PackagePath": "build\\TinderApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.TinderApp.props",
+      "PackagePath": "buildMultiTargeting\\TinderApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.TinderApp.props",
+      "PackagePath": "buildTransitive\\TinderApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
