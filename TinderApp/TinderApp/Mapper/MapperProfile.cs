@@ -11,7 +11,7 @@ namespace TinderApp.Mapper
             // Map from ProfileCreateRequest DTO to Profile entity
             CreateMap<Data.Entities.Profile, ProfileItemDTO>()
                 .ForMember(x => x.ImagePath, opt => opt.MapFrom(x =>
-                        string.IsNullOrEmpty(x.Image) ? "/images/noimage.jpg" : $"/images/300_{x.Image}"));
+                        string.IsNullOrEmpty(x.Image) ? "/images/noimage.jpg" : $"/images/{x.Image}"));
 
             CreateMap<ProfileCreateRequest, Data.Entities.Profile>()
                 .ForMember(x => x.Image, opt => opt.Ignore());

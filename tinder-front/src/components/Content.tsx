@@ -1,10 +1,11 @@
 import React from 'react';
 import Card from './Card';
 import useSWR from 'swr';
+import {data} from "react-router-dom";
 
 interface Profile {
     id: string;
-    photoUrl: string;
+    imagePath: string; // Оновлено
     bio: string;
 }
 
@@ -21,12 +22,13 @@ const fetcher = async (url: string): Promise<Profile[]> => {
         } else {
             console.error('An unknown error occurred');
         }
-        throw error; // Re-throw the error after logging
+        throw error;
     }
 };
 
 const Swr: React.FC = () => {
-    const { data: cardsData, error, isValidating } = useSWR('https://localhost:7034/api/Home/profiles', fetcher);
+    const { data: cardsData, error, isValidating } = useSWR('https://localhost:7034/api/Home', fetcher);
+
 
     if (isValidating) return <div className="loading text-blue-600">Loading profiles...</div>;
 
@@ -40,7 +42,7 @@ const Swr: React.FC = () => {
             <div className="flex flex-col justify-center items-center bg-gray-100 min-h-screen space-y-4">
                 {cardsData && cardsData.length > 0 ? (
                     cardsData.map((card) => (
-                        <Card key={card.id} photoUrl={card.photoUrl} bio={card.bio} />
+                        <Card key={card.id} imagePath={card.imagePath} bio={card.bio} />
                     ))
                 ) : (
                     <div className="text-gray-600">No profiles found.</div>

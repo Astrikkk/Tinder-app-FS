@@ -301,3 +301,6 @@ D:\Дипломниу проект\Project\Tinder-app-FS\TinderApp\TinderApp\obj
 D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\AutoMapper.dll
 D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\SixLabors.ImageSharp.dll
 D:\Code\IT-Step-Projects\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\TinderApp.staticwebassets.runtime.json
+D:\Дипломниу проект\Project\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\TinderApp.staticwebassets.runtime.json
+D:\Дипломниу проект\Project\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\AutoMapper.dll
+D:\Дипломниу проект\Project\Tinder-app-FS\TinderApp\TinderApp\bin\Debug\net8.0\SixLabors.ImageSharp.dll

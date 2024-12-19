@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 
 const CreateProfile: React.FC = () => {
     const [bio, setBio] = useState<string>('');
-    const [photo, setPhoto] = useState<File | null>(null); // Store the uploaded file
+    const [photo, setPhoto] = useState<File | null>(null);
     const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -19,12 +19,12 @@ const CreateProfile: React.FC = () => {
 
         const formData = new FormData();
         formData.append('Bio', bio);
-        formData.append('Image', photo); // Attach the file under the "Image" key
+        formData.append('Image', photo); // Додаємо файл під ключем "Image"
 
         try {
             const response = await fetch('https://localhost:7034/api/Home', {
                 method: 'POST',
-                body: formData, // Send the form data with the file
+                body: formData,
             });
 
             if (!response.ok) {
@@ -32,7 +32,7 @@ const CreateProfile: React.FC = () => {
             }
 
             const data = await response.json();
-            setMessage(data.message); // Display a success message or response from the server
+            setMessage(data.message); // Відображаємо повідомлення від сервера
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setMessage(error.message);

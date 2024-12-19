@@ -6,28 +6,20 @@ using AutoMapper;
 using Microsoft.Extensions.FileProviders;
 using TinderApp.Mapper;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Swagger configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Database context configuration
 builder.Services.AddDbContext<TinderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-//builder.Services.AddIdentityCore<User>()
-//    .AddEntityFrameworkStores<TinderDbContext>()
-//    .AddApiEndpoints();
-
-//builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
-//builder.Services.AddAuthorizationBuilder();
-
-
-// Add CORS policy
+// CORS policy to allow React app
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -37,10 +29,11 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+// AutoMapper configuration
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -51,57 +44,55 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-// Use CORS policy
+// Apply CORS policy
 app.UseCors("AllowReactApp");
 
-app.MapControllers();
+app.UseAuthorization();
 
+// Static file configuration
+var imageDir = builder.Configuration["ImageDir"] ?? "wwwroot/images/profiles"; // Default directory
+var dirPath = Path.Combine(Directory.GetCurrentDirectory(), imageDir);
 
-var dir = builder.Configuration["ImageDir"];
-Console.WriteLine("-------Image dir {0}-------", dir);
-var dirPath = Path.Combine(Directory.GetCurrentDirectory(), dir);
+// Ensure the directory exists
 if (!Directory.Exists(dirPath))
+{
     Directory.CreateDirectory(dirPath);
+    Console.WriteLine($"Directory created at: {dirPath}");
+}
 
-//app.UseStaticFiles();
+// Configure static file serving
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(dirPath),
     RequestPath = "/images"
 });
 
-var imageNo = Path.Combine(dirPath, "noimage.jpg");
-if (!File.Exists(imageNo))
+// Ensure default image exists
+var defaultImagePath = Path.Combine(dirPath, "noimage.jpg");
+if (!File.Exists(defaultImagePath))
 {
-    string url = "https://m.media-amazon.com/images/I/71QaVHD-ZDL.jpg";
+    string defaultImageUrl = "https://m.media-amazon.com/images/I/71QaVHD-ZDL.jpg";
     try
     {
-        using (HttpClient client = new HttpClient())
+        using HttpClient client = new HttpClient();
+        var response = await client.GetAsync(defaultImageUrl);
+        if (response.IsSuccessStatusCode)
         {
-            // Send a GET request to the image URL
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            // Check if the response status code indicates success (e.g., 200 OK)
-            if (response.IsSuccessStatusCode)
-            {
-                // Read the image bytes from the response content
-                byte[] imageBytes = response.Content.ReadAsByteArrayAsync().Result;
-                File.WriteAllBytes(imageNo, imageBytes);
-            }
-            else
-            {
-                Console.WriteLine($"------Failed to retrieve image. Status code: {response.StatusCode}---------");
-            }
+            var imageBytes = await response.Content.ReadAsByteArrayAsync();
+            await File.WriteAllBytesAsync(defaultImagePath, imageBytes);
+            Console.WriteLine($"Default image saved at: {defaultImagePath}");
+        }
+        else
+        {
+            Console.WriteLine($"Failed to retrieve default image. Status code: {response.StatusCode}");
         }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"-----An error occurred: {ex.Message}------");
+        Console.WriteLine($"Error fetching default image: {ex.Message}");
     }
 }
 
-//app.MapIdentityApi<User>();
+app.MapControllers();
 
 app.Run();
