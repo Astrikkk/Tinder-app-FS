@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\TinderApp.csproj": {}
+    "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\TinderApp.csproj": {}
   },
   "projects": {
-    "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\TinderApp.csproj": {
+    "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\TinderApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\TinderApp.csproj",
+        "projectUniqueName": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\TinderApp.csproj",
         "projectName": "TinderApp",
-        "projectPath": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\TinderApp.csproj",
-        "packagesPath": "C:\\Users\\puzyr\\.nuget\\packages\\",
-        "outputPath": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\obj\\",
+        "projectPath": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\TinderApp.csproj",
+        "packagesPath": "C:\\Users\\ukrvl\\.nuget\\packages\\",
+        "outputPath": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\puzyr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ukrvl\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
