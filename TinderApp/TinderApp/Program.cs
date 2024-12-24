@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Identity;
-using TinderApp.Data;
 using Microsoft.EntityFrameworkCore;
-using TinderApp.Data.Entities;
-using AutoMapper;
 using Microsoft.Extensions.FileProviders;
+using TinderApp.Data;
+using TinderApp.Data.Entities;
 using TinderApp.Mapper;
 using TinderApp.Services;
 
@@ -23,12 +22,14 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
                .AddDefaultTokenProviders()
                .AddEntityFrameworkStores<TinderDbContext>();
 
-builder.Services.AddScoped<IAccountsService, AccountsService>();
+// Додаємо реєстрацію JwtTokenGenerator
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+builder.Services.AddScoped<IAccountsService, AccountsService>();  // Реєстрація AccountsService
 
 // Swagger configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 // CORS policy to allow React app
 builder.Services.AddCors(options =>

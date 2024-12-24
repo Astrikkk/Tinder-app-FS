@@ -8,28 +8,43 @@ const Login: React.FC = () => {
 
     const handleLogin = async () => {
         try {
+            console.log("Attempting login...");
             const response = await fetch("https://localhost:7034/api/Auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
-    
+
+            console.log("Response status:", response.status);
+
+            // Check if the response contains JSON
+            const isJson = response.headers.get("content-type")?.includes("application/json");
             if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem("token", data.Token);  // Save the token in localStorage
-                console.log("Token saved:", data.Token);  // Log to verify the token is saved
-                alert("Login successful!");
-                navigate("/");  // Redirect to the home page
+                const data = isJson ? await response.json() : null;  // JSON or null
+                if (data?.token) {
+                    console.log("Token received:", data.token);
+                    localStorage.setItem("token", data.token);
+                    alert("Login successful!");
+                    navigate("/");
+                } else {
+                    alert("Login successful, but no token received.");
+                }
             } else {
-                alert("Login failed. Please check your credentials.");
+                const errorText = isJson ? await response.json() : await response.text();
+                console.error("Error response:", errorText);
+                alert("Login failed: " + (errorText?.Error || "Unknown error"));
             }
         } catch (error) {
             console.error("Login error:", error);
+            alert("An unexpected error occurred.");
         }
     };
-    
-    
-    
+
+
+
+
+
+
     return (
         <div style={styles.container}>
             <h2>Login</h2>

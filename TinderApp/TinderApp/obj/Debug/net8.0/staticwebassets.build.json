@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Fzr55Kdn6+S5P5WgSfnRATul4lZ1aoMROa4G1j2uTHg=",
+  "Hash": "qe/T4/sqeYMSal17Ka4NGYjUH8n4XwES6E2xgAs3ThU=",
   "Source": "TinderApp",
   "BasePath": "_content/TinderApp",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "TinderApp\\wwwroot",
       "Source": "TinderApp",
-      "ContentRoot": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
+      "ContentRoot": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
       "BasePath": "_content/TinderApp",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\1a600160-79c9-4ba6-b6dc-9f8ad6afc618.jpg",
+      "Identity": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\1a600160-79c9-4ba6-b6dc-9f8ad6afc618.jpg",
       "SourceId": "TinderApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
+      "ContentRoot": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
       "BasePath": "_content/TinderApp",
       "RelativePath": "images/profiles/1a600160-79c9-4ba6-b6dc-9f8ad6afc618.jpg",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\images\\profiles\\1a600160-79c9-4ba6-b6dc-9f8ad6afc618.jpg"
     },
     {
-      "Identity": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\8ad733c0-2a14-4f66-926d-83f5a88f9459.jpg",
+      "Identity": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\8ad733c0-2a14-4f66-926d-83f5a88f9459.jpg",
       "SourceId": "TinderApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
+      "ContentRoot": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
       "BasePath": "_content/TinderApp",
       "RelativePath": "images/profiles/8ad733c0-2a14-4f66-926d-83f5a88f9459.jpg",
       "AssetKind": "All",
@@ -55,10 +55,10 @@
       "OriginalItemSpec": "wwwroot\\images\\profiles\\8ad733c0-2a14-4f66-926d-83f5a88f9459.jpg"
     },
     {
-      "Identity": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\noimage.jpg",
+      "Identity": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\noimage.jpg",
       "SourceId": "TinderApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Code\\IT-Step-Projects\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
+      "ContentRoot": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\",
       "BasePath": "_content/TinderApp",
       "RelativePath": "images/profiles/noimage.jpg",
       "AssetKind": "All",

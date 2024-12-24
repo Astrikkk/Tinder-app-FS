@@ -7,7 +7,7 @@ namespace TinderApp.Services
     public interface IAccountsService
     {
         Task Register(RegisterDTO model);
-        Task Login(LoginDTO model);
+        Task<string> Login(LoginDTO model);  // Зміна на Task<string>
         Task Logout();
     }
 
@@ -15,14 +15,16 @@ namespace TinderApp.Services
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly IJwtTokenService jwtTokenService;  // Заміна на IJwtTokenService
 
-        public AccountsService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountsService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtTokenService jwtTokenService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.jwtTokenService = jwtTokenService;  // Передача в конструктор
         }
 
-        public async Task Login(LoginDTO model)
+        public async Task<string> Login(LoginDTO model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
 
@@ -30,7 +32,12 @@ namespace TinderApp.Services
                 throw new Exception("Invalid user login or password.");
 
             await signInManager.SignInAsync(user, true);
+
+            // Generate token
+            var token = await jwtTokenService.CreateTokenAsync(user);
+            return token; // Make sure you're returning the token here
         }
+
 
         public async Task Logout()
         {
@@ -40,21 +47,18 @@ namespace TinderApp.Services
         public async Task Register(RegisterDTO model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
-
             if (user != null)
-                throw new Exception("Email is already exists.");
+                throw new Exception("Email already exists.");
 
-            // create user
-            var newUser = new User()
+            var newUser = new User
             {
                 Email = model.Email,
                 UserName = model.Email
             };
 
             var result = await userManager.CreateAsync(newUser, model.Password);
-
             if (!result.Succeeded)
-                throw new Exception(string.Join(" ", result.Errors.Select(x => x.Description)));
+                throw new Exception(string.Join(" ", result.Errors.Select(e => e.Description)));
         }
     }
 }

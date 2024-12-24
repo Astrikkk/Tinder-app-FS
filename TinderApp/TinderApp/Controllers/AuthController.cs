@@ -20,16 +20,35 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDTO model)
     {
-        await accountsService.Register(model);
-        return Ok();
+        try
+        {
+            await accountsService.Register(model);
+            return Ok(new { Message = "Registration successful!" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Error = ex.Message });
+        }
     }
+
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO model)
     {
-        await accountsService.Login(model);
-        return Ok();
+        try
+        {
+            var token = await accountsService.Login(model);
+            return Ok(new { token });  // Ensure token is returned in the response body
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
+
+
+
+
 
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()

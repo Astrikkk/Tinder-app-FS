@@ -14,15 +14,18 @@ const Register: React.FC = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem("token", data.Token);
                 alert("Registration successful!");
             } else {
-                alert("Registration failed. Please try again.");
+                const error = await response.json();
+                alert(error.Error || "Registration failed.");
             }
-        } catch (error) {
-            console.error("Registration error:", error);
+        } catch (err) {
+            console.error("Error:", err);
+            alert("An unexpected error occurred. Please try again later.");
         }
     };
+
+
 
     return (
         <div style={styles.container}>
