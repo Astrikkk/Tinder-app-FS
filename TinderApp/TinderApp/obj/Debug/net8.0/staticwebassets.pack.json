@@ -5,12 +5,40 @@
       "PackagePath": "staticwebassets\\images\\profiles\\1a600160-79c9-4ba6-b6dc-9f8ad6afc618.jpg"
     },
     {
+      "Id": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\369e9571-93ca-4e10-a7b3-7a090b9a7b3a.jpg",
+      "PackagePath": "staticwebassets\\images\\profiles\\369e9571-93ca-4e10-a7b3-7a090b9a7b3a.jpg"
+    },
+    {
+      "Id": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\51a3b566-913a-4852-a0b4-d7098f5d6548.jpg",
+      "PackagePath": "staticwebassets\\images\\profiles\\51a3b566-913a-4852-a0b4-d7098f5d6548.jpg"
+    },
+    {
+      "Id": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\655c2c73-7180-4774-aea6-a6321c119a19.jpg",
+      "PackagePath": "staticwebassets\\images\\profiles\\655c2c73-7180-4774-aea6-a6321c119a19.jpg"
+    },
+    {
+      "Id": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\7a1e0b61-aed9-40bc-872b-2d3bd40e64a9.jpg",
+      "PackagePath": "staticwebassets\\images\\profiles\\7a1e0b61-aed9-40bc-872b-2d3bd40e64a9.jpg"
+    },
+    {
       "Id": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\8ad733c0-2a14-4f66-926d-83f5a88f9459.jpg",
       "PackagePath": "staticwebassets\\images\\profiles\\8ad733c0-2a14-4f66-926d-83f5a88f9459.jpg"
     },
     {
+      "Id": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\d37d0d57-6388-4108-afcf-302a2aeecc12.jpg",
+      "PackagePath": "staticwebassets\\images\\profiles\\d37d0d57-6388-4108-afcf-302a2aeecc12.jpg"
+    },
+    {
       "Id": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\profiles\\noimage.jpg",
       "PackagePath": "staticwebassets\\images\\profiles\\noimage.jpg"
+    },
+    {
+      "Id": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\Знімок екрана 2024-11-12 201817.png",
+      "PackagePath": "staticwebassets\\images\\Знімок екрана 2024-11-12 201817.png"
+    },
+    {
+      "Id": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\TinderApp\\TinderApp\\wwwroot\\images\\Знімок екрана 2024-11-13 120909.png",
+      "PackagePath": "staticwebassets\\images\\Знімок екрана 2024-11-13 120909.png"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.TinderApp.Microsoft.AspNetCore.StaticWebAssets.props",
