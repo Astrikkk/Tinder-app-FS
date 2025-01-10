@@ -5,30 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6f6ee830-83dc-45fb-ad9e-7ff7601770c8" name="Changes" comment="">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/DesignTimeBuild/.dtbcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/DesignTimeBuild/.dtbcache.v2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/467e56a5-cbe7-46a4-ab59-77da8548ceae.vsidx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/6038eec5-ab0f-4bd4-b529-3452605052a1.vsidx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/6ac39a17-bb20-4ae7-8286-eed1643169b1.vsidx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/6e7e7fa0-38fb-415c-8e72-28be0fa8991b.vsidx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/951d0f75-cb77-47d0-a9b3-ace545929695.vsidx" beforeDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/DesignTimeBuild/.dtbcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/DesignTimeBuild/.dtbcache.v2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/6e8fa5be-ff92-4226-8a4f-9ca401186374.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/8f17656e-49c7-4ba1-954d-8b2e3a931fc7.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/a22e9022-88a0-4010-bca7-c7edbf10b10d.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/af1306a0-3898-42cb-ac70-cab5d63dea59.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/FileContentIndex/ffe15d1b-6b78-4b8a-a177-644c8ab7b34b.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.futdcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.futdcache.v2" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.suo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.wsuo" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/.wsuo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/DocumentLayout.backup.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/DocumentLayout.backup.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/DocumentLayout.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/TinderApp/v17/DocumentLayout.json" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/Mapper/MapperProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/Mapper/MapperProfile.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/Program.cs" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/../TinderApp/.vs/slnx.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/.vs/slnx.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/Controllers/HomeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/DTOs/ProfileCreateRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/DTOs/ProfileCreateRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/Data/Entities/Profile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/Data/Entities/Profile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/Mapper/MapperProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/Mapper/MapperProfile.cs" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.staticwebassets.runtime.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/bin/Debug/net8.0/TinderApp.staticwebassets.runtime.json" afterDir="false" />
+<<<<<<< Updated upstream
+=======
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/ApiEndpoints.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/ApiEndpoints.json" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.AssemblyReference.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.csproj.FileListAbsolute.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.genruntimeconfig.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/TinderApp.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/apphost.exe" afterDir="false" />
@@ -38,10 +58,17 @@
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/staticwebassets.development.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/staticwebassets.development.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/staticwebassets.pack.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/staticwebassets.pack.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/staticwebassets/msbuild.TinderApp.Microsoft.AspNetCore.StaticWebAssets.props" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Debug/net8.0/staticwebassets/msbuild.TinderApp.Microsoft.AspNetCore.StaticWebAssets.props" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/TinderApp.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/TinderApp.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/TinderApp.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/TinderApp.csproj.nuget.g.props" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/project.nuget.cache" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Release/net8.0/TinderApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Release/net8.0/TinderApp.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Release/net8.0/TinderApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Release/net8.0/TinderApp.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Release/net8.0/TinderApp.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Release/net8.0/TinderApp.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Release/net8.0/TinderApp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../TinderApp/TinderApp/obj/Release/net8.0/TinderApp.csproj.AssemblyReference.cache" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Card.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Content.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Content.tsx" afterDir="false" />
@@ -71,6 +98,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< Updated upstream
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -84,11 +112,30 @@
     "nodejs_package_manager_path": "npm",
     "ts.external.directory.path": "D:\\Дипломниу проект\\Project\\Tinder-app-FS\\tinder-front\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
+=======
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Auth&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Дипломниу проект/Project/Tinder-app-FS/tinder-front/src/services&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\Дипломниу проект\\Project\\Tinder-app-FS\\tinder-front\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+>>>>>>> Stashed changes
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Дипломниу проект\Project\Tinder-app-FS\tinder-front\src\services" />
       <recent name="D:\Дипломниу проект\Project\Tinder-app-FS\tinder-front\src" />
+      <recent name="D:\Дипломниу проект\Project\Tinder-app-FS\tinder-front\src\components" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Дипломниу проект\Project\Tinder-app-FS\tinder-front\src\components" />
     </key>
   </component>
@@ -109,6 +156,13 @@
       <updated>1733843527787</updated>
       <workItem from="1733843529557" duration="2928000" />
       <workItem from="1734615405564" duration="4744000" />
+<<<<<<< Updated upstream
+=======
+      <workItem from="1735037699578" duration="8696000" />
+      <workItem from="1736509439957" duration="1166000" />
+      <workItem from="1736517934508" duration="4517000" />
+      <workItem from="1736527276800" duration="750000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>

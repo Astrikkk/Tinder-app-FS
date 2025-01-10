@@ -1,16 +1,45 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const CreateProfile: React.FC = () => {
+
+interface Profile {
+    id?: string;
+    bio: string;
+    imagePath?: string;
+}
+
+const CreateEditProfile: React.FC = () => {
     const [bio, setBio] = useState<string>('');
     const [photo, setPhoto] = useState<File | null>(null);
-    const [message, setMessage] = useState<string>('');
+    const [messageText, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isEditMode, setIsEditMode] = useState<boolean>(false);
+    const [profile, setProfile] = useState<Profile | null>(null);
+    const { id } = useParams(); // For fetching/editing existing profile by id
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (id) {
+            setIsEditMode(true);
+            // Fetch profile data to edit if id is present
+            fetch(`https://localhost:7034/api/Home/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    setProfile(data);
+                    setBio(data.bio);
+                })
+                .catch(error => {
+                    console.error('Error fetching profile:', error);
+                    setMessage('Failed to load profile');
+                });
+        }
+    }, [id]);
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
-        if (!photo) {
-            setMessage('Please upload a photo.');
+        if (!photo && !bio) {
+            setMessage('Please upload a photo or update the bio.');
             return;
         }
 
@@ -19,20 +48,24 @@ const CreateProfile: React.FC = () => {
 
         const formData = new FormData();
         formData.append('Bio', bio);
-        formData.append('Image', photo); // Додаємо файл під ключем "Image"
+        if (photo) formData.append('Image', photo);
+
+        const url = isEditMode ? `https://localhost:7034/api/Home/${id}` : 'https://localhost:7034/api/Home';
+        const method = isEditMode ? 'PUT' : 'POST';
 
         try {
-            const response = await fetch('https://localhost:7034/api/Home', {
-                method: 'POST',
+            const response = await fetch(url, {
+                method,
                 body: formData,
             });
 
             if (!response.ok) {
-                throw new Error('Failed to create profile');
+                throw new Error(isEditMode ? 'Failed to update profile' : 'Failed to create profile');
             }
 
             const data = await response.json();
-            setMessage(data.message); // Відображаємо повідомлення від сервера
+            setMessage(data.message || (isEditMode ? 'Profile updated successfully!' : 'Profile created successfully!'));
+            navigate('/profiles'); // Redirect after successful action
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setMessage(error.message);
@@ -46,7 +79,7 @@ const CreateProfile: React.FC = () => {
 
     return (
         <div className="container mx-auto mt-8 p-4">
-            <h2 className="text-2xl font-semibold mb-4">Create a New Profile</h2>
+            <h2 className="text-2xl font-semibold mb-4">{isEditMode ? 'Edit' : 'Create'} Profile</h2>
             <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
                 <div>
                     <label className="block text-sm font-medium">Bio</label>
@@ -64,7 +97,6 @@ const CreateProfile: React.FC = () => {
                         type="file"
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setPhoto(e.target.files ? e.target.files[0] : null)}
                         className="w-full p-2 border border-gray-300 rounded"
-                        required
                     />
                 </div>
                 <button
@@ -72,13 +104,13 @@ const CreateProfile: React.FC = () => {
                     className="mt-4 bg-blue-500 text-white p-2 rounded"
                     disabled={isLoading}
                 >
-                    {isLoading ? 'Creating...' : 'Create Profile'}
+                    {isLoading ? 'Saving...' : isEditMode ? 'Save Changes' : 'Create Profile'}
                 </button>
             </form>
 
-            {message && <div className="mt-4 text-center">{message}</div>}
+            {messageText && <div className="mt-4 text-center text-red-600">{messageText}</div>}
         </div>
     );
 };
 
-export default CreateProfile;
+export default CreateEditProfile;
