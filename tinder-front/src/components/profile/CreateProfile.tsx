@@ -1,12 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
-
-interface Profile {
-    id?: string;
-    bio: string;
-    imagePath?: string;
-}
+import { createProfile, updateProfile, getProfileById } from '../../services/profile.service';
 
 const CreateEditProfile: React.FC = () => {
     const [bio, setBio] = useState<string>('');
@@ -14,24 +8,17 @@ const CreateEditProfile: React.FC = () => {
     const [messageText, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
-    const [profile, setProfile] = useState<Profile | null>(null);
     const { id } = useParams(); // For fetching/editing existing profile by id
     const navigate = useNavigate();
 
     useEffect(() => {
         if (id) {
             setIsEditMode(true);
-            // Fetch profile data to edit if id is present
-            fetch(`https://localhost:7034/api/Home/${id}`)
-                .then(res => res.json())
-                .then(data => {
-                    setProfile(data);
+            getProfileById(id)
+                .then((data) => {
                     setBio(data.bio);
                 })
-                .catch(error => {
-                    console.error('Error fetching profile:', error);
-                    setMessage('Failed to load profile');
-                });
+                .catch(() => setMessage('Failed to load profile'));
         }
     }, [id]);
 
@@ -46,32 +33,17 @@ const CreateEditProfile: React.FC = () => {
         setIsLoading(true);
         setMessage('');
 
-        const formData = new FormData();
-        formData.append('Bio', bio);
-        if (photo) formData.append('Image', photo);
-
-        const url = isEditMode ? `https://localhost:7034/api/Home/${id}` : 'https://localhost:7034/api/Home';
-        const method = isEditMode ? 'PUT' : 'POST';
-
         try {
-            const response = await fetch(url, {
-                method,
-                body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error(isEditMode ? 'Failed to update profile' : 'Failed to create profile');
-            }
-
-            const data = await response.json();
-            setMessage(data.message || (isEditMode ? 'Profile updated successfully!' : 'Profile created successfully!'));
-            navigate('/profiles'); // Redirect after successful action
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setMessage(error.message);
+            if (isEditMode && id) {
+                await updateProfile(id, bio, photo); // Editing existing profile
+                setMessage('Profile updated successfully!');
             } else {
-                setMessage('An unknown error occurred');
+                await createProfile(bio, photo); // Creating a new profile
+                setMessage('Profile created successfully!');
             }
+            navigate('/#'); // Navigate to profile list after success
+        } catch (error) {
+            setMessage('An error occurred while saving the profile.');
         } finally {
             setIsLoading(false);
         }
@@ -107,7 +79,6 @@ const CreateEditProfile: React.FC = () => {
                     {isLoading ? 'Saving...' : isEditMode ? 'Save Changes' : 'Create Profile'}
                 </button>
             </form>
-
             {messageText && <div className="mt-4 text-center text-red-600">{messageText}</div>}
         </div>
     );

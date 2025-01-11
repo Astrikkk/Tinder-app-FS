@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { register } from "../../services/auth.service";
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState<string>("");
@@ -6,26 +7,13 @@ const Register: React.FC = () => {
 
     const handleRegister = async () => {
         try {
-            const response = await fetch("https://localhost:7034/api/Auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                alert("Registration successful!");
-            } else {
-                const error = await response.json();
-                alert(error.Error || "Registration failed.");
-            }
-        } catch (err) {
-            console.error("Error:", err);
-            alert("An unexpected error occurred. Please try again later.");
+            await register(email, password);
+            console.log("Registration successful!");
+        } catch (error: any) {
+            console.error("Registration error:", error);
+            alert(error.message || "An unexpected error occurred.");
         }
     };
-
-
 
     return (
         <div style={styles.container}>
@@ -51,9 +39,9 @@ const Register: React.FC = () => {
     );
 };
 
-const styles: { [key: string]: React.CSSProperties } = {
+const styles: { container: React.CSSProperties; input: React.CSSProperties; button: React.CSSProperties } = {
     container: {
-        textAlign: "center",
+        textAlign: "center" as "center",  // Type assertion for 'center'
         marginTop: "50px",
     },
     input: {

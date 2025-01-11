@@ -1,8 +1,8 @@
 import React from 'react';
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 import Navbar from "./components/Navbar";
-import Content from "./components/Content";
-import CreateProfile from "./components/CreateProfile";
+import Content from "./components/profile/Content";
+import CreateProfile from "./components/profile/CreateProfile";
 import PrivateRoute from './components/PrivateRoute';  // Import the PrivateRoute component
 import AuthChoice from './components/Auth/AuthChoise';
 

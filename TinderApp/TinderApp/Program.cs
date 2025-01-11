@@ -32,6 +32,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // CORS policy to allow React app
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -46,6 +47,13 @@ builder.Services.AddCors(options =>
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
+
+app.UseCors(policy =>
+    policy.WithOrigins("http://localhost:3000") // Дозволений домен
+          .AllowAnyHeader()
+          .AllowAnyMethod()
+          .AllowCredentials()); // Дозволити обробку з credentials
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

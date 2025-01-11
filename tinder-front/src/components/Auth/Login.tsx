@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../services/auth.service";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState<string>("");
@@ -8,42 +9,15 @@ const Login: React.FC = () => {
 
     const handleLogin = async () => {
         try {
-            console.log("Attempting login...");
-            const response = await fetch("https://localhost:7034/api/Auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
-
-            console.log("Response status:", response.status);
-
-            // Check if the response contains JSON
-            const isJson = response.headers.get("content-type")?.includes("application/json");
-            if (response.ok) {
-                const data = isJson ? await response.json() : null;  // JSON or null
-                if (data?.token) {
-                    console.log("Token received:", data.token);
-                    localStorage.setItem("token", data.token);
-                    alert("Login successful!");
-                    navigate("/");
-                } else {
-                    alert("Login successful, but no token received.");
-                }
-            } else {
-                const errorText = isJson ? await response.json() : await response.text();
-                console.error("Error response:", errorText);
-                alert("Login failed: " + (errorText?.Error || "Unknown error"));
-            }
-        } catch (error) {
+            const { token } = await login(email, password);
+            localStorage.setItem("token", token);
+            console.log("Login successful!");
+            navigate("/");
+        } catch (error: any) {
             console.error("Login error:", error);
-            alert("An unexpected error occurred.");
+            alert(error.message || "An unexpected error occurred.");
         }
     };
-
-
-
-
-
 
     return (
         <div style={styles.container}>
@@ -69,7 +43,7 @@ const Login: React.FC = () => {
     );
 };
 
-const styles: { [key: string]: React.CSSProperties } = {
+const styles: { container: React.CSSProperties; input: React.CSSProperties; button: React.CSSProperties } = {
     container: {
         textAlign: "center",
         marginTop: "50px",
