@@ -4,7 +4,7 @@ using TinderApp.Data.Entities;
 
 namespace TinderApp.Data
 {
-    public class TinderDbContext : DbContext //IdentityDbContext<User>
+    public class TinderDbContext : /*DbContext */IdentityDbContext<User>
     {
         public TinderDbContext(DbContextOptions<TinderDbContext> options) : base(options)
         {
