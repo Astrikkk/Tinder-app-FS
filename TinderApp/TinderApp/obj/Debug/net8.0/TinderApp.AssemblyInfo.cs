@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TinderApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d2a91b0f5980095f76e651c7489014b432eb4acf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+baf80d0b4dcbffdf6a018828815d4bd3fdd46a54")]
 [assembly: System.Reflection.AssemblyProductAttribute("TinderApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TinderApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
