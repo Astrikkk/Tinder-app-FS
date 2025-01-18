@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using TinderApp.Data;
 using TinderApp.Data.Entities;
+using TinderApp.Interfaces;
 using TinderApp.Mapper;
 using TinderApp.Services;
 
@@ -15,6 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<TinderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add Identity configuration
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -22,17 +24,17 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
                .AddDefaultTokenProviders()
                .AddEntityFrameworkStores<TinderDbContext>();
 
-// Додаємо реєстрацію JwtTokenGenerator
+// Register JwtTokenService
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
-builder.Services.AddScoped<IAccountsService, AccountsService>();  // Реєстрація AccountsService
+// Register AccountsService
+builder.Services.AddScoped<IAccountsService, AccountsService>();
 
 // Swagger configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // CORS policy to allow React app
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -47,22 +49,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
-
-app.UseCors(policy =>
-    policy.WithOrigins("http://localhost:3000") // Дозволений домен
-          .AllowAnyHeader()
-          .AllowAnyMethod()
-          .AllowCredentials()); // Дозволити обробку з credentials
-
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-//app.UseHttpsRedirection();
 
 // Apply CORS policy
 app.UseCors("AllowReactApp");
@@ -89,6 +75,7 @@ app.UseStaticFiles(new StaticFileOptions
 
 // Ensure default image exists
 var defaultImagePath = Path.Combine(dirPath, "noimage.jpg");
+
 if (!File.Exists(defaultImagePath))
 {
     string defaultImageUrl = "https://m.media-amazon.com/images/I/71QaVHD-ZDL.jpg";
@@ -113,6 +100,15 @@ if (!File.Exists(defaultImagePath))
     }
 }
 
+// Configure HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+//app.UseHttpsRedirection(); // Uncomment this line if you need HTTPS redirection
+
 app.MapControllers();
 
-app.Run();
+await app.RunAsync(); // Make sure the main method is async

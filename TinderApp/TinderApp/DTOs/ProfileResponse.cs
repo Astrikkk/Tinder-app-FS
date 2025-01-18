@@ -3,7 +3,13 @@
     public class ProfileResponse
     {
         public int Id { get; set; }
-        public string Bio { get; set; }
-        public string PhotoFileName { get; set; } // The uploaded photo's filename
+        public string Name { get; set; }
+        public DateTime BirthDay { get; set; }
+        public string Gender { get; set; }
+        public string InterestedIn { get; set; }
+        public string LookingFor { get; set; }
+        public string SexualOrientation { get; set; }
+        public List<string> Photos { get; set; } = new List<string>();
+        public List<string> Interests { get; set; } = new List<string>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Data.Entities;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TinderApp.Data.Entities
 {
@@ -7,31 +8,54 @@ namespace TinderApp.Data.Entities
     {
         [Key]
         public int Id { get; set; }
+
         [Required, StringLength(255)]
-        public string Bio { get; set; }
+        public string Name { get; set; }
 
-        
-        //[Required]
-        //[DataType(DataType.Date)]
-        //[Display(Name = "Birth Date")]
-        //public DateTime? BirthDay { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Birth Date")]
+        public DateTime? BirthDay { get; set; }
 
-        //[Required]
-        //public Gender Gender { get; set; }
+        [Required]
+        [ForeignKey(nameof(Gender))]
+        public int GenderId { get; set; }
+        public Gender? Gender { get; set; }
 
-        //[Required]
-        //public InterestedIn InterestedIn { get; set; }
+        [Required]
+        [ForeignKey(nameof(InterestedIn))]
+        public int InterestedInId { get; set; }
+        public InterestedIn? InterestedIn { get; set; }
 
-        //[Required]
-        //public LookingFor LookingFor { get; set; }
+        [Required]
+        [ForeignKey(nameof(LookingFor))]
+        public int LookingForId { get; set; }
+        public LookingFor? LookingFor { get; set; }
 
-        //[Required]
-        //public SexualOrientation SexualOrientation { get; set; }
+        [Required]
+        [ForeignKey(nameof(SexualOrientation))]
+        public int SexualOrientationId { get; set; }
+        public SexualOrientation? SexualOrientation { get; set; }
 
-        //[Display(Name = "Interests")]
-        //public virtual ICollection<Interest>? Interests { get; set; } = new List<Interest>();
+        [Display(Name = "Interests")]
+        public virtual ICollection<Interest>? Interests { get; set; } = new List<Interest>();
 
-        //[Display(Name = "Profile Photos")]
-        public string? Image { get; set; }
+        [Display(Name = "Profile Photos")]
+        public ICollection<ProfilePhoto> ProfilePhotos
+        {
+            get { return _profilePhotos ??= new List<ProfilePhoto>(); }
+            set { _profilePhotos = value; }
+        }
+        private ICollection<ProfilePhoto> _profilePhotos;   
+
+        public Profile()
+        {
+            //ProfilePhotos = new List<ProfilePhoto>(); // Initialize the collection
+        }
+
+
+
+        public string? UserId { get; set; } // Зроблено nullable
+        public User? User { get; set; }
     }
 }

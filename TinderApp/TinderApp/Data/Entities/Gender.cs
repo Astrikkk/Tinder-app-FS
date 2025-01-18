@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Data.Entities
+namespace TinderApp.Data.Entities
 {
-    public enum Gender
+    public class Gender
     {
-        Male,
-        Female
+        [Key]
+        public int Id { get; set; }
+        [Required]
+        public string Name { get; set; }
     }
 }

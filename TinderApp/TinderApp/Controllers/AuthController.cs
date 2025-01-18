@@ -1,20 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using TinderApp.Data.Entities;
 using TinderApp.DTOs;
+using TinderApp.Interfaces;
 using TinderApp.Services;
 
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly IAccountsService accountsService;
+    private readonly IAccountsService _accountsService;
 
     public AuthController(IAccountsService accountsService)
     {
-        this.accountsService = accountsService;
+        _accountsService = accountsService;
     }
 
     [HttpPost("register")]
@@ -22,7 +20,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            await accountsService.Register(model);
+            await _accountsService.Register(model);
             return Ok(new { Message = "Registration successful!" });
         }
         catch (Exception ex)
@@ -31,30 +29,25 @@ public class AuthController : ControllerBase
         }
     }
 
-
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO model)
     {
         try
         {
-            var token = await accountsService.Login(model);
-            return Ok(new { token });  // Ensure token is returned in the response body
+            var token = await _accountsService.Login(model);
+            return Ok(new { Token = token }); // Ensures proper casing for JSON response
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return Unauthorized(new { Error = ex.Message }); // Changed status code for login errors
         }
     }
 
-
-
-
-
+    [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        await accountsService.Logout();
-        return Ok();
+        await _accountsService.Logout();
+        return Ok(new { Message = "Logged out successfully." });
     }
 }
-

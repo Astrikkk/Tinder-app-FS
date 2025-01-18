@@ -1,16 +1,12 @@
-﻿namespace Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TinderApp.Data.Entities
 {
-    public enum SexualOrientation
+    public class SexualOrientation
     {
-        Straight,
-        Gay,
-        Lesbian,
-        Bisexual,
-        Asexual,
-        Demisexual,
-        Pansexual,
-        Queer,
-        Questioning,
-        AttackHelicopter
+        [Key]
+        public int Id { get; set; }
+        [Required]
+        public string Name { get; set; }
     }
 }

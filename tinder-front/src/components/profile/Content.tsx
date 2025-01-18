@@ -17,6 +17,9 @@ const Swr: React.FC = () => {
         setNewBio(profile.bio);
         setNewImage(null); // Reset the new image if it's being edited
         setIsModalOpen(true);
+
+        // Логуємо шлях до фотографії, коли редагуємо профіль
+        console.log('Editing Profile Image Path:', profile.imagePath);
     };
 
     const handleSave = async () => {
@@ -61,18 +64,22 @@ const Swr: React.FC = () => {
             <h2 className="text-2xl font-semibold mb-4 text-center">Welcome to My App</h2>
             <div className="flex flex-col justify-center items-center bg-gray-100 min-h-screen space-y-4">
                 {cardsData && cardsData.length > 0 ? (
-                    cardsData.map((card) => (
-                        <Card
-                            key={card.id ?? ''}
-                            imagePath={card.imagePath ?? '/default-image.jpg'}
-                            bio={card.bio}
-                            onDelete={() => card.id && handleDelete(card.id)}
-                            onEdit={() => card && handleEdit(card)} // Trigger modal on edit
-                        />
-                    ))
+                    cardsData.map((card) => {
+                        console.log('Image Path:', card.imagePath); // Логуємо шлях до фотографії
+                        return (
+                            <Card
+                                key={card.id ?? ''}
+                                imagePath={card.imagePath ?? '/default-image.jpg'}
+                                bio={card.bio}
+                                onDelete={() => card.id && handleDelete(card.id)}
+                                onEdit={() => card && handleEdit(card)} // Trigger modal on edit
+                            />
+                        );
+                    })
                 ) : (
                     <div className="text-gray-600">No profiles found.</div>
                 )}
+
             </div>
 
             {/* Modal for editing profile */}

@@ -1,35 +1,34 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
 using TinderApp.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TinderApp.Services
 {
     public class ImageWorker : IImageWorker
     {
         private readonly IConfiguration _configuration;
+
         public ImageWorker(IConfiguration configuration)
         {
             _configuration = configuration;
         }
+
         public bool Delete(string fileName)
         {
             try
             {
-                var dir = _configuration["ImageFolder"];
+                var directory = _configuration["ImageFolder"];
                 var sizes = _configuration["ImageSizes"].Split(",")
-                    .Select(x => int.Parse(x));
-                //int[] sizes = [50, 150, 300, 600, 1200];
+                    .Select(int.Parse);
+
                 foreach (var size in sizes)
                 {
-                    string dirSave = Path.Combine(Directory.GetCurrentDirectory(),
-                        dir, $"{size}_{fileName}");
-
-                    if (File.Exists(dirSave))
-                        File.Delete(dirSave);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), directory, $"{size}_{fileName}");
+                    if (File.Exists(filePath))
+                        File.Delete(filePath);
                 }
+
                 return true;
             }
             catch
@@ -38,90 +37,54 @@ namespace TinderApp.Services
             }
         }
 
-        public async Task<string> Save(IFormFile image)
+        public async Task<string> SaveAsync(IFormFile image)
         {
-            string imageName = String.Empty;
+            using var memoryStream = new MemoryStream();
+            await image.CopyToAsync(memoryStream);
+            return SaveByteArray(memoryStream.ToArray());
+        }
 
-            using (MemoryStream ms = new())
+        public async Task<string> SaveAsync(string url)
+        {
+            try
             {
-                await image.CopyToAsync(ms);
-                var bytes = ms.ToArray();
-                imageName = SaveByteArray(bytes);
-            }
+                using var client = new HttpClient();
+                var response = await client.GetAsync(url);
 
-            return imageName;
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception("Failed to download the image.");
+
+                var imageBytes = await response.Content.ReadAsByteArrayAsync();
+                return SaveByteArray(imageBytes);
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         private string SaveByteArray(byte[] bytes)
         {
-            string imageName = Guid.NewGuid().ToString() + ".webp";
-            var dir = _configuration["ImageDir"];
+            var imageName = $"{Guid.NewGuid()}.webp"; // Генерація нового унікального імені файлу
+            var directory = _configuration["ImageFolder"];
+            var sizes = _configuration["ImageSizes"].Split(",").Select(int.Parse);
 
-            var sizes = _configuration["ImageSizes"].Split(",")
-                    .Select(x => int.Parse(x));
-            //Thread.CurrentThread.ManagedThreadId
-            //int[] sizes = [50, 150, 300, 600, 1200];
+            // Створення різних розмірів зображень
             Parallel.ForEach(sizes, size =>
             {
-                string dirSave = Path.Combine(Directory.GetCurrentDirectory(),
-                   dir, $"{size}_{imageName}");
-                using (var imageLoad = SixLabors.ImageSharp.Image.Load(bytes))
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), directory, $"{size}_{imageName}");
+                using var image = Image.Load(bytes);
+                image.Mutate(x => x.Resize(new ResizeOptions
                 {
-                    // Resize the image (50% of original dimensions)
-                    imageLoad.Mutate(x => x.Resize(new ResizeOptions
-                    {
-                        Size = new Size(size, size),
-                        Mode = ResizeMode.Max
-                    }));
-
-                    // Save the image with compression
-                    imageLoad.Save(dirSave, new WebpEncoder());
-                }
+                    Size = new Size(size),
+                    Mode = ResizeMode.Max
+                }));
+                image.Save(filePath, new WebpEncoder());
             });
-            //foreach (var size in sizes)
-            //{
-            //    string dirSave = Path.Combine(Directory.GetCurrentDirectory(),
-            //        dir, $"{size}_{imageName}");
-            //    using (var imageLoad = Image.Load(bytes))
-            //    {
-            //        // Resize the image (50% of original dimensions)
-            //        imageLoad.Mutate(x => x.Resize(new ResizeOptions
-            //        {
-            //            Size = new Size(size, size),
-            //            Mode = ResizeMode.Max
-            //        }));
 
-            //        // Save the image with compression
-            //        imageLoad.Save(dirSave, new WebpEncoder());
-            //    }
-            //}
-            return imageName;
+            // Повертаємо шлях до зображення як /images/{imageName}.webp
+            return $"/images/{imageName}";
         }
 
-        public async Task<string> Save(string urlImage)
-        {
-            string imageName = String.Empty;
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    // Send a GET request to the image URL
-                    HttpResponseMessage response = client.GetAsync(urlImage).Result;
-
-                    // Check if the response status code indicates success (e.g., 200 OK)
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // Read the image bytes from the response content
-                        byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
-                        imageName = SaveByteArray(imageBytes);
-                    }
-                }
-            }
-            catch
-            {
-                return imageName;
-            }
-            return imageName;
-        }
     }
 }

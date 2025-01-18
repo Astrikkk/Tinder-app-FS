@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TinderApp.Data.Entities;
 
-
 public interface IJwtTokenService
 {
     Task<string> CreateTokenAsync(User user);
 }
+
 public class JwtTokenService : IJwtTokenService
 {
     private readonly IConfiguration _configuration;
@@ -25,29 +24,27 @@ public class JwtTokenService : IJwtTokenService
     public async Task<string> CreateTokenAsync(User user)
     {
         var claims = new List<Claim>
-    {
-        new Claim("email", user.Email),
-        new Claim("name", user.UserName)
-    };
+        {
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.UserName)
+        };
 
         var roles = await _userManager.GetRolesAsync(user);
-        foreach (var role in roles)
-            claims.Add(new Claim("roles", role));
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-        var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtSecretKey"));
-        var signinKey = new SymmetricSecurityKey(key);
-        var signinCredential = new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256);
+        var secretKey = _configuration.GetValue<string>("JwtSecretKey");
+        if (string.IsNullOrEmpty(secretKey))
+            throw new InvalidOperationException("JWT secret key is not configured.");
 
-        var jwt = new JwtSecurityToken(
-            signingCredentials: signinCredential,
-            expires: DateTime.Now.AddDays(10),
-            claims: claims
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            claims: claims,
+            expires: DateTime.UtcNow.AddDays(10),
+            signingCredentials: credentials
         );
 
-        var token = new JwtSecurityTokenHandler().WriteToken(jwt);
-        Console.WriteLine($"Generated Token: {token}");  // Log the token for debugging
-        return token;
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
-
 }
