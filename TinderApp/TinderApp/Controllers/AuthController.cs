@@ -42,12 +42,4 @@ public class AuthController : ControllerBase
             return Unauthorized(new { Error = ex.Message }); // Changed status code for login errors
         }
     }
-
-    [Authorize]
-    [HttpPost("logout")]
-    public async Task<IActionResult> Logout()
-    {
-        await _accountsService.Logout();
-        return Ok(new { Message = "Logged out successfully." });
-    }
 }

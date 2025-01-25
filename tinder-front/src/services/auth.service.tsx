@@ -31,15 +31,3 @@ export const register = async (email: string, password: string): Promise<void> =
         throw new Error(error.Error || "Registration failed.");
     }
 };
-
-export const logout = async (): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/logout`, {
-        method: "POST",
-        credentials: "include",
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.Error || "Logout failed.");
-    }
-};

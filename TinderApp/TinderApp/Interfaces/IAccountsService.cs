@@ -6,6 +6,5 @@ namespace TinderApp.Interfaces
     {
         Task Register(RegisterDTO model);
         Task<string> Login(LoginDTO model);
-        Task Logout();
     }
 }
