@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime BirthDay { get; set; }
+        public DateOnly BirthDay { get; set; }
         public string Gender { get; set; }
         public string InterestedIn { get; set; }
         public string LookingFor { get; set; }

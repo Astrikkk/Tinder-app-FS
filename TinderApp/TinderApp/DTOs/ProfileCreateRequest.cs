@@ -3,7 +3,7 @@
     public class ProfileCreateRequest
     {
         public string Name { get; set; }
-        public DateTime BirthDay { get; set; }
+        public DateOnly BirthDay { get; set; }
         public int GenderId { get; set; }
         public int InterestedInId { get; set; }
         public int LookingForId { get; set; }

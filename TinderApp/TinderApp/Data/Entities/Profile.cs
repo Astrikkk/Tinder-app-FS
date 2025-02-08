@@ -15,7 +15,7 @@ namespace TinderApp.Data.Entities
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Birth Date")]
-        public DateTime? BirthDay { get; set; }
+        public DateOnly? BirthDay { get; set; }
 
         [Required]
         [ForeignKey(nameof(Gender))]
@@ -46,14 +46,12 @@ namespace TinderApp.Data.Entities
             get { return _profilePhotos ??= new List<ProfilePhoto>(); }
             set { _profilePhotos = value; }
         }
-        private ICollection<ProfilePhoto> _profilePhotos;   
+        private ICollection<ProfilePhoto> _profilePhotos;
 
         public Profile()
         {
             //ProfilePhotos = new List<ProfilePhoto>(); // Initialize the collection
         }
-
-
 
         public string? UserId { get; set; } // Зроблено nullable
         public User? User { get; set; }

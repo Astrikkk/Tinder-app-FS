@@ -1,126 +1,139 @@
-import React, { useState, useRef } from 'react';
-import useSWR, { mutate } from 'swr';
-import { getProfiles, deleteProfile, updateProfile, Profile } from '../../services/profile.service';
-import Card from './Card';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Table, Button, Modal, message, Typography } from "antd";
+import { ProfileItemDTO } from "./types";
+import ProfileForm from "./ProfileForm";
 
-const Swr: React.FC = () => {
-    const { data: cardsData, error, isValidating } = useSWR('profiles', getProfiles);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingProfile, setEditingProfile] = useState<Profile | null>(null);
-    const [newBio, setNewBio] = useState<string>('');
-    const [newImage, setNewImage] = useState<File | null>(null);
+const { Title } = Typography;
+const API_URL = `${process.env.REACT_APP_API}/Home`;
+const API_URL_IMG = `${process.env.REACT_APP}`;
 
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
+const ProfileList: React.FC = () => {
+    const [profiles, setProfiles] = useState<ProfileItemDTO[]>([]);
+    const [selectedProfile, setSelectedProfile] = useState<ProfileItemDTO | null>(null);
+    const [loading, setLoading] = useState(false);
 
-    const handleEdit = (profile: Profile) => {
-        setEditingProfile(profile);
-        setNewBio(profile.bio);
-        setNewImage(null); // Reset the new image if it's being edited
-        setIsModalOpen(true);
+    useEffect(() => {
+        fetchProfiles();
+    }, []);
 
-        // Логуємо шлях до фотографії, коли редагуємо профіль
-        console.log('Editing Profile Image Path:', profile.imagePath);
-    };
-
-    const handleSave = async () => {
-        if (editingProfile && editingProfile.id) {
-            try {
-                await updateProfile(editingProfile.id, newBio, newImage);
-                mutate('profiles'); // Refresh profiles after update
-                closeModal();
-            } catch (error) {
-                console.error('Error updating profile:', error);
-            }
-        }
-    };
-
-    const handleDelete = async (id: string) => {
+    const fetchProfiles = async () => {
+        setLoading(true);
         try {
-            await deleteProfile(id);
-            mutate('profiles'); // Refresh profiles after delete
+            const response = await axios.get(API_URL);
+            setProfiles(response.data);
         } catch (error) {
-            console.error('Error deleting profile:', error);
+            message.error("Failed to load profiles");
+        } finally {
+            setLoading(false);
         }
     };
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setEditingProfile(null);
-        setNewBio('');
-        setNewImage(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
+    const handleDelete = async (id: number) => {
+        Modal.confirm({
+            title: "Are you sure?",
+            content: "This action cannot be undone.",
+            okText: "Yes, delete",
+            okType: "danger",
+            cancelText: "Cancel",
+            async onOk() {
+                try {
+                    await axios.delete(`${API_URL}/${id}`);
+                    message.success("Profile deleted successfully");
+                    fetchProfiles();
+                } catch (error) {
+                    message.error("Failed to delete profile");
+                }
+            },
+        });
     };
 
-    if (isValidating) return <div className="loading text-blue-600">Loading profiles...</div>;
+    const columns = [
+        {
+            title: "Profile Image",
+            dataIndex: "imagePath",
+            key: "imagePath",
+            render: (imagePath: string) => {
+                console.log("Image Path:", `http://localhost:7034${imagePath}`); // Логування шляху до фото
+                return imagePath ? <img src={`http://localhost:7034${imagePath}`} alt="Profile" width={50} /> : "No Image";
+            },
+        },
+        {
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
+        },
+        {
+            title: "Gender",
+            dataIndex: "gender",
+            key: "gender",
+        },
+        {
+            title: "Looking For",
+            dataIndex: "lookingFor",
+            key: "lookingFor",
+        },
+        {
+            title: "Actions",
+            key: "actions",
+            render: (_: any, profile: ProfileItemDTO) => (
+                <>
+                    <Button type="link" onClick={() => setSelectedProfile(profile)}>
+                        Edit
+                    </Button>
+                    <Button type="link" danger onClick={() => handleDelete(profile.id)}>
+                        Delete
+                    </Button>
+                </>
+            ),
+        },
+    ];
 
-    if (error) {
-        return <div className="text-red-600">Error loading profiles. Please try again.</div>;
-    }
 
     return (
-        <main className="container mx-auto mt-8 p-4">
-            <h2 className="text-2xl font-semibold mb-4 text-center">Welcome to My App</h2>
-            <div className="flex flex-col justify-center items-center bg-gray-100 min-h-screen space-y-4">
-                {cardsData && cardsData.length > 0 ? (
-                    cardsData.map((card) => {
-                        console.log('Image Path:', card.imagePath); // Логуємо шлях до фотографії
-                        return (
-                            <Card
-                                key={card.id ?? ''}
-                                imagePath={card.imagePath ?? '/default-image.jpg'}
-                                bio={card.bio}
-                                onDelete={() => card.id && handleDelete(card.id)}
-                                onEdit={() => card && handleEdit(card)} // Trigger modal on edit
-                            />
-                        );
+        <div style={{ padding: "20px" }}>
+            <Title level={2}>Profiles</Title>
+            <Button
+                type="primary"
+                onClick={() =>
+                    setSelectedProfile({
+                        id: 0,
+                        name: "",
+                        imagePath: "",
+                        interests: [],
+                        photos: [],
+                        sexualOrientation: "",
+                        gender: "",
+                        lookingFor: "",
+                        interestedIn: "",
+                        birthDay: new Date(),
                     })
-                ) : (
-                    <div className="text-gray-600">No profiles found.</div>
-                )}
+                }
+                style={{ marginBottom: "20px" }}
+            >
+                Create New Profile
+            </Button>
+            <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading} />
 
-            </div>
-
-            {/* Modal for editing profile */}
-            {isModalOpen && editingProfile && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-lg w-1/3">
-                        <h3 className="text-xl font-semibold mb-4">Edit Profile</h3>
-                        <div>
-                            <label className="block text-sm font-medium">Bio</label>
-                            <textarea
-                                value={newBio}
-                                onChange={(e) => setNewBio(e.target.value)}
-                                placeholder="Enter your bio"
-                                className="w-full p-2 border border-gray-300 rounded"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium">Photo</label>
-                            <input
-                                type="file"
-                                onChange={(e) => setNewImage(e.target.files ? e.target.files[0] : null)}
-                                className="w-full p-2 border border-gray-300 rounded"
-                            />
-                        </div>
-                        <div className="mt-4 flex justify-between">
-                            <button onClick={closeModal} className="bg-gray-500 text-white p-2 rounded">
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSave}
-                                className="bg-blue-500 text-white p-2 rounded"
-                            >
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            {selectedProfile && (
+                <Modal
+                    open={!!selectedProfile}
+                    title={selectedProfile.id ? "Edit Profile" : "Create Profile"}
+                    onCancel={() => setSelectedProfile(null)}
+                    footer={null}
+                >
+                    <ProfileForm
+                        profile={selectedProfile}
+                        onClose={() => setSelectedProfile(null)}
+                        onSave={() => {
+                            setSelectedProfile(null);
+                            fetchProfiles();
+                        }}
+                    />
+                </Modal>
             )}
-        </main>
+        </div>
     );
 };
 
-export default Swr;
+export default ProfileList;

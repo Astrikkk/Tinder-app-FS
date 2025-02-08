@@ -2,7 +2,8 @@ import React from 'react';
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 import Navbar from "./components/Navbar";
 import Content from "./components/profile/Content";
-import CreateProfile from "./components/profile/CreateProfile";
+import PrifileList from "./components/profile/Content";
+// import CreateProfile from "./components/profile/ProfileForm";
 import PrivateRoute from './components/PrivateRoute';  // Import the PrivateRoute component
 import AuthChoice from './components/Auth/AuthChoise';
 
@@ -19,8 +20,8 @@ const App: React.FC = () => {
                             
                             {/* Protected Routes wrapped with PrivateRoute */}
                             <Route element={<PrivateRoute />}>
-                                <Route path="/" element={<Content />} />
-                                <Route path="/profile" element={<CreateProfile />} />
+                                <Route path="/" element={<PrifileList />} />
+                                {/*<Route path="/profile" element={<CreateProfile />} />*/}
                             </Route>
                         </Routes>
                     </div>

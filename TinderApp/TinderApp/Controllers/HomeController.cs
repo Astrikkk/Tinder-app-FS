@@ -26,8 +26,11 @@ public class HomeController : ControllerBase
     public async Task<IActionResult> GetAllProfiles()
     {
         var profiles = await _dbContext.Profiles
+            .Include(p => p.Interests)  // Include Interests
+            .Include(p => p.ProfilePhotos)  // Include Photos
             .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
             .ToListAsync();
+
         return Ok(profiles);
     }
 
@@ -187,5 +190,41 @@ public class HomeController : ControllerBase
         await _dbContext.SaveChangesAsync();
 
         return Ok(new { Message = $"Profile with ID {id} has been deleted." });
+    }
+
+    [HttpGet("genders")]
+    public async Task<IActionResult> GetGenders()
+    {
+        var genders = await _dbContext.Genders.ToListAsync();
+        return Ok(genders);
+    }
+
+
+    [HttpGet("interests")]
+    public async Task<IActionResult> GetInterests()
+    {
+        var interests = await _dbContext.Interests.ToListAsync();
+        return Ok(interests);
+    }
+
+    [HttpGet("interested-in")]
+    public async Task<IActionResult> GetInterestedIn()
+    {
+        var interestedInOptions = await _dbContext.InterestedInOptions.ToListAsync();
+        return Ok(interestedInOptions);
+    }
+
+    [HttpGet("looking-for")]
+    public async Task<IActionResult> GetLookingFor()
+    {
+        var lookingForOptions = await _dbContext.LookingForOptions.ToListAsync();
+        return Ok(lookingForOptions);
+    }
+
+    [HttpGet("sexual-orientation")]
+    public async Task<IActionResult> GetSexualOrientation()
+    {
+        var sexualOrientations = await _dbContext.SexualOrientations.ToListAsync();
+        return Ok(sexualOrientations);
     }
 }

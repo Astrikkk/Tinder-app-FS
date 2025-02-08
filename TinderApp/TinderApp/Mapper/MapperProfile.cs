@@ -10,12 +10,17 @@ namespace TinderApp.Mapper
         {
             // Map Profile entity to ProfileItemDTO
             CreateMap<Data.Entities.Profile, ProfileItemDTO>()
-                .ForMember(dto => dto.ImagePath, opt => opt.MapFrom(profile =>
-                    profile.ProfilePhotos != null && profile.ProfilePhotos.Any(photo => photo.IsPrimary)
-                        ? $"/images/{profile.ProfilePhotos.First(photo => photo.IsPrimary).Path}" // Додаємо "/images/" перед шляхом
-                        : "/images/noimage.jpg"))
-                .ForMember(dto => dto.Gender, opt => opt.MapFrom(profile => profile.Gender.Name))
-                .ForMember(dto => dto.LookingFor, opt => opt.MapFrom(profile => profile.LookingFor.Name));
+                     .ForMember(dto => dto.ImagePath, opt => opt.MapFrom(profile =>
+                         profile.ProfilePhotos != null && profile.ProfilePhotos.Any(photo => photo.IsPrimary)
+                             ? $"/images/{profile.ProfilePhotos.First(photo => photo.IsPrimary).Path}" // Add "/images/" before the photo path
+                             : "/images/noimage.jpg"))
+                     .ForMember(dto => dto.Gender, opt => opt.MapFrom(profile => profile.Gender.Name))
+                     .ForMember(dto => dto.LookingFor, opt => opt.MapFrom(profile => profile.LookingFor.Name))
+                     .ForMember(dto => dto.InterestedIn, opt => opt.MapFrom(profile => profile.InterestedIn.Name)) // Add InterestedIn mapping
+                     .ForMember(dto => dto.BirthDay, opt => opt.MapFrom(profile => profile.BirthDay)) // Add BirthDay mapping
+                     .ForMember(dto => dto.Interests, opt => opt.MapFrom(profile => profile.Interests.Select(i => i.Name).ToList())) // Add Interests mapping
+                     .ForMember(dto => dto.Photos, opt => opt.MapFrom(profile => profile.ProfilePhotos.Select(photo => $"/images/{photo.Path}").ToList())); // Add Photos mapping
+
 
             // Map ProfileCreateRequest DTO to Profile entity
             CreateMap<ProfileCreateRequest, Data.Entities.Profile>()
