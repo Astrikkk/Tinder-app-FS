@@ -9,10 +9,14 @@ const Login: React.FC = () => {
 
     const handleLogin = async () => {
         try {
-            const { token } = await login(email, password);
-            localStorage.setItem("token", token);
-            console.log("Login successful!");
-            navigate("/");
+            const response = await login(email, password);
+            if (response.token) {
+                localStorage.setItem("token", response.token);
+                console.log("Login successful!");
+                navigate("/");
+            } else {
+                throw new Error("Invalid token received.");
+            }
         } catch (error: any) {
             console.error("Login error:", error);
             alert(error.message || "An unexpected error occurred.");
@@ -43,7 +47,7 @@ const Login: React.FC = () => {
     );
 };
 
-const styles: { container: React.CSSProperties; input: React.CSSProperties; button: React.CSSProperties } = {
+const styles: Record<string, React.CSSProperties> = {
     container: {
         textAlign: "center",
         marginTop: "50px",

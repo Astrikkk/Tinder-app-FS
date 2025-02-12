@@ -9,6 +9,7 @@ const Register: React.FC = () => {
         try {
             await register(email, password);
             console.log("Registration successful!");
+            alert("Registration successful! You can now log in.");
         } catch (error: any) {
             console.error("Registration error:", error);
             alert(error.message || "An unexpected error occurred.");
@@ -39,9 +40,9 @@ const Register: React.FC = () => {
     );
 };
 
-const styles: { container: React.CSSProperties; input: React.CSSProperties; button: React.CSSProperties } = {
+const styles: Record<string, React.CSSProperties> = {
     container: {
-        textAlign: "center" as "center",  // Type assertion for 'center'
+        textAlign: "center",
         marginTop: "50px",
     },
     input: {
