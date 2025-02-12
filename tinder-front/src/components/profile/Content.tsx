@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Table, Button, Modal, message, Typography } from "antd";
+import {Modal, Table, Button, message, Typography } from "antd";
 import { ProfileItemDTO } from "./types";
 import ProfileForm from "./ProfileForm";
+import { ProfileService } from "../../services/profile.service";
 
 const { Title } = Typography;
-const API_URL = `${process.env.REACT_APP_API}/Home`;
-const API_URL_IMG = `${process.env.REACT_APP}`;
 
 const ProfileList: React.FC = () => {
     const [profiles, setProfiles] = useState<ProfileItemDTO[]>([]);
@@ -20,8 +18,14 @@ const ProfileList: React.FC = () => {
     const fetchProfiles = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(API_URL);
-            setProfiles(response.data);
+            const data = await ProfileService.getProfiles();
+            setProfiles(data.map(profile => ({
+                ...profile,
+                id: profile.id ? Number(profile.id) : 0,
+                imagePath: profile.imagePath || "",
+                photos: profile.photos || [],
+                birthDay: new Date(profile.birthDay),
+            })));
         } catch (error) {
             message.error("Failed to load profiles");
         } finally {
@@ -30,22 +34,15 @@ const ProfileList: React.FC = () => {
     };
 
     const handleDelete = async (id: number) => {
-        Modal.confirm({
-            title: "Are you sure?",
-            content: "This action cannot be undone.",
-            okText: "Yes, delete",
-            okType: "danger",
-            cancelText: "Cancel",
-            async onOk() {
-                try {
-                    await axios.delete(`${API_URL}/${id}`);
-                    message.success("Profile deleted successfully");
-                    fetchProfiles();
-                } catch (error) {
-                    message.error("Failed to delete profile");
-                }
-            },
-        });
+        if (window.confirm("Are you sure? This action cannot be undone.")) {
+            try {
+                await ProfileService.deleteProfile(id.toString());
+                message.success("Profile deleted successfully");
+                fetchProfiles();
+            } catch (error) {
+                message.error("Failed to delete profile");
+            }
+        }
     };
 
     const columns = [
@@ -53,10 +50,9 @@ const ProfileList: React.FC = () => {
             title: "Profile Image",
             dataIndex: "imagePath",
             key: "imagePath",
-            render: (imagePath: string) => {
-                console.log("Image Path:", `http://localhost:7034${imagePath}`); // Логування шляху до фото
-                return imagePath ? <img src={`http://localhost:7034${imagePath}`} alt="Profile" width={50} /> : "No Image";
-            },
+            render: (imagePath: string) => (
+                imagePath ? <img src={`http://localhost:7034${imagePath}`} alt="Profile" width={50}/> : "No Image"
+            ),
         },
         {
             title: "Name",
@@ -89,9 +85,8 @@ const ProfileList: React.FC = () => {
         },
     ];
 
-
     return (
-        <div style={{ padding: "20px" }}>
+        <div style={{padding: "20px"}}>
             <Title level={2}>Profiles</Title>
             <Button
                 type="primary"
@@ -109,11 +104,11 @@ const ProfileList: React.FC = () => {
                         birthDay: new Date(),
                     })
                 }
-                style={{ marginBottom: "20px" }}
+                style={{marginBottom: "20px"}}
             >
                 Create New Profile
             </Button>
-            <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading} />
+            <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading}/>
 
             {selectedProfile && (
                 <Modal
@@ -124,7 +119,6 @@ const ProfileList: React.FC = () => {
                 >
                     <ProfileForm
                         profile={selectedProfile}
-                        onClose={() => setSelectedProfile(null)}
                         onSave={() => {
                             setSelectedProfile(null);
                             fetchProfiles();
@@ -135,5 +129,6 @@ const ProfileList: React.FC = () => {
         </div>
     );
 };
+
 
 export default ProfileList;

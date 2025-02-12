@@ -9,13 +9,13 @@ using System.Security.Claims;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HomeController : ControllerBase
+public class ProfileController : ControllerBase
 {
     private readonly TinderDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
 
-    public HomeController(TinderDbContext dbContext, IMapper mapper, IConfiguration configuration)
+    public ProfileController(TinderDbContext dbContext, IMapper mapper, IConfiguration configuration)
     {
         _dbContext = dbContext;
         _mapper = mapper;
@@ -200,31 +200,10 @@ public class HomeController : ControllerBase
     }
 
 
-    [HttpGet("interests")]
-    public async Task<IActionResult> GetInterests()
-    {
-        var interests = await _dbContext.Interests.ToListAsync();
-        return Ok(interests);
-    }
+ 
 
-    [HttpGet("interested-in")]
-    public async Task<IActionResult> GetInterestedIn()
-    {
-        var interestedInOptions = await _dbContext.InterestedInOptions.ToListAsync();
-        return Ok(interestedInOptions);
-    }
+    
 
-    [HttpGet("looking-for")]
-    public async Task<IActionResult> GetLookingFor()
-    {
-        var lookingForOptions = await _dbContext.LookingForOptions.ToListAsync();
-        return Ok(lookingForOptions);
-    }
 
-    [HttpGet("sexual-orientation")]
-    public async Task<IActionResult> GetSexualOrientation()
-    {
-        var sexualOrientations = await _dbContext.SexualOrientations.ToListAsync();
-        return Ok(sexualOrientations);
-    }
+   
 }

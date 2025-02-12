@@ -29,6 +29,18 @@ const Navbar: React.FC = () => {
                     <a href="/profile">Profile</a>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
+                    <a href="/interested-in">Interested In</a>
+                </li>
+                <li className="mb-4 hover:bg-gray-700 p-2 rounded">
+                    <a href="/interests">Interests</a>
+                </li>
+                <li className="mb-4 hover:bg-gray-700 p-2 rounded">
+                    <a href="/looking-for">Looking For</a>
+                </li>
+                <li className="mb-4 hover:bg-gray-700 p-2 rounded">
+                    <a href="/sexual-orientation">Sexual Orientation</a>
+                </li>
+                <li className="mb-4 hover:bg-gray-700 p-2 rounded">
                     <a href="#">Messages</a>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded cursor-pointer">

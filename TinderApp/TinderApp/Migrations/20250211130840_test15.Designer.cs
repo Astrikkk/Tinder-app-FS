@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TinderApp.Data;
 
@@ -11,9 +12,11 @@ using TinderApp.Data;
 namespace TinderApp.Migrations
 {
     [DbContext(typeof(TinderDbContext))]
-    partial class TinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250211130840_test15")]
+    partial class test15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,23 +201,6 @@ namespace TinderApp.Migrations
                         .IsUnique();
 
                     b.ToTable("Genders");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Male"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Female"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Other"
-                        });
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.InterestedIn", b =>

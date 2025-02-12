@@ -23,6 +23,12 @@ namespace TinderApp.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Gender>().HasData(
+                new Gender { Id = 1, Name = "Male" },
+                new Gender { Id = 2, Name = "Female" },
+                new Gender { Id = 3, Name = "Other" }
+            );
+
             modelBuilder.Entity<User>()
                  .HasOne(u => u.Profile)
                  .WithOne(p => p.User)
