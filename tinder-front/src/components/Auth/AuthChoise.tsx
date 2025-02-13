@@ -46,3 +46,17 @@ const styles: { [key: string]: React.CSSProperties } = {
 
 
 export default AuthChoice;
+
+
+/*
+MainMenu-register
+-Main user
+---UerMenu
+-----Swipe
+-----Like/Dislike
+-----Messages
+-Admin user
+---Admin Menu
+-----Manage user profiles
+-----Manage profile settings(gender interests hobby)
+*/

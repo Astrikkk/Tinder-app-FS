@@ -9,6 +9,6 @@ namespace TinderApp.Data.Entities
         public string Path { get; set; }
         public bool IsPrimary { get; set; }
         public int ProfileId { get; set; }
-        public Profile Profile { get; set; }
+        public UserProfile Profile { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using TinderApp.Data.Entities;
+﻿using TinderApp.Data.Entities.Identity;
 
 namespace TinderApp.Interfaces
 {

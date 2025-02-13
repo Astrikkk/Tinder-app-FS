@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TinderApp.Data;
 
@@ -11,9 +12,11 @@ using TinderApp.Data;
 namespace TinderApp.Migrations
 {
     [DbContext(typeof(TinderDbContext))]
-    partial class TinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250213120836_addingroles1")]
+    partial class addingroles1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace TinderApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("UserProfileId")
+                    b.Property<int?>("ProfileId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -42,7 +45,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex("UserProfileId");
+                    b.HasIndex("ProfileId");
 
                     b.ToTable("Interests");
                 });
@@ -207,12 +210,10 @@ namespace TinderApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -220,7 +221,8 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
 
@@ -347,57 +349,7 @@ namespace TinderApp.Migrations
                     b.ToTable("LookingForOptions");
                 });
 
-            modelBuilder.Entity("TinderApp.Data.Entities.ProfilePhoto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsPrimary")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProfileId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserProfileId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProfileId");
-
-                    b.HasIndex("UserProfileId");
-
-                    b.ToTable("ProfilePhotos");
-                });
-
-            modelBuilder.Entity("TinderApp.Data.Entities.SexualOrientation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("SexualOrientations");
-                });
-
-            modelBuilder.Entity("TinderApp.Data.Entities.UserProfile", b =>
+            modelBuilder.Entity("TinderApp.Data.Entities.Profile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -445,7 +397,57 @@ namespace TinderApp.Migrations
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("UserRoleEntity", b =>
+            modelBuilder.Entity("TinderApp.Data.Entities.ProfilePhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProfileId1")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("ProfileId1");
+
+                    b.ToTable("ProfilePhotos");
+                });
+
+            modelBuilder.Entity("TinderApp.Data.Entities.SexualOrientation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("SexualOrientations");
+                });
+
+            modelBuilder.Entity("TinderApp.Data.Entities.Identity.UserRoleEntity", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<int>");
 
@@ -456,9 +458,9 @@ namespace TinderApp.Migrations
 
             modelBuilder.Entity("Data.Entities.Interest", b =>
                 {
-                    b.HasOne("TinderApp.Data.Entities.UserProfile", null)
+                    b.HasOne("TinderApp.Data.Entities.Profile", null)
                         .WithMany("Interests")
-                        .HasForeignKey("UserProfileId");
+                        .HasForeignKey("ProfileId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -497,22 +499,7 @@ namespace TinderApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TinderApp.Data.Entities.ProfilePhoto", b =>
-                {
-                    b.HasOne("TinderApp.Data.Entities.UserProfile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TinderApp.Data.Entities.UserProfile", null)
-                        .WithMany("ProfilePhotos")
-                        .HasForeignKey("UserProfileId");
-
-                    b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("TinderApp.Data.Entities.UserProfile", b =>
+            modelBuilder.Entity("TinderApp.Data.Entities.Profile", b =>
                 {
                     b.HasOne("TinderApp.Data.Entities.Gender", "Gender")
                         .WithMany()
@@ -540,7 +527,7 @@ namespace TinderApp.Migrations
 
                     b.HasOne("TinderApp.Data.Entities.Identity.User", "User")
                         .WithOne("Profile")
-                        .HasForeignKey("TinderApp.Data.Entities.UserProfile", "UserId")
+                        .HasForeignKey("TinderApp.Data.Entities.Profile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Gender");
@@ -554,7 +541,22 @@ namespace TinderApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UserRoleEntity", b =>
+            modelBuilder.Entity("TinderApp.Data.Entities.ProfilePhoto", b =>
+                {
+                    b.HasOne("TinderApp.Data.Entities.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TinderApp.Data.Entities.Profile", null)
+                        .WithMany("ProfilePhotos")
+                        .HasForeignKey("ProfileId1");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("TinderApp.Data.Entities.Identity.UserRoleEntity", b =>
                 {
                     b.HasOne("TinderApp.Data.Entities.Identity.RoleEntity", "Role")
                         .WithMany("UserRoles")
@@ -585,7 +587,7 @@ namespace TinderApp.Migrations
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("TinderApp.Data.Entities.UserProfile", b =>
+            modelBuilder.Entity("TinderApp.Data.Entities.Profile", b =>
                 {
                     b.Navigation("Interests");
 

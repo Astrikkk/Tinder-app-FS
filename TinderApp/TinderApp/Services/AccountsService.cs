@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using TinderApp.Data.Entities;
+using TinderApp.Data.Entities.Identity;
 using TinderApp.DTOs;
 using TinderApp.Interfaces;
 

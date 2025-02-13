@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TinderApp.Data;
 
@@ -11,9 +12,11 @@ using TinderApp.Data;
 namespace TinderApp.Migrations
 {
     [DbContext(typeof(TinderDbContext))]
-    partial class TinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250213123113_addingroles2")]
+    partial class addingroles2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,12 +210,10 @@ namespace TinderApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -220,7 +221,8 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
 
@@ -445,7 +447,7 @@ namespace TinderApp.Migrations
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("UserRoleEntity", b =>
+            modelBuilder.Entity("TinderApp.Data.Entities.Identity.UserRoleEntity", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<int>");
 
@@ -554,7 +556,7 @@ namespace TinderApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UserRoleEntity", b =>
+            modelBuilder.Entity("TinderApp.Data.Entities.Identity.UserRoleEntity", b =>
                 {
                     b.HasOne("TinderApp.Data.Entities.Identity.RoleEntity", "Role")
                         .WithMany("UserRoles")

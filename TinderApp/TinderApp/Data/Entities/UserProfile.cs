@@ -1,10 +1,11 @@
 ﻿using Data.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TinderApp.Data.Entities.Identity;
 
 namespace TinderApp.Data.Entities
 {
-    public class Profile
+    public class UserProfile
     {
         [Key]
         public int Id { get; set; }
@@ -48,12 +49,13 @@ namespace TinderApp.Data.Entities
         }
         private ICollection<ProfilePhoto> _profilePhotos;
 
-        public Profile()
+        public UserProfile()
         {
             //ProfilePhotos = new List<ProfilePhoto>(); // Initialize the collection
         }
 
-        public string? UserId { get; set; } // Зроблено nullable
-        public User? User { get; set; }
+        public int UserId { get; set; }  // Must be int to match User's Id
+        public virtual User User { get; set; }
+
     }
 }
