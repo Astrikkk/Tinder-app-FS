@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Akatab:wght@400;500;600;700;800;900&display=swap');
+
+.main-container {
+    width: 100%;
+    height: 100vh;
+    background: #100607;
+    display: flex;
+        flex-direction: column;
+}
+
+.custom-header {
+    width: 1841px;
+    margin: auto;
+    padding: 40px 101px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-radius: 12px;
+    border: 2px solid rgba(29, 12, 14, 0.20);
+    background: rgba(29, 12, 14, 0.80);
+}
+
+.logo-menubar-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 158px;
+}
+
+.sparkii-img {
+    width: 118px;
+    height: 44px;
+}
+
+.menubar-header {
+    display: flex;
+    gap: 48px;
+    color: white;
+}
+
+.lang-login-header {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.language-header {
+    display: flex;
+    width: 47px;
+    height: 46px;
+    padding: 2px 0px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 12px;
+    background: #651111;
+}
+
+.log-in-header {
+
+    display: flex;
+    width: 193px;
+    padding: 9px 66px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 12px;
+    background:  #751123;
+
+
+    color: white;
+}
+
+.imagebg-custom{
+
+    display: flex; /* Додаємо флекс-контейнер */
+    flex-direction: column; /* Елементи розташовуються вертикально */
+    align-items: center; /* Центрування по горизонталі */
+    justify-content: center; /* Центрування по вертикалі */
+
+    width: 100vw; /* Займає всю ширину екрану */
+    height: 100vh;
+    background: url('./mainPage/Main-ImageBG.png') center/cover;
+}
+
+.main-custom {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+
+}
+
+.custom-text {
+    color: white;
+    font-family: 'Akatab', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+}
+
+.custom-text-spark {
+    color: #FFCC7E;
+    font-size: 56px;
+    font-weight: 700;
+}
+
+.custom-button {
+    display: flex;
+    width: 262px;
+    height: 56px;
+    padding: 12px 66px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 18px;
+    background: #BF0B2C; /* Red color */
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.Create-Account-Button-1{
+    color: #FFF;
+
+    /* Akatab-Bold-22 */
+    font-family: Akatab;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.custom-footer {
+    width: 100%;
+    background: #1D0C0E;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 64px 239px;
+    gap: 28px;
+}
+
+.Line-Footer{
+    width: 1441px;
+    height: 0px;
+}
+
+.logo-text-footer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.sparkii-footer {
+    width: 118px;
+    height: 44px;
+}
+
+.site-navigation-elements-footer {
+    display: flex;
+    align-items: center;
+    gap: 88px;
+}
+
+.faq-footer {
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+
+
+
+}
+
+.text-footer {
+    color: #B1B1B1;
+    font-size: 16px;
+}
