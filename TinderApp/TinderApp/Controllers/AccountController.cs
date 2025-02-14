@@ -9,10 +9,10 @@ namespace TinderApp.Controllers
     [Route("api/account")]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<UserEntity> _userManager;
         private readonly RoleManager<RoleEntity> _roleManager;
 
-        public AccountController(UserManager<User> userManager, RoleManager<RoleEntity> roleManager)
+        public AccountController(UserManager<UserEntity> userManager, RoleManager<RoleEntity> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;

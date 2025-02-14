@@ -7,11 +7,11 @@ namespace TinderApp.Services
 {
     public class AccountsService : IAccountsService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<UserEntity> _userManager;
+        private readonly SignInManager<UserEntity> _signInManager;
         private readonly IJwtTokenService _jwtTokenService;
 
-        public AccountsService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtTokenService jwtTokenService)
+        public AccountsService(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager, IJwtTokenService jwtTokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -24,7 +24,7 @@ namespace TinderApp.Services
             if (user != null)
                 throw new Exception("Email already exists.");
 
-            var newUser = new User
+            var newUser = new UserEntity
             {
                 Email = model.Email,
                 UserName = model.Email

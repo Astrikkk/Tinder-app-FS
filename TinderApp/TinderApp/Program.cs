@@ -11,14 +11,14 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<TinderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<User, RoleEntity>(options =>
+builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
 .AddEntityFrameworkStores<TinderDbContext>()
 .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<UserManager<User>>();
+builder.Services.AddScoped<UserManager<UserEntity>>();
 builder.Services.AddScoped<RoleManager<RoleEntity>>();
 
 var app = builder.Build();
@@ -29,7 +29,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        var userManager = services.GetRequiredService<UserManager<User>>();
+        var userManager = services.GetRequiredService<UserManager<UserEntity>>();
         var roleManager = services.GetRequiredService<RoleManager<RoleEntity>>();
 
         await SeedRolesAndAdminUser(roleManager, userManager);
@@ -46,7 +46,7 @@ app.UseAuthorization();
 app.MapControllers();
 await app.RunAsync();
 
-static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, UserManager<User> userManager)
+static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, UserManager<UserEntity> userManager)
 {
     var roles = new[] { "User", "Admin" };
 
@@ -54,7 +54,7 @@ static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, Use
     {
         if (!await roleManager.RoleExistsAsync(role))
         {
-            await roleManager.CreateAsync(new RoleEntity { Name = role, NormalizedName = role.ToUpper() });
+            await roleManager.CreateAsync(new RoleEntity { Name = role});
             Console.WriteLine($"Role '{role}' created.");
         }
     }
@@ -64,7 +64,7 @@ static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, Use
 
     if (adminUser == null)
     {
-        adminUser = new User
+        adminUser = new UserEntity
         {
             UserName = "admin",
             Email = adminEmail,

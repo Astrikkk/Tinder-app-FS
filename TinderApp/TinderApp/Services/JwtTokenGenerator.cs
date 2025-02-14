@@ -7,21 +7,21 @@ using TinderApp.Data.Entities.Identity;
 
 public interface IJwtTokenService
 {
-    Task<string> CreateTokenAsync(User user);
+    Task<string> CreateTokenAsync(UserEntity user);
 }
 
 public class JwtTokenService : IJwtTokenService
 {
     private readonly IConfiguration _configuration;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<UserEntity> _userManager;
 
-    public JwtTokenService(IConfiguration configuration, UserManager<User> userManager)
+    public JwtTokenService(IConfiguration configuration, UserManager<UserEntity> userManager)
     {
         _configuration = configuration;
         _userManager = userManager;
     }
 
-    public async Task<string> CreateTokenAsync(User user)
+    public async Task<string> CreateTokenAsync(UserEntity user)
     {
         var claims = new List<Claim>
         {

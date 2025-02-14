@@ -207,12 +207,10 @@ namespace TinderApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -220,7 +218,8 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
 
@@ -239,7 +238,7 @@ namespace TinderApp.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TinderApp.Data.Entities.Identity.User", b =>
+            modelBuilder.Entity("TinderApp.Data.Entities.Identity.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -472,7 +471,7 @@ namespace TinderApp.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("TinderApp.Data.Entities.Identity.User", null)
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -481,7 +480,7 @@ namespace TinderApp.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("TinderApp.Data.Entities.Identity.User", null)
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -490,7 +489,7 @@ namespace TinderApp.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("TinderApp.Data.Entities.Identity.User", null)
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -538,7 +537,7 @@ namespace TinderApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TinderApp.Data.Entities.Identity.User", "User")
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", "User")
                         .WithOne("Profile")
                         .HasForeignKey("TinderApp.Data.Entities.UserProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -562,7 +561,7 @@ namespace TinderApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TinderApp.Data.Entities.Identity.User", "User")
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -578,7 +577,7 @@ namespace TinderApp.Migrations
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("TinderApp.Data.Entities.Identity.User", b =>
+            modelBuilder.Entity("TinderApp.Data.Entities.Identity.UserEntity", b =>
                 {
                     b.Navigation("Profile");
 
