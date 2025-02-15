@@ -20,4 +20,6 @@ export interface ProfileCreateDTO {
     sexualOrientationId: number;
     image?: File | null; // Файл для завантаження фото
     interestIds?: number[]; // Масив ID інтересів
+    userid: number;
+
 }
