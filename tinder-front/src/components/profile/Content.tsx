@@ -19,6 +19,7 @@ const ProfileList: React.FC = () => {
         setLoading(true);
         try {
             const data = await ProfileService.getProfiles();
+            console.log("asdhjkjl ----- ", data);
             setProfiles(data.map(profile => ({
                 ...profile,
                 id: profile.id ? Number(profile.id) : 0,
@@ -51,7 +52,7 @@ const ProfileList: React.FC = () => {
             dataIndex: "imagePath",
             key: "imagePath",
             render: (imagePath: string) => (
-                imagePath ? <img src={`http://localhost:7034${imagePath}`} alt="Profile" width={50}/> : "No Image"
+                imagePath ? <img src={`http://localhost:7034${imagePath}`} alt="Photo" width={50}/> : "No Image"
             ),
         },
         {

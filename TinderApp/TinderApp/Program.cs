@@ -4,22 +4,51 @@ using TinderApp.Data.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using TinderApp.Mapper;
+using TinderApp.Interfaces;
+using TinderApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 builder.Services.AddControllers();
+
+// Database context configuration
 builder.Services.AddDbContext<TinderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add Identity configuration
 builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
-.AddEntityFrameworkStores<TinderDbContext>()
-.AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<TinderDbContext>()
+    .AddDefaultTokenProviders();
 
+// Register UserManager and RoleManager
 builder.Services.AddScoped<UserManager<UserEntity>>();
 builder.Services.AddScoped<RoleManager<RoleEntity>>();
+
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// Register custom services
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IAccountsService, AccountsService>();
+
+// Swagger configuration
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// CORS policy to allow React app
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") // React app's URL
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -40,12 +69,25 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.UseStaticFiles();
 
+// Apply CORS policy
+app.UseCors("AllowReactApp");
 
 app.UseAuthorization();
+
 app.MapControllers();
+
+// Configure Swagger for development environment
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 await app.RunAsync();
 
+// Seed roles and admin user
 static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, UserManager<UserEntity> userManager)
 {
     var roles = new[] { "User", "Admin" };
@@ -54,7 +96,7 @@ static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, Use
     {
         if (!await roleManager.RoleExistsAsync(role))
         {
-            await roleManager.CreateAsync(new RoleEntity { Name = role});
+            await roleManager.CreateAsync(new RoleEntity { Name = role });
             Console.WriteLine($"Role '{role}' created.");
         }
     }
