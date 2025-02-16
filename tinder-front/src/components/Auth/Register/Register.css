@@ -1,0 +1,257 @@
+/* Забезпечуємо, щоб контейнер займав весь екран */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.register-container {
+    width: 100vw; /* Займає всю ширину екрану */
+    height: 100vh; /* Займає всю висоту екрану */
+    position: relative;
+    background-color: #100506;
+    overflow: hidden;
+}
+
+.background {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* або інша необхідна висота */
+    overflow: hidden;
+}
+
+.background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Забезпечує, щоб зображення покривало весь контейнер */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+.bow {
+    position: absolute;
+    top: 13%; /* Відступ зверху */
+    left: 5%; /* Відступ зліва */
+    width: 352px;
+    height: 562px;
+}
+
+.stars {
+    position: absolute;
+    bottom: 5%; /* Відступ віднизу */
+    left: 70%; /* Відступ справа */
+    width: 518px;
+    height: 427px;
+}
+
+
+.gradient-bar {
+    width: 100%;
+    height: 54px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(0deg, rgba(101, 17, 17, 0.00) 0%, #651111 203.7%);
+}
+
+.register-form {
+
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%); /* Центруємо форму */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    width: 90%; /* Адаптивна ширина */
+    max-width: 600px; /* Максимальна ширина форми */
+
+
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.email-field, .password-field {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.email-label, .password-label {
+    color: white;
+    font-size: 22px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.email-input, .password-input {
+    width: 100%;
+    height: 72px;
+    padding: 0 24px;
+    background-color: #100506;
+    border: 2px solid #551e28;
+    border-radius: 12px;
+    color: #b1a4a4;
+    font-size: 20px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.checkbox{
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid  #FFCC7E;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 7px;
+
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #ffcb7e;
+    font-size: 18px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 500;
+}
+
+.agree {
+    color: #ffcb7e;
+    font-size: 18px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.sign-up-but{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    align-self: stretch;
+}
+
+.form-actions {
+
+    display: flex;
+    width: 85%;
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+
+
+}
+
+.login-button, .google-login-button {
+    width: 100%;
+    height: 72px;
+    border-radius: 18px;
+    font-size: 22px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 700;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+.login-button {
+    background-color: #bf0b2c;
+    color: white;
+    border: none;
+}
+
+.google-login-button {
+    background-color: #240000;
+    border: 2px solid #bf0b2c;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.sign-up-link {
+    color: white;
+    font-size: 20px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 400;
+    text-align: center;
+}
+
+.sign-up-link a {
+    color: #ffcb7e;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.sign-up-link a:hover {
+    color: #ffa500;
+}
+
+.register-header {
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+}
+
+.heart {
+    color: #651111;
+    font-size: 40px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.register-title {
+    color: #ffcb7e;
+    font-size: 42px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.sparkii-logo {
+    position: absolute;
+    left: 5%;
+    top: 5%;
+}
