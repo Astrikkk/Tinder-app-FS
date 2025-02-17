@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using TinderApp.Data;
-using TinderApp.Data.Entities;
-using TinderApp.Interfaces;
+using TinderApp.Data.Entities.Identity;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using TinderApp.Mapper;
+using TinderApp.Interfaces;
 using TinderApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,17 +17,22 @@ builder.Services.AddDbContext<TinderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add Identity configuration
-builder.Services.AddIdentity<User, IdentityRole>(options =>
+builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
-               .AddDefaultTokenProviders()
-               .AddEntityFrameworkStores<TinderDbContext>();
+    .AddEntityFrameworkStores<TinderDbContext>()
+    .AddDefaultTokenProviders();
 
-// Register JwtTokenService
+// Register UserManager and RoleManager
+builder.Services.AddScoped<UserManager<UserEntity>>();
+builder.Services.AddScoped<RoleManager<RoleEntity>>();
+
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// Register custom services
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
-
-// Register AccountsService
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 
 // Swagger configuration
@@ -45,70 +50,77 @@ builder.Services.AddCors(options =>
     });
 });
 
-// AutoMapper configuration
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
 var app = builder.Build();
+
+// Seed roles and initial admin user
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var userManager = services.GetRequiredService<UserManager<UserEntity>>();
+        var roleManager = services.GetRequiredService<RoleManager<RoleEntity>>();
+
+        await SeedRolesAndAdminUser(roleManager, userManager);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred seeding the DB: {ex.Message}");
+    }
+}
+
+app.UseStaticFiles();
 
 // Apply CORS policy
 app.UseCors("AllowReactApp");
 
 app.UseAuthorization();
 
-// Static file configuration
-var imageDir = builder.Configuration["ImageDir"] ?? "wwwroot/images/profiles"; // Default directory
-var dirPath = Path.Combine(Directory.GetCurrentDirectory(), imageDir);
+app.MapControllers();
 
-// Ensure the directory exists
-if (!Directory.Exists(dirPath))
-{
-    Directory.CreateDirectory(dirPath);
-    Console.WriteLine($"Directory created at: {dirPath}");
-}
-
-// Configure static file serving
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(dirPath),
-    RequestPath = "/images"
-});
-
-// Ensure default image exists
-var defaultImagePath = Path.Combine(dirPath, "noimage.jpg");
-
-if (!File.Exists(defaultImagePath))
-{
-    string defaultImageUrl = "https://m.media-amazon.com/images/I/71QaVHD-ZDL.jpg";
-    try
-    {
-        using HttpClient client = new HttpClient();
-        var response = await client.GetAsync(defaultImageUrl);
-        if (response.IsSuccessStatusCode)
-        {
-            var imageBytes = await response.Content.ReadAsByteArrayAsync();
-            await File.WriteAllBytesAsync(defaultImagePath, imageBytes);
-            Console.WriteLine($"Default image saved at: {defaultImagePath}");
-        }
-        else
-        {
-            Console.WriteLine($"Failed to retrieve default image. Status code: {response.StatusCode}");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error fetching default image: {ex.Message}");
-    }
-}
-
-// Configure HTTP request pipeline
+// Configure Swagger for development environment
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection(); // Uncomment this line if you need HTTPS redirection
+await app.RunAsync();
 
-app.MapControllers();
+// Seed roles and admin user
+static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, UserManager<UserEntity> userManager)
+{
+    var roles = new[] { "User", "Admin" };
 
-await app.RunAsync(); // Make sure the main method is async
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new RoleEntity { Name = role });
+            Console.WriteLine($"Role '{role}' created.");
+        }
+    }
+
+    var adminEmail = "admin@example.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+    if (adminUser == null)
+    {
+        adminUser = new UserEntity
+        {
+            UserName = "admin",
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+        var result = await userManager.CreateAsync(adminUser, "Admin123!"); // Use a strong password
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+            Console.WriteLine("Admin user created and assigned to 'Admin' role.");
+        }
+        else
+        {
+            Console.WriteLine($"Failed to create admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+        }
+    }
+}

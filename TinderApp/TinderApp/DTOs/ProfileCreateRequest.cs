@@ -10,5 +10,6 @@
         public int SexualOrientationId { get; set; }
         public IFormFile? Image { get; set; }
         public List<int>? InterestIds { get; set; }
+        public int UserId { get; set; }
     }
 }

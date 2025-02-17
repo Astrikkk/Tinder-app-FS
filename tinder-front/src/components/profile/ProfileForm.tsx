@@ -5,6 +5,7 @@ import moment from 'moment';
 import { ProfileItemDTO } from './types';
 import { ProfileService } from "../../services/profile.service";
 import { ProfileInfoService } from "../../services/profile.info.service";
+import jwtDecode, { JwtPayload } from "jwt-decode";
 
 const { Option } = Select;
 
@@ -12,6 +13,21 @@ interface ProfileFormProps {
     profile: ProfileItemDTO | null;
     onSave: () => void;
 }
+
+const getUserIdFromToken = (token: string | null): string | null => {
+    if (!token) return null;
+    
+    try {
+        const { jwtDecode } = require("jwt-decode"); // Використовуємо require для правильного імпорту
+        const decoded: any = jwtDecode(token);
+        return decoded.userId || decoded.id || null;
+    } catch (error) {
+        console.error("Помилка декодування JWT", error);
+        return null;
+    }
+};
+
+
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
     const [form] = Form.useForm();
@@ -62,24 +78,33 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
     }, [profile, form]);
 
     const onFinish = async (values: any) => {
+        const token = localStorage.getItem("token");
+        const userId = getUserIdFromToken(token);
+    
+        if (!userId) {
+            message.error("Не вдалося отримати ID користувача. Увійдіть знову.");
+            return;
+        }
+    
         const formData = new FormData();
+        formData.append("UserId", userId); // Додаємо userId
         formData.append("Name", values.name);
         formData.append("BirthDay", values.birthDay ? values.birthDay.format("YYYY-MM-DD") : "");
         formData.append("GenderId", values.genderId.toString());
         formData.append("InterestedInId", values.interestedInId.toString());
         formData.append("LookingForId", values.lookingForId.toString());
         formData.append("SexualOrientationId", values.sexualOrientationId.toString());
-
+    
         if (values.interests && values.interests.length > 0) {
             values.interests.forEach((interestId: number) => {
                 formData.append("InterestIds", interestId.toString());
             });
         }
-
+    
         if (image) {
             formData.append("Image", image);
         }
-
+    
         try {
             if (profile && profile.id) {
                 await ProfileService.updateProfile(profile.id.toString(), formData);
@@ -94,7 +119,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
             message.error("Failed to save profile");
         }
     };
-
+    
     const handleImageChange = (info: any) => {
         if (info.file && info.file.originFileObj) {
             setImage(info.file.originFileObj);

@@ -1,9 +1,9 @@
-﻿using TinderApp.Data.Entities;
+﻿using TinderApp.Data.Entities.Identity;
 
 namespace TinderApp.Interfaces
 {
     public interface IJwtTokenService
     {
-        Task<string> CreateTokenAsync(User user);
+        Task<string> CreateTokenAsync(UserEntity user);
     }
 }
