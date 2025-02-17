@@ -43,11 +43,15 @@ const Navbar: React.FC = () => {
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
                     <a href="#">Messages</a>
                 </li>
+                <li className="mb-4 hover:bg-gray-700 p-2 rounded">
+                    <a href="/user-view">Profile Viewer</a>
+                </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded cursor-pointer">
                     <button onClick={handleLogout} className="w-full text-left">
                         Logout
                     </button>
                 </li>
+
             </ul>
         </div>
     );

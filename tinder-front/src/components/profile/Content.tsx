@@ -3,6 +3,7 @@ import {Modal, Table, Button, message, Typography } from "antd";
 import { ProfileItemDTO } from "./types";
 import ProfileForm from "./ProfileForm";
 import { ProfileService } from "../../services/profile.service";
+import {useNavigate} from "react-router-dom";
 
 const { Title } = Typography;
 
@@ -10,6 +11,8 @@ const ProfileList: React.FC = () => {
     const [profiles, setProfiles] = useState<ProfileItemDTO[]>([]);
     const [selectedProfile, setSelectedProfile] = useState<ProfileItemDTO | null>(null);
     const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchProfiles();
@@ -31,6 +34,16 @@ const ProfileList: React.FC = () => {
             message.error("Failed to load profiles");
         } finally {
             setLoading(false);
+        }
+    };
+    const handleLogout = async () => {
+        try {
+            localStorage.removeItem("token");
+            console.log("Logout successful!");
+            navigate("/auth");
+        } catch (error: any) {
+            console.error("Logout error:", error);
+            alert(error.message || "An unexpected error occurred.");
         }
     };
 
@@ -109,6 +122,10 @@ const ProfileList: React.FC = () => {
             >
                 Create New Profile
             </Button>
+
+            <button onClick={handleLogout} className="w-full text-left">
+                Logout
+            </button>
             <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading}/>
 
             {selectedProfile && (
