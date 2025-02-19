@@ -91,10 +91,10 @@ const Login: React.FC = () => {
                 </div>
                 <div className="form-actions">
                     <button className="login-button" onClick={handleLogin}>Log In</button>
-                    <button className="google-login-button">
+                    {/* <button className="google-login-button">
                         <img src={Google} alt="Google"/>
                         Log in with Google
-                    </button>
+                    </button> */}
                     <div className="sign-up-link">
                         Don't have an account? <a href="/register">Sign Up</a>
                     </div>

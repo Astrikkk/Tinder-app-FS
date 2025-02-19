@@ -231,3 +231,7 @@ html, body, #root {
     left: 5%;
     top: 5%;
 }
+
+.email-input, .password-input {
+    text-transform: none !important;
+}
