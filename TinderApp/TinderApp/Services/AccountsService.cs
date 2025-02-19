@@ -42,7 +42,7 @@ namespace TinderApp.Services
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 throw new Exception("Invalid user login or password.");
 
-            await _signInManager.SignInAsync(user, true);
+            //await _signInManager.SignInAsync(user, true);
             return await _jwtTokenService.CreateTokenAsync(user);
         }
 
