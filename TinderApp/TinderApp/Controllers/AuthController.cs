@@ -21,7 +21,9 @@ public class AuthController : ControllerBase
         try
         {
             await _accountsService.Register(model);
-            return Ok(new { Message = "Registration successful!" });
+
+            var token = await _accountsService.Login(new LoginDTO { Email = model.Email, Password=model.Password });
+            return Ok(new { Token = token });
         }
         catch (Exception ex)
         {
