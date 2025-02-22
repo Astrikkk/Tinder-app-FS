@@ -66,11 +66,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
         };
         fetchData();
 
-        if (profile) {  
+        if (profile) {
+            console.log("profile",profile);
             form.setFieldsValue({
                 name: profile.name,
                 birthDay: profile.birthDay ? moment(profile.birthDay) : null,
-                genderId: profile.gender,
+                genderId: 1,
                 interestedInId: profile.interestedIn,
                 lookingForId: profile.lookingFor,
                 sexualOrientationId: profile.sexualOrientation,
@@ -85,6 +86,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
     }, [profile, form]);
 
     const onFinish = async (values: any) => {
+
+        console.log("Values send server:", values);
         const token = localStorage.getItem("token");
         const userId = getUserIdFromToken(token);
 
@@ -115,14 +118,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
         }
     
         try {
-            if (profile && profile.id) {
-                await ProfileService.updateProfile(profile.id.toString(), formData);
-                message.success("Profile updated successfully");
-            } else {
-                await ProfileService.createProfile(formData);
-                message.success("Profile created successfully");
-            }
-            onSave();
+
+            // if (profile && profile.id) {
+            //     await ProfileService.updateProfile(profile.id.toString(), formData);
+            //     message.success("Profile updated successfully");
+            // } else {
+            //     await ProfileService.createProfile(formData);
+            //     message.success("Profile created successfully");
+            // }
+            // onSave();
         } catch (error: any) {
             console.error("Error saving profile:", error.response?.data || error.message);
             message.error("Failed to save profile");
@@ -135,6 +139,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
         }
     };
 
+    const gendersData = genders.map((item) => ({
+        label: item.name,
+        value: item.id,
+    }));
+
     return (
         <div className="profile-form-container">
 
@@ -145,13 +154,22 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
                 <Form.Item name="birthDay" label="Birthday" rules={[{ required: true, message: 'Please select your birthday!' }]}>
                     <DatePicker format="YYYY-MM-DD" />
                 </Form.Item>
-                <Form.Item name="genderId" label="Gender" rules={[{ required: true, message: 'Please select your gender!' }]}>
-                    <Select>
-                        {genders.map((gender) => (
-                            <Option key={gender.id} value={gender.id}>{gender.name}</Option>
-                        ))}
-                    </Select>
+
+                <Form.Item
+                    label="Gender"
+                    name="genderId"
+                    htmlFor="genderId"
+                    rules={[{ required: true, message: "Це поле є обов'язковим!" }]}
+                >
+                    <Select placeholder="Оберіть категорію: " options={gendersData} />
                 </Form.Item>
+                {/*<Form.Item name="genderId" label="Gender" rules={[{ required: true, message: 'Please select your gender!' }]}>*/}
+                {/*    <Select>*/}
+                {/*        {genders.map((gender) => (*/}
+                {/*            <Option key={gender.id} value={gender.id}>{gender.name}</Option>*/}
+                {/*        ))}*/}
+                {/*    </Select>*/}
+                {/*</Form.Item>*/}
                 <Form.Item name="interestedInId" label="Interested In" rules={[{ required: true, message: 'Please select what you are interested in!' }]}>
                     <Select>
                         {interestedIn.map((item) => (
