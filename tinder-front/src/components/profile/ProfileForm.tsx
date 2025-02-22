@@ -71,10 +71,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
             form.setFieldsValue({
                 name: profile.name,
                 birthDay: profile.birthDay ? moment(profile.birthDay) : null,
-                genderId: 1,
-                interestedInId: profile.interestedIn,
-                lookingForId: profile.lookingFor,
-                sexualOrientationId: profile.sexualOrientation,
+                genderId: profile.gender.id,
+                interestedInId: profile.interestedIn.id,
+                lookingForId: profile.lookingFor.id,
+                sexualOrientationId: profile.sexualOrientation.id,
                 interests: profile.interests,
             });
             if (profile.imagePath) {
@@ -102,8 +102,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
         formData.append("UserId", userId); // Додаємо userId
         formData.append("Name", values.name);
         formData.append("BirthDay", values.birthDay ? values.birthDay.format("YYYY-MM-DD") : "");
-        formData.append("GenderId", values.genderId.toString());
-        formData.append("InterestedInId", values.interestedInId.toString());
+        formData.append("GenderId", values.genderId);
+        formData.append("InterestedInId", values.interestedInId);
         formData.append("LookingForId", values.lookingForId.toString());
         formData.append("SexualOrientationId", values.sexualOrientationId.toString());
     
@@ -116,17 +116,22 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
         if (image) {
             formData.append("Image", image);
         }
-    
+        console.log("FormData contains:");
+        formData.forEach((value, key) => {
+            console.log(key, value);
+        });
+
+
         try {
 
-            // if (profile && profile.id) {
-            //     await ProfileService.updateProfile(profile.id.toString(), formData);
-            //     message.success("Profile updated successfully");
-            // } else {
-            //     await ProfileService.createProfile(formData);
-            //     message.success("Profile created successfully");
-            // }
-            // onSave();
+            if (profile && profile.id) {
+                await ProfileService.updateProfile(profile.id.toString(), formData);
+                message.success("Profile updated successfully");
+            } else {
+
+                message.error("id not found");
+            }
+            onSave();
         } catch (error: any) {
             console.error("Error saving profile:", error.response?.data || error.message);
             message.error("Failed to save profile");

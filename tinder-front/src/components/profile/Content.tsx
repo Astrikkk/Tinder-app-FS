@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {Modal, Table, Button, message, Typography } from "antd";
+import { Modal, Table, Button, message, Typography } from "antd";
 import { ProfileItemDTO } from "./types";
 import ProfileForm from "./ProfileForm";
 import { ProfileService } from "../../services/profile.service";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
@@ -22,25 +22,20 @@ const ProfileList: React.FC = () => {
         setLoading(true);
         try {
             const data = await ProfileService.getProfiles();
-            console.log("asdhjkjl ----- ", data);
-            setProfiles(data.map(profile => ({
-                ...profile,
-                id: profile.id ? Number(profile.id) : 0,
-                imagePath: profile.imagePath || "",
-                photos: profile.photos || [],
-                birthDay: new Date(profile.birthDay),
-                userid: profile?.userId ?? 0
-            })));
-        } catch (error) {
+            console.log("Fetched profiles data:", data); // Перевірка API-відповіді
+
+            setProfiles(data.map((profile: any) => (profile)));
+        } catch (error: any) {
+            console.error("Error fetching profiles:", error);
             message.error("Failed to load profiles");
         } finally {
             setLoading(false);
         }
     };
+
     const handleLogout = async () => {
         try {
             localStorage.removeItem("token");
-            console.log("Logout successful!");
             navigate("/auth");
         } catch (error: any) {
             console.error("Logout error:", error);
@@ -66,7 +61,7 @@ const ProfileList: React.FC = () => {
             dataIndex: "imagePath",
             key: "imagePath",
             render: (imagePath: string) => (
-                imagePath ? <img src={`http://localhost:7034${imagePath}`} alt="Photo" width={50}/> : "No Image"
+                imagePath ? <img src={`http://localhost:7034${imagePath}`} alt="Photo" width={50} /> : "No Image"
             ),
         },
         {
@@ -76,12 +71,12 @@ const ProfileList: React.FC = () => {
         },
         {
             title: "Gender",
-            dataIndex: "gender",
+            dataIndex: ["gender", "name"],
             key: "gender",
         },
         {
             title: "Looking For",
-            dataIndex: "lookingFor",
+            dataIndex: ["lookingFor", "name"],
             key: "lookingFor",
         },
         {
@@ -101,39 +96,18 @@ const ProfileList: React.FC = () => {
     ];
 
     return (
-        <div style={{padding: "20px"}}>
+        <div style={{ padding: "20px" }}>
             <Title level={2}>Profiles</Title>
-            <Button
-                type="primary"
-                onClick={() =>
-                    setSelectedProfile({
-                        id: 0,
-                        name: "",
-                        imagePath: "",
-                        interests: [],
-                        photos: [],
-                        sexualOrientation: "",
-                        gender: "",
-                        lookingFor: "",
-                        interestedIn: "",
-                        birthDay: new Date(),
-                        userid: 0
-                    })
-                }
-                style={{marginBottom: "20px"}}
-            >
-                Create New Profile
-            </Button>
 
             <button onClick={handleLogout} className="w-full text-left">
                 Logout
             </button>
-            <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading}/>
+            <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading} />
 
-            {selectedProfile && (
+            {selectedProfile && selectedProfile.id !== 0 && (
                 <Modal
                     open={!!selectedProfile}
-                    title={selectedProfile.id ? "Edit Profile" : "Create Profile"}
+                    title="Edit Profile"
                     onCancel={() => setSelectedProfile(null)}
                     footer={null}
                 >
@@ -149,6 +123,5 @@ const ProfileList: React.FC = () => {
         </div>
     );
 };
-
 
 export default ProfileList;
