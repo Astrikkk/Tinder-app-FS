@@ -4,6 +4,10 @@ export interface LoginResponse {
     token: string;
 }
 
+export interface RegisterResponse {
+    token: string;
+}
+
 const parseJSON = async (response: Response) => {
     try {
         return await response.json();
@@ -27,7 +31,7 @@ export const login = async (email: string, password: string): Promise<LoginRespo
     return await parseJSON(response);
 };
 
-export const register = async (email: string, password: string): Promise<void> => {
+export const register = async (email: string, password: string): Promise<RegisterResponse> => {
     const response = await fetch(`${API_BASE_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -38,4 +42,6 @@ export const register = async (email: string, password: string): Promise<void> =
         const error = await parseJSON(response);
         throw new Error(error.Error || "Registration failed.");
     }
+
+    return await parseJSON(response);
 };

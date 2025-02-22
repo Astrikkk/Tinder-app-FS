@@ -4,11 +4,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TinderApp.Data.Entities.Identity;
+using TinderApp.Interfaces;
 
-public interface IJwtTokenService
-{
-    Task<string> CreateTokenAsync(UserEntity user);
-}
+
 
 public class JwtTokenService : IJwtTokenService
 {
@@ -25,12 +23,14 @@ public class JwtTokenService : IJwtTokenService
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.UserName)
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Конвертація у string
+            new Claim(ClaimTypes.Email, user.Email ?? string.Empty), // Уникнення null
+            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
         };
 
         var roles = await _userManager.GetRolesAsync(user);
-        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role.ToString())));
+
 
         var secretKey = _configuration.GetValue<string>("JwtSecretKey");
         if (string.IsNullOrEmpty(secretKey))
@@ -39,12 +39,17 @@ public class JwtTokenService : IJwtTokenService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var token = new JwtSecurityToken(
-            claims: claims,
-            expires: DateTime.UtcNow.AddDays(10),
-            signingCredentials: credentials
-        );
+        // Використовуємо SecurityTokenDescriptor
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims), // ✅ Виправлено
+            Expires = DateTime.UtcNow.AddDays(10),
+            SigningCredentials = credentials
+        };
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        return tokenHandler.WriteToken(token);
     }
 }

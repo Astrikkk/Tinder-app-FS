@@ -2,30 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select, DatePicker, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { ProfileItemDTO } from './types';
+import {ProfileCreateDTO, ProfileItemDTO} from './types';
 import { ProfileService } from "../../services/profile.service";
 import { ProfileInfoService } from "../../services/profile.info.service";
-import jwtDecode, { JwtPayload } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
+import JwtPayload from "jwt-decode";
+
+import { useLocation } from 'react-router-dom';
 const { Option } = Select;
 
+
+
 interface ProfileFormProps {
-    profile: ProfileItemDTO | null;
+    profile: ProfileCreateDTO | null;
     onSave: () => void;
 }
 
 const getUserIdFromToken = (token: string | null): string | null => {
     if (!token) return null;
-    
+
     try {
-        const { jwtDecode } = require("jwt-decode"); // Використовуємо require для правильного імпорту
         const decoded: any = jwtDecode(token);
-        return decoded.userId || decoded.id || null;
+        console.log("Decoded token:", decoded);
+
+        return decoded.nameid || null; // Спробуйте використати 'sub'
     } catch (error) {
         console.error("Помилка декодування JWT", error);
         return null;
     }
 };
+
 
 
 
@@ -59,7 +66,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
         };
         fetchData();
 
-        if (profile) {
+        if (profile) {  
             form.setFieldsValue({
                 name: profile.name,
                 birthDay: profile.birthDay ? moment(profile.birthDay) : null,
@@ -80,10 +87,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
     const onFinish = async (values: any) => {
         const token = localStorage.getItem("token");
         const userId = getUserIdFromToken(token);
-    
+
         if (!userId) {
             message.error("Не вдалося отримати ID користувача. Увійдіть знову.");
             return;
+        } else {
+            message.success(`Отримано userId: ${userId}`);
         }
     
         const formData = new FormData();
@@ -128,7 +137,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
 
     return (
         <div className="profile-form-container">
-            <h2>{profile ? 'Edit Profile' : 'Create Profile'}</h2>
+
             <Form form={form} onFinish={onFinish} layout="vertical" encType="multipart/form-data">
                 <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input your name!' }]}>
                     <Input />

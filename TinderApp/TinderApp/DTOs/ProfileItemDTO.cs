@@ -11,5 +11,6 @@
         public DateOnly BirthDay { get; set; }  // Add birth date
         public List<string> Interests { get; set; } = new List<string>();  // Add Interests
         public List<string> Photos { get; set; } = new List<string>();  // Add Photos
+        public int userId {  get; set; }
     }
 }

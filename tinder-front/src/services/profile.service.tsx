@@ -14,6 +14,7 @@ export interface Profile {
     interests: string[];
     imagePath?: string;
     photos?: string[];
+    userId: number;
 }
 
 export const ProfileService = {

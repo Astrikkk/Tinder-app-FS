@@ -9,17 +9,20 @@ export interface ProfileItemDTO {
     birthDay: Date;
     interests: string[];
     photos: string[];
+    userid: number;
 }
 
 export interface ProfileCreateDTO {
+    id: number;
     name: string;
+    imagePath: string;
+    gender: string;
+    lookingFor: string;
+    interestedIn: string;
+    sexualOrientation: string;
     birthDay: Date;
-    genderId: number;
-    interestedInId: number;
-    lookingForId: number;
-    sexualOrientationId: number;
-    image?: File | null; // Файл для завантаження фото
-    interestIds?: number[]; // Масив ID інтересів
+    interests: string[];
+    photos: string[];
     userid: number;
 
 }

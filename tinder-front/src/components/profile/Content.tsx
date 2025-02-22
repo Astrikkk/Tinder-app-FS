@@ -29,6 +29,7 @@ const ProfileList: React.FC = () => {
                 imagePath: profile.imagePath || "",
                 photos: profile.photos || [],
                 birthDay: new Date(profile.birthDay),
+                userid: profile?.userId ?? 0
             })));
         } catch (error) {
             message.error("Failed to load profiles");
@@ -116,6 +117,7 @@ const ProfileList: React.FC = () => {
                         lookingFor: "",
                         interestedIn: "",
                         birthDay: new Date(),
+                        userid: 0
                     })
                 }
                 style={{marginBottom: "20px"}}

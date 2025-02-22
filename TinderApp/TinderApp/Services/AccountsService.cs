@@ -18,21 +18,21 @@ namespace TinderApp.Services
             _jwtTokenService = jwtTokenService;
         }
 
-        public async Task Register(RegisterDTO model)
+        public async Task<int> Register(RegisterDTO model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user != null)
-                throw new Exception("Email already exists.");
-
-            var newUser = new UserEntity
+            var user = new UserEntity
             {
-                Email = model.Email,
-                UserName = model.Email
+                UserName = model.Email,
+                Email = model.Email
             };
 
-            var result = await _userManager.CreateAsync(newUser, model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                throw new Exception(string.Join(" ", result.Errors.Select(e => e.Description)));
+            {
+                throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+
+            return user.Id;
         }
 
         public async Task<string> Login(LoginDTO model)
