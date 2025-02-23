@@ -1,0 +1,60 @@
+.sexual-orientation-list{
+    display: flex;
+    width: 444px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.sexual-orientation{
+    display: flex;
+    padding: 16px 24px;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+
+    border-radius: 12px;
+    border-bottom: 2px solid #551E28;
+}
+
+.sexual-orientation.selected {
+    display: flex;
+    width: 444px;
+    padding: 16px 24px;
+    align-items: center;
+    gap: 8px;
+
+    border-radius: 12px;
+    border-bottom: 2px solid #651111;
+    background: #320000;
+
+}
+
+.sexual-orientation.selected .orientation-text{
+    color: #FFF;
+    text-align: center;
+
+    /* Akatab-Regular-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+
+}
+
+.orientation-text{
+    color: #B1A4A4;
+    text-align: center;
+
+    /* Akatab-Regular-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+
+}

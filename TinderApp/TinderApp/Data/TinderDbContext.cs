@@ -50,6 +50,16 @@ namespace TinderApp.Data
                 new RoleEntity { Id = 1, Name = "User", NormalizedName = "USER" },
                 new RoleEntity { Id = 2, Name = "Admin", NormalizedName = "ADMIN" }
             );
+            // Seed initial data for LookingFor
+            modelBuilder.Entity<LookingFor>().HasData(
+                new LookingFor { Id = 1, Name = "Long-Term Relationship" },
+                new LookingFor { Id = 2, Name = "Short-term romance" },
+                new LookingFor { Id = 3, Name = "Serious relationship" },
+                new LookingFor { Id = 4, Name = "New friends" },
+                new LookingFor { Id = 5, Name = "Non-serious relationship" },
+                new LookingFor { Id = 6, Name = "I'm not sure yet" }
+            );
+
 
             // Configure User and Profile one-to-one relationship
             modelBuilder.Entity<UserEntity>()

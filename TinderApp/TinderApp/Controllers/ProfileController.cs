@@ -6,6 +6,7 @@ using AutoMapper.QueryableExtensions;
 using TinderApp.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text.Json;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -47,40 +48,60 @@ public class ProfileController : ControllerBase
 
         return Ok(_mapper.Map<ProfileDetailsDTO>(profile));
     }
+[HttpPost]
+public async Task<IActionResult> CreateProfile([FromForm] ProfileCreateRequest model)
+{
+    Console.WriteLine($"Received data: {JsonSerializer.Serialize(model)}");
 
-    [HttpPost]
-    public async Task<IActionResult> CreateProfile([FromForm] ProfileCreateRequest model)
+    if (!ModelState.IsValid)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        Console.WriteLine("ModelState errors: " + string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+        return BadRequest(ModelState);
+    }
 
-        var entity = _mapper.Map<UserProfile>(model);
-        await _dbContext.Profiles.AddAsync(entity);
-        await _dbContext.SaveChangesAsync();
+    var entity = _mapper.Map<UserProfile>(model);
 
-        if (model.Image != null)
+    // Додаємо інтереси, якщо вони вказані
+    if (model.InterestIds != null && model.InterestIds.Any())
+    {
+        var interests = await _dbContext.Interests
+            .Where(i => model.InterestIds.Contains(i.Id))
+            .ToListAsync();
+        entity.Interests = interests; // Призначаємо знайдені інтереси профілю
+    }
+
+    await _dbContext.Profiles.AddAsync(entity);
+    await _dbContext.SaveChangesAsync();
+
+    // Обробка збереження фотографій
+    if (model.Images != null && model.Images.Count > 0)
+    {
+        var dir = _configuration["ImageDir"];
+
+        foreach (var image in model.Images)
         {
             string imageName = $"{Guid.NewGuid()}.jpg";
-            var dir = _configuration["ImageDir"];
             var fileSave = Path.Combine(Directory.GetCurrentDirectory(), dir, imageName);
 
             await using var stream = new FileStream(fileSave, FileMode.Create);
-            await model.Image.CopyToAsync(stream);
+            await image.CopyToAsync(stream);
 
             var profilePhoto = new ProfilePhoto
             {
                 Path = imageName,
-                IsPrimary = true,
+                IsPrimary = entity.ProfilePhotos.Count == 0,
                 ProfileId = entity.Id
             };
 
             entity.ProfilePhotos.Add(profilePhoto);
-            _dbContext.Attach(entity); // Avoid unnecessary updates
-            await _dbContext.SaveChangesAsync();
         }
 
-        return Ok(new { ProfileId = entity.Id });
+        _dbContext.Attach(entity);
+        await _dbContext.SaveChangesAsync();
     }
+
+    return Ok(new { ProfileId = entity.Id });
+}
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProfile(int id, [FromForm] ProfileUpdateRequest model)

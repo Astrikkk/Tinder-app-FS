@@ -10,14 +10,53 @@ import Vector2 from "./img/Vector2.svg";
 import IconAdd from "./img/IconAdd.svg";
 
 
-import './createForm.css'; // Імпортуємо CSS файл
+import './createForm.css';
+import LookingFor from "./modal/lookingFor/lookingFor";
+import Interests from "./modal/interests/interests";
+import SexualOrientation from "./modal/sexualOrientation/sexualOrientation";
+import {jwtDecode} from "jwt-decode";
+import {Form, message} from "antd";
+import {ProfileService} from "../../../services/profile.service";
+import lookingFor from "./modal/lookingFor/lookingFor";
+import sexualOrientation from "./modal/sexualOrientation/sexualOrientation";
+
+const getUserIdFromToken = (token: string | null): string | null => {
+    if (!token) return null;
+
+    try {
+        const decoded: any = jwtDecode(token);
+        console.log("Decoded token:", decoded);
+
+        return decoded.nameid || null; // Спробуйте використати 'sub'
+    } catch (error) {
+        console.error("Помилка декодування JWT", error);
+        return null;
+    }
+};
 
 const CreateForm: React.FC = () => {
 
-    const [images, setImages] = useState<(string | null)[]>([null, null, null, null]);
+    const [form] = Form.useForm();
 
-    const [gender, setGender] = useState<string>("");
-    const [interestedIn, setInterestedIn] = useState<string>("");
+    const [images, setImages] = useState<(string | null)[]>([null, null, null, null]);
+    const [openModal, setOpenModal] = useState<string | null>(null);
+    const [selectedRelationship, setSelectedRelationship] = useState<number | null>(null);
+    const [selectedInterests, setSelectedInterests] = useState<number[]>([]);
+    const [selectedSexualOrientation, setSelectedSexualOrientation] = useState<number | null>(null);
+    const [gender, setGender] = useState<number | null>(null);
+    const [interestedIn, setInterestedIn] = useState<number | null>(null);
+
+    const [name, setName] = useState<string>("");
+    const [dob, setDob] = useState<Date | null>(null);
+
+
+    const handleOpenModal = (modal: string) => {
+        setOpenModal(modal);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(null);
+    };
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         if (event.target.files && event.target.files[0]) {
@@ -31,6 +70,118 @@ const CreateForm: React.FC = () => {
             });
         }
     };
+
+    const handleRelationshipSelect = (selectedId: number | null) => {
+        setSelectedRelationship(selectedId);
+        handleCloseModal();
+    };
+
+    const handleInterestsSelect = (selectedIds: number[]) => {
+        setSelectedInterests(selectedIds);
+        handleCloseModal();
+        console.log(selectedIds)
+    };
+    const handleOrientationSelect = (selectedId: number | null) => {
+        setSelectedSexualOrientation(selectedId);
+        handleCloseModal();
+        console.log(selectedId)
+    };
+
+
+    const handleDobChange = (field: "day" | "month" | "year", value: string) => {
+        setDob((prevDob) => {
+            const currentDob = prevDob || new Date(); // Якщо prevDob === null, створюємо новий об'єкт дати
+
+            const updatedDob = {
+                day: field === "day" ? value : currentDob.getDate().toString(),
+                month: field === "month" ? value : (currentDob.getMonth() + 1).toString(),
+                year: field === "year" ? value : currentDob.getFullYear().toString(),
+            };
+
+            const { day, month, year } = updatedDob;
+
+            if (day && month && year) {
+                const parsedDate = new Date(Number(year), Number(month) - 1, Number(day));
+
+                if (!isNaN(parsedDate.getTime())) {
+                    return parsedDate;
+                }
+            }
+
+            return prevDob;
+        });
+    };
+
+
+
+
+
+
+    const handleSubmit = async () => {
+        const token = localStorage.getItem("token");
+        const userId = getUserIdFromToken(token);
+
+        if (!userId) {
+            message.error("Не вдалося отримати ID користувача. Увійдіть знову.");
+            return;
+        } else {
+            message.success(`Отримано userId: ${userId}`);
+        }
+
+        const formData = new FormData();
+        formData.append("UserId", userId);
+        formData.append("Name", name);
+        formData.append("BirthDay", dob ? dob.toISOString().split("T")[0] : "");
+        if (gender !== null) formData.append("GenderId", gender.toString());
+
+        if (selectedRelationship !== null) formData.append("LookingForId", selectedRelationship.toString());
+        if (selectedSexualOrientation !== null) formData.append("SexualOrientationId", selectedSexualOrientation.toString());
+
+        selectedInterests.forEach((interestId) => {
+            formData.append("InterestIds", interestId.toString());
+        });
+
+// Додаємо масив фотографій
+        images.forEach((image) => {
+            if (image) { // Переконуємося, що image не null
+                formData.append("Images", image);
+            }
+        });
+
+// Виведення вмісту formData у консоль
+        formData.forEach((value, key) => {
+            console.log(`${key}:`, value);
+        });
+
+        try {
+            await ProfileService.createProfile(formData);
+            message.success("Profile updated successfully");
+        } catch (error: any) {
+            console.error("Error saving profile:", error.response?.data || error.message);
+            message.error("Failed to save profile");
+        }
+    };
+
+
+    const onfin = () => {
+
+        const token = localStorage.getItem("token");
+        const userId = getUserIdFromToken(token);
+        console.log({
+            images,
+            name,
+            dob,
+            gender,
+            interestedIn,
+            selectedRelationship,
+            selectedInterests,
+            selectedSexualOrientation,
+            userId
+        });
+    };
+
+
+
 
     return (
         <div className=" min-h-screen h-screen overflow-y-auto bg-stone-950 flex flex-col relative">
@@ -85,47 +236,79 @@ const CreateForm: React.FC = () => {
                 {/* Name Input */}
                 <label className="form-label gap-[24px]">
                     <span>Name</span>
-                    <input type="text" placeholder="Name" className="input-field"/>
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        className="input-field"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
                 </label>
 
                 {/* Date of Birth Inputs */}
                 <label className="form-label">
                     Date of birth
                     <div className="flex gap-3">
-                        <input type="number" placeholder="DD" className="input-date w-[124px]" min="1" max="31"/>
-                        <input type="number" placeholder="MM" className="input-date w-[124px]" min="1" max="12"/>
-                        <input type="number" placeholder="YYYY" className="input-date w-[124px]" min="1900"
-                               max="2100"/>
+                        <input
+                            type="number"
+                            placeholder="DD"
+                            className="input-date w-[124px]"
+                            min="1" max="31"
+                            onChange={(e) => handleDobChange("day", e.target.value)}
+                        />
+                        <input
+                            type="number"
+                            placeholder="MM"
+                            className="input-date w-[124px]"
+                            min="1" max="12"
+                            onChange={(e) => handleDobChange("month", e.target.value)}
+                        />
+                        <input
+                            type="number"
+                            placeholder="YYYY"
+                            className="input-date w-[124px]"
+                            min="1900" max="2100"
+                            onChange={(e) => handleDobChange("year", e.target.value)}
+                        />
                     </div>
                 </label>
+
 
                 {/* Gender Selection */}
                 <label className="form-label">
                     Gender
                     <div className="flex gap-3">
-                        {["Male", "Female"].map((option) => (
+                        {[
+                            {label: "Male", value: 1},
+                            {label: "Female", value: 2},
+                        ].map(({label, value}) => (
                             <button
-                                key={option}
-                                className={`btn-option ${gender === option ? "active" : ""}`}
-                                onClick={() => setGender(option)}
+                                key={label}
+                                className={`btn-option ${gender === value ? "active" : ""}`}
+                                onClick={() => setGender(value)}
                             >
-                                {option}
+                                {label}
                             </button>
                         ))}
                     </div>
                 </label>
 
+
                 {/* Interested In Selection */}
                 <label className="form-label">
                     I’m interested in
                     <div className="flex gap-3">
-                        {["Male", "Female", "Both"].map((option) => (
+                        {[
+                            {label: "Male", value: 1},
+                            {label: "Female", value: 2},
+                            {label: "Both", value: 3},
+                        ].map(({label, value}) => (
                             <button
-                                key={option}
-                                className={`btn-option ${interestedIn === option ? "active" : ""}`}
-                                onClick={() => setInterestedIn(option)}
+                                key={label}
+                                className={`btn-option ${interestedIn === value ? "active" : ""}`}
+                                onClick={() => setInterestedIn(value)}
                             >
-                                {option}
+                                {label}
                             </button>
                         ))}
                     </div>
@@ -134,25 +317,34 @@ const CreateForm: React.FC = () => {
 
             <div className="optional-container absolute left-[416px] top-[1003px] flex gap-3">
                 <img src={Vector1} alt="Vector"/>
-                <span className="text-orange-300 text-2xl font-bold">optional</span>
+                <span className="optional-text">optional</span>
                 <img src={Vector2} alt="Vector"/>
             </div>
 
             <div className="form-2-container absolute w-[400px] left-[367px] top-[1099px] flex flex-col gap-6">
                 {[
-                    {label: "I'm looking for", placeholder: "+ Add a relationship goal"},
-                    {label: "Interests", placeholder: "+ Add interests"},
-                    {label: "Sexual orientation", placeholder: "+ Add Sexual orientation"},
-                ].map((item, i) => (
-                    <label key={i} className="form-label">
+                    {id: "relationship", label: "I'm looking for", placeholder: "+ Add a relationship goal"},
+                    {id: "interests", label: "Interests", placeholder: "+ Add interests"},
+                    {id: "orientation", label: "Sexual orientation", placeholder: "+ Add Sexual orientation"},
+                ].map((item) => (
+                    <label key={item.id} className="form-label">
                         {item.label}
-                        <button className="btn-placeholder-form2"><span>{item.placeholder}</span></button>
+                        <button className="btn-placeholder-form2" onClick={() => handleOpenModal(item.id)}>
+                            <span>{item.placeholder}</span>
+                        </button>
                     </label>
                 ))}
+
+                {/* Відображення модальних вікон */}
+                {openModal === "relationship" && <LookingFor onClose={handleRelationshipSelect}/>}
+
+                {openModal === "interests" && <Interests onClose={handleInterestsSelect}/> }
+
+                {openModal === "orientation" &&<SexualOrientation onClose={handleOrientationSelect}/>}
             </div>
 
             {/* Submit Button */}
-            <button className="submit-btn">
+            <button className="find-love-btn" onClick={handleSubmit}>
                 Find your love!
             </button>
 

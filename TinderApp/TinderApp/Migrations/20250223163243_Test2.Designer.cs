@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TinderApp.Data;
 
@@ -11,9 +12,11 @@ using TinderApp.Data;
 namespace TinderApp.Migrations
 {
     [DbContext(typeof(TinderDbContext))]
-    partial class TinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250223163243_Test2")]
+    partial class Test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,15 +37,10 @@ namespace TinderApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("UserProfileId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
-
-                    b.HasIndex("UserProfileId");
 
                     b.ToTable("Interests");
                 });
@@ -476,6 +474,21 @@ namespace TinderApp.Migrations
                     b.ToTable("Profiles");
                 });
 
+            modelBuilder.Entity("TinderApp.Data.Entities.UserProfileInterest", b =>
+                {
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InterestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserProfileId", "InterestId");
+
+                    b.HasIndex("InterestId");
+
+                    b.ToTable("UserProfileInterests");
+                });
+
             modelBuilder.Entity("UserRoleEntity", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<int>");
@@ -483,13 +496,6 @@ namespace TinderApp.Migrations
                     b.HasIndex("RoleId");
 
                     b.HasDiscriminator().HasValue("UserRoleEntity");
-                });
-
-            modelBuilder.Entity("Data.Entities.Interest", b =>
-                {
-                    b.HasOne("TinderApp.Data.Entities.UserProfile", null)
-                        .WithMany("Interests")
-                        .HasForeignKey("UserProfileId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -585,6 +591,25 @@ namespace TinderApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TinderApp.Data.Entities.UserProfileInterest", b =>
+                {
+                    b.HasOne("Data.Entities.Interest", "Interest")
+                        .WithMany("UserProfileInterests")
+                        .HasForeignKey("InterestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TinderApp.Data.Entities.UserProfile", "UserProfile")
+                        .WithMany("UserProfileInterests")
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Interest");
+
+                    b.Navigation("UserProfile");
+                });
+
             modelBuilder.Entity("UserRoleEntity", b =>
                 {
                     b.HasOne("TinderApp.Data.Entities.Identity.RoleEntity", "Role")
@@ -604,6 +629,11 @@ namespace TinderApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Data.Entities.Interest", b =>
+                {
+                    b.Navigation("UserProfileInterests");
+                });
+
             modelBuilder.Entity("TinderApp.Data.Entities.Identity.RoleEntity", b =>
                 {
                     b.Navigation("UserRoles");
@@ -618,9 +648,9 @@ namespace TinderApp.Migrations
 
             modelBuilder.Entity("TinderApp.Data.Entities.UserProfile", b =>
                 {
-                    b.Navigation("Interests");
-
                     b.Navigation("ProfilePhotos");
+
+                    b.Navigation("UserProfileInterests");
                 });
 #pragma warning restore 612, 618
         }
