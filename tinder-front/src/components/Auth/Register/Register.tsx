@@ -32,7 +32,7 @@ const Register: React.FC = () => {
             }
 
 
-            navigate(`/profile`);
+            navigate(`/create-profile`);
         } catch (error: any) {
             console.error("Registration error:", error);
             setErrorMessage(error.message || "An unexpected error occurred.");

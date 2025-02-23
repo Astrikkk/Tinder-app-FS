@@ -19,6 +19,7 @@ import {Form, message} from "antd";
 import {ProfileService} from "../../../services/profile.service";
 import lookingFor from "./modal/lookingFor/lookingFor";
 import sexualOrientation from "./modal/sexualOrientation/sexualOrientation";
+import {useNavigate} from "react-router-dom";
 
 const getUserIdFromToken = (token: string | null): string | null => {
     if (!token) return null;
@@ -26,7 +27,7 @@ const getUserIdFromToken = (token: string | null): string | null => {
     try {
         const decoded: any = jwtDecode(token);
         console.log("Decoded token:", decoded);
-
+        console.log(decoded.role);
         return decoded.nameid || null; // Спробуйте використати 'sub'
     } catch (error) {
         console.error("Помилка декодування JWT", error);
@@ -38,7 +39,8 @@ const CreateForm: React.FC = () => {
 
     const [form] = Form.useForm();
 
-    const [images, setImages] = useState<(string | null)[]>([null, null, null, null]);
+    const [images, setImages] = useState<(File | string | null)[]>([null, null, null, null]);
+
     const [openModal, setOpenModal] = useState<string | null>(null);
     const [selectedRelationship, setSelectedRelationship] = useState<number | null>(null);
     const [selectedInterests, setSelectedInterests] = useState<number[]>([]);
@@ -48,6 +50,8 @@ const CreateForm: React.FC = () => {
 
     const [name, setName] = useState<string>("");
     const [dob, setDob] = useState<Date | null>(null);
+
+    const navigate = useNavigate();
 
 
     const handleOpenModal = (modal: string) => {
@@ -61,11 +65,10 @@ const CreateForm: React.FC = () => {
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
-            const imageUrl = URL.createObjectURL(file);
 
             setImages((prevImages) => {
                 const newImages = [...prevImages];
-                newImages[index] = imageUrl;
+                newImages[index] = file; // Now valid due to updated state type
                 return newImages;
             });
         }
@@ -79,12 +82,10 @@ const CreateForm: React.FC = () => {
     const handleInterestsSelect = (selectedIds: number[]) => {
         setSelectedInterests(selectedIds);
         handleCloseModal();
-        console.log(selectedIds)
     };
     const handleOrientationSelect = (selectedId: number | null) => {
         setSelectedSexualOrientation(selectedId);
         handleCloseModal();
-        console.log(selectedId)
     };
 
 
@@ -133,20 +134,18 @@ const CreateForm: React.FC = () => {
         formData.append("Name", name);
         formData.append("BirthDay", dob ? dob.toISOString().split("T")[0] : "");
         if (gender !== null) formData.append("GenderId", gender.toString());
-
+        if (interestedIn !== null) formData.append("InterestedInId", interestedIn.toString());
         if (selectedRelationship !== null) formData.append("LookingForId", selectedRelationship.toString());
         if (selectedSexualOrientation !== null) formData.append("SexualOrientationId", selectedSexualOrientation.toString());
 
-        selectedInterests.forEach((interestId) => {
-            formData.append("InterestIds", interestId.toString());
-        });
 
 // Додаємо масив фотографій
         images.forEach((image) => {
-            if (image) { // Переконуємося, що image не null
+            if (image instanceof File) { // TypeScript now recognizes this as valid
                 formData.append("Images", image);
             }
         });
+
 
 // Виведення вмісту formData у консоль
         formData.forEach((value, key) => {
@@ -156,6 +155,7 @@ const CreateForm: React.FC = () => {
         try {
             await ProfileService.createProfile(formData);
             message.success("Profile updated successfully");
+            navigate(`/#`);
         } catch (error: any) {
             console.error("Error saving profile:", error.response?.data || error.message);
             message.error("Failed to save profile");
@@ -209,8 +209,12 @@ const CreateForm: React.FC = () => {
                             <div
                                 className="w-full h-full border-2 border-red-900 rounded-xl flex items-center justify-center overflow-hidden">
                                 {image ? (
-                                    <img src={image} alt={`Uploaded ${i}`}
-                                         className="w-full h-full object-cover rounded-xl"/>
+                                    <img
+                                        src={image instanceof File ? URL.createObjectURL(image) : image || ""}
+                                        alt={`Uploaded ${i}`}
+                                        className="w-full h-full object-cover rounded-xl"
+                                    />
+
                                 ) : (
                                     <label htmlFor={`file-upload-${i}`} className="cursor-pointer">
                                         <img src={IconAdd} alt="Add" className="absolute left-[178px] top-[230px]"/>

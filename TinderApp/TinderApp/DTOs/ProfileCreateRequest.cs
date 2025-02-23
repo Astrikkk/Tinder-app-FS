@@ -8,7 +8,6 @@
         public int InterestedInId { get; set; }
         public int LookingForId { get; set; }
         public int SexualOrientationId { get; set; }
-
         public List<IFormFile>? Images { get; set; }  // Замість одного Image
         public List<int>? InterestIds { get; set; }
         public int UserId { get; set; }
