@@ -4,6 +4,7 @@ import { ProfileItemDTO } from "./types";
 import ProfileForm from "./ProfileForm";
 import { ProfileService } from "../../services/profile.service";
 import { useNavigate } from "react-router-dom";
+import {RoleService} from "../../services/role.service";
 
 const { Title } = Typography;
 
@@ -11,6 +12,7 @@ const ProfileList: React.FC = () => {
     const [profiles, setProfiles] = useState<ProfileItemDTO[]>([]);
     const [selectedProfile, setSelectedProfile] = useState<ProfileItemDTO | null>(null);
     const [loading, setLoading] = useState(false);
+    const [userRoles, setUserRoles] = useState<string[]>([]);
 
     const navigate = useNavigate();
 
@@ -52,6 +54,40 @@ const ProfileList: React.FC = () => {
             } catch (error) {
                 message.error("Failed to delete profile");
             }
+        }
+    };
+
+    // Тестові функції для роботи з ролями
+    const testGetRoles = async () => {
+        try {
+            const roles = await RoleService.getUserRoles("puzyrko2007@gmail.com");
+            setUserRoles(roles);
+            message.success(`Roles: ${roles.join(", ")}`);
+        } catch (error) {
+            console.error("Error fetching roles:", error);
+            message.error("Failed to fetch roles");
+        }
+    };
+
+    const testAddRole = async () => {
+        try {
+            await RoleService.addRoleToUser("puzyrko2007@gmail.com", "Admin");
+            message.success("Role added successfully.");
+            testGetRoles(); // Оновлення списку ролей
+        } catch (error) {
+            console.error("Error adding role:", error);
+            message.error("Failed to add role");
+        }
+    };
+
+    const testRemoveRole = async () => {
+        try {
+            await RoleService.removeRoleFromUser("puzyrko2007@gmail.com", "Admin");
+            message.success("Role removed successfully.");
+            testGetRoles(); // Оновлення списку ролей
+        } catch (error) {
+            console.error("Error removing role:", error);
+            message.error("Failed to remove role");
         }
     };
 
@@ -103,6 +139,28 @@ const ProfileList: React.FC = () => {
                 Logout
             </button>
             <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading} />
+
+            {/* Кнопки для тестування сервісу ролей */}
+            <div style={{ marginTop: "20px" }}>
+                <Title level={4}>Test Role Service</Title>
+                <Button onClick={testGetRoles} type="primary" style={{ marginRight: "10px" }}>
+                    Get User Roles
+                </Button>
+                <Button onClick={testAddRole} type="default" style={{ marginRight: "10px" }}>
+                    Add Admin Role
+                </Button>
+                <Button onClick={testRemoveRole} type="dashed">
+                    Remove Admin Role
+                </Button>
+            </div>
+
+            {/* Відображення отриманих ролей */}
+            {userRoles.length > 0 && (
+                <div style={{ marginTop: "10px" }}>
+                    <Title level={5}>User Roles:</Title>
+                    <p>{userRoles.join(", ")}</p>
+                </div>
+            )}
 
             {selectedProfile && selectedProfile.id !== 0 && (
                 <Modal

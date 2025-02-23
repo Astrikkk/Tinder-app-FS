@@ -163,26 +163,6 @@ const CreateForm: React.FC = () => {
     };
 
 
-    const onfin = () => {
-
-        const token = localStorage.getItem("token");
-        const userId = getUserIdFromToken(token);
-        console.log({
-            images,
-            name,
-            dob,
-            gender,
-            interestedIn,
-            selectedRelationship,
-            selectedInterests,
-            selectedSexualOrientation,
-            userId
-        });
-    };
-
-
-
-
     return (
         <div className=" min-h-screen h-screen overflow-y-auto bg-stone-950 flex flex-col relative">
             {/* Background Elements */}
