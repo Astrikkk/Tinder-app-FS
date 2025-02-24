@@ -37,16 +37,17 @@ namespace TinderApp.Controllers
         }
 
         // Get all roles of a user
-        [HttpGet("get-roles")]
-        public async Task<IActionResult> GetUserRoles(string username)
+        [HttpGet("get-roles/{userId}")]
+        public async Task<IActionResult> GetUserRoles(string userId)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 return NotFound("User not found.");
 
             var roles = await _userManager.GetRolesAsync(user);
             return Ok(roles);
         }
+
 
         // Remove a role from a user
         [HttpPost("remove-role")]
