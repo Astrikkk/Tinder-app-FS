@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Akatab:wght@400;500;600;700;800;900&display=swap');
+
+.card {
+    width: 414px;
+    height: 803px;
+    position: relative;
+}
+
+.card-background {
+    width: 414px;
+    height: 803px;
+    flex-shrink: 0;
+}
+
+.card-image {
+    width: 414px;
+    height: 554px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 12px;
+    background: lightgray 50% / cover no-repeat;
+
+    
+}
+
+.card-overlay {
+    width: 414px;
+    height: 374px;
+    position: absolute;
+    left: 0;
+    top: 429px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(36, 0, 0, 0.00) 0%, #210000 25.39%);
+}
+
+.card-buttons {
+    position: absolute;
+    left: 84px;
+    top: 710px;
+
+    display: flex;
+    width: 246px;
+    height: 70px;
+    align-items: center;
+    gap: 24px;
+    flex-shrink: 0;
+}
+
+.dislike{
+    display: flex;
+    width: 70px;
+    height: 70px;
+    padding: 15px 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+
+    border-radius: 44px;
+    border: 2px solid #FFCC7E;
+}
+
+.star-like{
+    display: flex;
+    width: 58px;
+    height: 58px;
+    padding: 11px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+
+    border-radius: 32px;
+    border: 2px solid #BF0B2C;
+}
+
+.message{
+    display: flex;
+    width: 70px;
+    height: 70px;
+    padding: 15px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+
+    border-radius: 44px;
+    border: 2px solid #FFCC7E;
+}
+
+.card-interests {
+    width: 350px;
+    position: absolute;
+    left: 32px;
+    top: 612px;
+    display: flex;
+    justify-content: start;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+.card-interest {
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e5e5e5;
+    font-size: 18px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 400;
+
+    padding: 4px 28px;
+    gap: 8px;
+
+    border: 2px solid #B1A4A4;
+    background: #320000;
+}
+
+.card-info-icon {
+    position: absolute;
+    left: 352px;
+    top: 569px;
+
+    display: flex;
+    width: 30px;
+    height: 30px;
+    padding: 2.5px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.card-name-status {
+    height: 67px;
+    position: absolute;
+    left: 32px;
+    top: 536px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 4px;
+}
+
+.card-status {
+    color: #86efac;
+    font-size: 18px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 400;
+}
+
+.card-name-age {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 16px;
+}
+
+.card-name {
+    color: white;
+    font-size: 28px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 800;
+}
+
+.card-age {
+    color: white;
+    font-size: 28px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 400;
+}

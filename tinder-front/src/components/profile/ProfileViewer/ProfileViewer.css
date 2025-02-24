@@ -1,0 +1,243 @@
+.custom-container {
+    width: 100vw;
+    height: 100vh;
+    background: #100607;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+.keys{
+    display: inline-flex;
+    align-items: center;
+    gap: 28px;
+
+    position: absolute;
+    bottom: 3%;
+}
+.key{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+}
+.key-box{
+    display: flex;
+    width: 28px;
+    height: 28px;
+    padding: 3.5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.key-text{
+    color: #B1A4A4;
+    text-align: center;
+
+    /* AnekTamil-SemiBold-16 */
+    font-family: "Anek Tamil";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.bg-left{
+    width: 671px;
+    height: 1002px;
+    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 38px;
+
+}
+
+.left-header{
+    display: flex;
+
+}
+
+.bg-left-1{
+    width: 400px;
+    height: 908px;
+
+    border-radius: 0px 0px 12px 12px;
+    background: #240000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.bg-left-1 > :first-child {
+    align-self: flex-start; /* Перший елемент на самому верху */
+}
+
+.bg-left-1 > :nth-child(2) {
+    flex-grow: 1; /* Другий елемент займає весь вільний простір */
+    display: flex; /* Якщо всередині потрібне центрування */
+    justify-content: center;
+    align-items: center;
+}
+
+
+.section-1{
+    display: flex;
+    width: 397px;
+    padding: 18px 0px;
+    justify-content: space-between;
+    align-items: center;
+
+    background:  #BF0B2C;
+}
+
+.account{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.security-settings{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.your-avatar{
+    width: 58px;
+    height: 58px;
+
+    border-radius: 58px;
+    background:  lightgray 0px -1.938px / 100% 133.849% no-repeat;
+}
+
+.your-name{
+    color: #FFF;
+
+    /* Akatab-SemiBold-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+.bg-left-3{
+    width: 137px;
+    height: 94px;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, #100607 44.1%, #BF0B2C 100%);
+
+}
+.bg-left-2{
+    width: 137px;
+    height: 94px;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, #BF0B2C 0%, #100607 56%);
+
+}
+
+.section-2{
+    display: flex;
+    width: 400px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-2-button.selected{
+    display: flex;
+    width: 124px;
+    padding: 16px 36px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+
+    border-radius: 0px 0px 12px 12px;
+    background: #751123;
+}
+
+.section-2-button{
+    display: flex;
+    width: 106px;
+    padding: 16px 36px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+
+
+.button-text{
+    color: #B1A4A4;
+
+    /* Akatab-Regular-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+}
+
+.section-2-button.selected .button-text{
+    color: #FFF;
+}
+
+.match-info{
+    display: flex;
+    width: 301px;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.match-info-h2{
+    align-self: stretch;
+    color: #FFF;
+    text-align: center;
+    /* Akatab-SemiBold-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+.match-info-p{
+    align-self: stretch;
+    color: #E1DFDF;
+    text-align: center;
+
+    /* Akatab-Regular-18 */
+    font-family: Akatab;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.logo{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: absolute;
+    top: 38px;
+    right: 0;
+
+}
+
+.gradient-right{
+    width: 137px;
+    height: 94px;
+    background: linear-gradient(90deg, #100607 44.1%, #BF0B2C 100%);
+}

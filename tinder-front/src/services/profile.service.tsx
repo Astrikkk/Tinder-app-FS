@@ -4,16 +4,31 @@ import axios from 'axios';
 const API_URL = `${process.env.REACT_APP_API}/Profile`;
 
 export interface Profile {
-    id?: string;
+    id: number;
     name: string;
-    birthDay: string;
-    gender: string;
-    interestedIn: string;
-    lookingFor: string;
-    sexualOrientation: string;
-    interests: string[];
-    imagePath?: string;
-    photos?: string[];
+    imagePath: string;
+    gender: {
+        id: number;
+        name: string;
+    };
+    lookingFor:  {
+        id: number;
+        name: string;
+    };
+    interestedIn:  {
+        id: number;
+        name: string;
+    };
+    sexualOrientation:{
+        id: number;
+        name: string;
+    };
+    birthDay: Date;
+    interests:  {
+        id: number;
+        name: string;
+    }[];
+    photos: string[];
     userId: number;
 }
 

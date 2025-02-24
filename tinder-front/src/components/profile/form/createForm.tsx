@@ -155,7 +155,7 @@ const CreateForm: React.FC = () => {
         try {
             await ProfileService.createProfile(formData);
             message.success("Profile updated successfully");
-            navigate(`/#`);
+            navigate(`/user-view`);
         } catch (error: any) {
             console.error("Error saving profile:", error.response?.data || error.message);
             message.error("Failed to save profile");

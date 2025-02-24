@@ -10,7 +10,7 @@
 
 .custom-header {
     width: 1841px;
-    margin: auto;
+    margin: 16px auto 0 auto; /* Додаємо верхній відступ */
     padding: 40px 101px;
     display: flex;
     justify-content: space-between;
@@ -19,6 +19,7 @@
     border: 2px solid rgba(29, 12, 14, 0.20);
     background: rgba(29, 12, 14, 0.80);
 }
+
 
 .logo-menubar-header {
     display: flex;

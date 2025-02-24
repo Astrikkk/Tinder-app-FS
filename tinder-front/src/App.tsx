@@ -19,6 +19,7 @@ import LookingForForm from "./components/profileInfo/lookingFor/form";
 import SexualOrientationForm from "./components/profileInfo/sexualOrientation/form";
 import {useAuth} from "./components/Auth/AuthContext";
 import CreateForm from "./components/profile/form/createForm";
+import NewProfileViewer from "./components/profile/ProfileViewer/NewProfileViewer";
 
 const App: React.FC = () => {
     const { isAuthenticated } = useAuth(); // Отримуємо статус авторизації
@@ -42,10 +43,12 @@ const App: React.FC = () => {
                             {/* Приватні сторінки */}
                             <Route element={<PrivateRoute />}>
 
+                                <Route path="/user-view" element={<NewProfileViewer />} />
+
                                 <Route path="/" element={<ProfileList />} />
                                 <Route path="/profile" element={<ProfileForm profile={null} onSave={() => console.log("Profile saved")} />} />
 
-                                <Route path="/user-view" element={<ProfileViewer />} />
+                                {/*<Route path="/user-view" element={<ProfileViewer />} />*/}
 
                                 <Route path="/interested-in" element={<InteresedInList />} />
                                 <Route

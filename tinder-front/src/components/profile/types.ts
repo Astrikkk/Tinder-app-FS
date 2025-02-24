@@ -24,7 +24,7 @@ export interface ProfileItemDTO {
         name: string;
     }[];
     photos: string[];
-    userid: number;
+    userId: number;
 }
 
 export interface ProfileCreateDTO {
@@ -53,6 +53,6 @@ export interface ProfileCreateDTO {
         name: string;
     }[];
     photos: string[];
-    userid: number;
+    userId: number;
 
 }

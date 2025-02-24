@@ -25,7 +25,7 @@ const Login: React.FC = () => {
             if (response.token) {
                 localStorage.setItem("token", response.token);
                 console.log("Login successful!");
-                navigate("/");
+                navigate("/user-view");
             } else {
                 throw new Error("Invalid token received.");
             }
