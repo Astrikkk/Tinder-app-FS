@@ -20,6 +20,8 @@ import {ProfileService} from "../../../services/profile.service";
 import lookingFor from "./modal/lookingFor/lookingFor";
 import sexualOrientation from "./modal/sexualOrientation/sexualOrientation";
 import {useNavigate} from "react-router-dom";
+import {RoleService} from "../../../services/role.service";
+import interests from "./modal/interests/interests";
 
 const getUserIdFromToken = (token: string | null): string | null => {
     if (!token) return null;
@@ -138,7 +140,11 @@ const CreateForm: React.FC = () => {
         if (selectedRelationship !== null) formData.append("LookingForId", selectedRelationship.toString());
         if (selectedSexualOrientation !== null) formData.append("SexualOrientationId", selectedSexualOrientation.toString());
 
-
+        selectedInterests.forEach((interest) => {
+            if (interest) { // TypeScript now recognizes this as valid
+                formData.append("InterestIds", interest.toString());
+            }
+        });
 // Додаємо масив фотографій
         images.forEach((image) => {
             if (image instanceof File) { // TypeScript now recognizes this as valid
@@ -154,6 +160,7 @@ const CreateForm: React.FC = () => {
 
         try {
             await ProfileService.createProfile(formData);
+            await RoleService.addRoleToUser(userId, "user");
             message.success("Profile updated successfully");
             navigate(`/user-view`);
         } catch (error: any) {

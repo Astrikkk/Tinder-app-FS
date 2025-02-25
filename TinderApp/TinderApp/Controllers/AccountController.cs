@@ -20,9 +20,9 @@ namespace TinderApp.Controllers
 
         // Add a role to a user
         [HttpPost("add-role")]
-        public async Task<IActionResult> AddRoleToUser(string username, string role)
+        public async Task<IActionResult> AddRoleToUser(string userId, string role)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 return NotFound("User not found.");
 
@@ -33,7 +33,7 @@ namespace TinderApp.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            return Ok($"Role '{role}' added to user '{username}'.");
+            return Ok($"Role '{role}' added to user '{userId}'.");
         }
 
         // Get all roles of a user
@@ -51,9 +51,9 @@ namespace TinderApp.Controllers
 
         // Remove a role from a user
         [HttpPost("remove-role")]
-        public async Task<IActionResult> RemoveRoleFromUser(string username, string role)
+        public async Task<IActionResult> RemoveRoleFromUser(string userId, string role)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 return NotFound("User not found.");
 
@@ -61,7 +61,19 @@ namespace TinderApp.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            return Ok($"Role '{role}' removed from user '{username}'.");
+            return Ok($"Role '{role}' removed from user '{userId}'.");
+        }
+
+        [HttpGet("get-email/{userId}")]
+        public async Task<IActionResult> GetEmailById(int userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            var email = await _userManager.GetEmailAsync(user);
+            return Ok(email);
         }
     }
 }

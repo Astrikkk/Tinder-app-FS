@@ -1,8 +1,8 @@
-
-import React from "react";
-import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, BrowserRouter as Router, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
+import AdminRoute from "./components/AdminRoute"; // Доданий компонент для перевірки прав адміністратора
 import ProfileList from "./components/profile/Content";
 import ProfileForm from "./components/profile/ProfileForm";
 import Login from "./components/Auth/Login/Login";
@@ -17,72 +17,87 @@ import InterestsForm from "./components/profileInfo/interests/form";
 import LookingForList from "./components/profileInfo/lookingFor/list";
 import LookingForForm from "./components/profileInfo/lookingFor/form";
 import SexualOrientationForm from "./components/profileInfo/sexualOrientation/form";
-import {useAuth} from "./components/Auth/AuthContext";
+import { useAuth } from "./components/Auth/AuthContext";
 import CreateForm from "./components/profile/form/createForm";
 import NewProfileViewer from "./components/profile/ProfileViewer/NewProfileViewer";
+import { jwtDecode } from "jwt-decode";
+import { RoleService } from "./services/role.service";
+
+const getUserIdFromToken = (token: string | null): string | null => {
+    if (!token) return null;
+    try {
+        const decoded: any = jwtDecode(token);
+        return decoded.nameid || null; // Якщо немає 'nameid', спробуємо 'sub'
+    } catch (error) {
+        console.error("Помилка декодування JWT", error);
+        return null;
+    }
+};
 
 const App: React.FC = () => {
-    const { isAuthenticated } = useAuth(); // Отримуємо статус авторизації
+    const { isAuthenticated } = useAuth();
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const fetchRoles = async () => {
+            const token = localStorage.getItem("token");
+            const userId = getUserIdFromToken(token);
+            if (userId) {
+                try {
+                    const roles = await RoleService.getUserRoles(userId);
+                    setIsAdmin(roles.includes("Admin"));
+                } catch (error) {
+                    console.error("Помилка отримання ролей", error);
+                    setIsAdmin(false);
+                }
+            } else {
+                setIsAdmin(false);
+            }
+        };
+
+        fetchRoles();
+    }, []);
+
+    if (isAdmin === null) {
+        return <div className="text-center text-lg font-semibold">Завантаження...</div>;
+    }
 
     return (
         <Router>
-            <div className="min-h-screen bg-gray-100">
-                <div className="flex">
-                    {/* Відображаємо Navbar тільки якщо користувач авторизований */}
-                    {isAuthenticated && <Navbar />}
+            <div className="min-h-screen bg-gray-100 flex">
+                {isAuthenticated && <Navbar />}
+                <div className="flex-1">
+                    <Routes>
+                        {/* Публічні маршрути */}
+                        <Route path="/auth" element={<DefaultLayout />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/create-profile" element={<CreateForm />} />
 
-                    <div className="flex-1">
-                        <Routes>
-                            {/* Публічні сторінки */}
-                            <Route path="/auth" element={<DefaultLayout />} />
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/create-profile" element={<CreateForm/>} />
+                        {/* Приватні маршрути для авторизованих користувачів */}
+                        <Route element={<PrivateRoute />}>
+                            <Route path="/user-view" element={<NewProfileViewer />} />
+                            <Route path="/profile" element={<ProfileForm profile={null} onSave={() => console.log("Profile saved")} />} />
+                            <Route path="/interested-in" element={<InteresedInList />} />
+                            <Route path="/interested-in-form" element={<InterestedInForm interestedIn={null} onSave={() => console.log("Profile saved")} />} />
+                            <Route path="/interests" element={<InterestsList />} />
+                            <Route path="/interests-form" element={<InterestsForm interests={null} onSave={() => console.log("Profile saved")} />} />
+                            <Route path="/looking-for" element={<LookingForList />} />
+                            <Route path="/looking-for-form" element={<LookingForForm lookingFor={null} onSave={() => console.log("Profile saved")} />} />
+                            <Route path="/sexual-orientation" element={<SexualOrientationList />} />
+                            <Route path="/sexual-orientation-form" element={<SexualOrientationForm sexualOrientation={null} onSave={() => console.log("Profile saved")} />} />
+                        </Route>
 
+                        {/* Приватні маршрути для адміністратора */}
+                        <Route element={<AdminRoute isAdmin={isAdmin} />}>
+                            <Route path="/admin-view" element={<ProfileList />} />
+                        </Route>
 
-                            {/* Приватні сторінки */}
-                            <Route element={<PrivateRoute />}>
-
-                                <Route path="/user-view" element={<NewProfileViewer />} />
-
-                                <Route path="/" element={<ProfileList />} />
-                                <Route path="/profile" element={<ProfileForm profile={null} onSave={() => console.log("Profile saved")} />} />
-
-                                {/*<Route path="/user-view" element={<ProfileViewer />} />*/}
-
-                                <Route path="/interested-in" element={<InteresedInList />} />
-                                <Route
-                                    path="/interested-in-form"
-                                    element={<InterestedInForm interestedIn={null} onSave={() => console.log('Profile saved')} />}
-                                />
-
-                                <Route path="/interests" element={<InterestsList />} />
-                                <Route
-                                    path="/interests-form"
-                                    element={<InterestsForm interests={null} onSave={() => console.log('Profile saved')} />}
-                                />
-
-                                <Route path="/looking-for" element={<LookingForList />} />
-                                <Route
-                                    path="/looking-for-form"
-                                    element={<LookingForForm lookingFor={null} onSave={() => console.log('Profile saved')} />}
-                                />
-
-                                <Route path="/looking-for" element={<LookingForList />} />
-                                <Route
-                                    path="/looking-for-form"
-                                    element={<LookingForForm lookingFor={null} onSave={() => console.log('Profile saved')} />}
-                                />
-
-                                <Route path="/sexual-orientation" element={<SexualOrientationList />} />
-                                <Route
-                                    path="/sexual-orientation-form"
-                                    element={<SexualOrientationForm sexualOrientation={null} onSave={() => console.log('Profile saved')} />}
-                                />
-
-                            </Route>
-                        </Routes>
-                    </div>
+                        {/* Сторінка без доступу */}
+                        <Route path="/unauthorized" element={<h1 className="text-center mt-10 text-red-500">Access Denied</h1>} />
+                        {/* Редірект на головну сторінку при невідомому маршруті */}
+                        <Route path="*" element={<Navigate to={isAuthenticated ? "/user-view" : "/login"} />} />
+                    </Routes>
                 </div>
             </div>
         </Router>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TinderApp.DTOs;
 using TinderApp.Interfaces;
@@ -44,4 +45,6 @@ public class AuthController : ControllerBase
             return Unauthorized(new { Error = ex.Message }); // Changed status code for login errors
         }
     }
+
+    
 }

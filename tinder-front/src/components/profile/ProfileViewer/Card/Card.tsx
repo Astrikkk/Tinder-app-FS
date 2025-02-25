@@ -29,7 +29,7 @@ const Card: React.FC<CardProps> = ({ profile }) => {
     return (
         <div className="card">
             <div className="card-background">
-                <img className="card-image" src={`http://localhost:7034${profile.imagePath}`} alt={profile.name} />
+                <img className="card-image" src={`http://localhost:7034${profile?.imagePath}`} alt={profile.name} />
                 <div className="card-overlay" />
             </div>
             <div className="card-buttons">

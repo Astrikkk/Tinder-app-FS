@@ -5,6 +5,9 @@ import ProfileForm from "./ProfileForm";
 import { ProfileService } from "../../services/profile.service";
 import { useNavigate } from "react-router-dom";
 import {RoleService} from "../../services/role.service";
+import EmailCell from "./EmailCell";
+import {jwtDecode} from "jwt-decode";
+
 
 const { Title } = Typography;
 
@@ -13,6 +16,7 @@ const ProfileList: React.FC = () => {
     const [selectedProfile, setSelectedProfile] = useState<ProfileItemDTO | null>(null);
     const [loading, setLoading] = useState(false);
     const [userRoles, setUserRoles] = useState<string[]>([]);
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
     const navigate = useNavigate();
 
@@ -34,6 +38,37 @@ const ProfileList: React.FC = () => {
             setLoading(false);
         }
     };
+
+    const getUserIdFromToken = (token: string | null): string | null => {
+        if (!token) return null;
+
+        try {
+            const decoded: any = jwtDecode(token);
+            return decoded.nameid || null; // Спробуйте використати 'sub'
+        } catch (error) {
+            console.error("Помилка декодування JWT", error);
+            return null;
+        }
+    };
+
+    const checkAdmin=async ()=>{
+        const token = localStorage.getItem("token");
+        const userId = getUserIdFromToken(token);
+        console.log(userId);
+        if(userId){
+            RoleService.getUserRoles(userId.toString())
+                .then((roles) => {
+                    setIsAdmin(roles.includes("Admin"));
+                    console.log(isAdmin);
+                })
+                .catch((error) => {
+                    console.error("Помилка отримання ролей", error);
+                    setIsAdmin(false); // Якщо є помилка, вважаємо, що ролі немає
+                });
+        } else {
+            setIsAdmin(false);
+        }
+    }
 
     const handleLogout = async () => {
         try {
@@ -58,9 +93,9 @@ const ProfileList: React.FC = () => {
     };
 
     // Тестові функції для роботи з ролями
-    const testGetRoles = async () => {
+    const testGetRoles = async (userId: string) => {
         try {
-            const roles = await RoleService.getUserRoles("puzyrko2007@gmail.com");
+            const roles = await RoleService.getUserRoles(`${userId}`);
             setUserRoles(roles);
             message.success(`Roles: ${roles.join(", ")}`);
         } catch (error) {
@@ -69,22 +104,20 @@ const ProfileList: React.FC = () => {
         }
     };
 
-    const testAddRole = async () => {
+    const testAddRole = async (userId: string) => {
         try {
-            await RoleService.addRoleToUser("puzyrko2007@gmail.com", "Admin");
+            await RoleService.addRoleToUser(`${userId}`, "Admin");
             message.success("Role added successfully.");
-            testGetRoles(); // Оновлення списку ролей
         } catch (error) {
             console.error("Error adding role:", error);
             message.error("Failed to add role");
         }
     };
 
-    const testRemoveRole = async () => {
+    const testRemoveRole = async (userId: string) => {
         try {
-            await RoleService.removeRoleFromUser("puzyrko2007@gmail.com", "Admin");
+            await RoleService.removeRoleFromUser(`${userId}`, "Admin");
             message.success("Role removed successfully.");
-            testGetRoles(); // Оновлення списку ролей
         } catch (error) {
             console.error("Error removing role:", error);
             message.error("Failed to remove role");
@@ -116,6 +149,11 @@ const ProfileList: React.FC = () => {
             key: "lookingFor",
         },
         {
+            title: "Email",
+            key: "email",
+            render: (_: any, profile: ProfileItemDTO) => <EmailCell userId={profile.userId} />,
+        },
+        {
             title: "Actions",
             key: "actions",
             render: (_: any, profile: ProfileItemDTO) => (
@@ -129,34 +167,54 @@ const ProfileList: React.FC = () => {
                 </>
             ),
         },
+        {
+            title: "Role",
+            key: "role",
+            render: (_: any, profile: ProfileItemDTO) => (
+                <>
+                    <Button type="link" onClick={() => testGetRoles(profile.userId.toString())}>
+                        Get Roles
+                    </Button>
+                    <Button type="link" onClick={() => testAddRole(profile.userId.toString())}>
+                        Add Admin Role
+                    </Button>
+                    <Button type="link" danger onClick={() => testRemoveRole(profile.userId.toString())}>
+                        Remove Admin Role
+                    </Button>
+                </>
+            ),
+        },
     ];
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div style={{padding: "20px"}}>
             <Title level={2}>Profiles</Title>
 
             <button onClick={handleLogout} className="w-full text-left">
                 Logout
             </button>
-            <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading} />
+            <button onClick={checkAdmin} className="w-full text-left">
+                Check Admin
+            </button>
+            <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading}/>
 
             {/* Кнопки для тестування сервісу ролей */}
-            <div style={{ marginTop: "20px" }}>
-                <Title level={4}>Test Role Service</Title>
-                <Button onClick={testGetRoles} type="primary" style={{ marginRight: "10px" }}>
-                    Get User Roles
-                </Button>
-                <Button onClick={testAddRole} type="default" style={{ marginRight: "10px" }}>
-                    Add Admin Role
-                </Button>
-                <Button onClick={testRemoveRole} type="dashed">
-                    Remove Admin Role
-                </Button>
-            </div>
+            {/*<div style={{ marginTop: "20px" }}>*/}
+            {/*    <Title level={4}>Test Role Service</Title>*/}
+            {/*    <Button onClick={testGetRoles} type="primary" style={{ marginRight: "10px" }}>*/}
+            {/*        Get User Roles*/}
+            {/*    </Button>*/}
+            {/*    <Button onClick={testAddRole} type="default" style={{ marginRight: "10px" }}>*/}
+            {/*        Add Admin Role*/}
+            {/*    </Button>*/}
+            {/*    <Button onClick={testRemoveRole} type="dashed">*/}
+            {/*        Remove Admin Role*/}
+            {/*    </Button>*/}
+            {/*</div>*/}
 
             {/* Відображення отриманих ролей */}
             {userRoles.length > 0 && (
-                <div style={{ marginTop: "10px" }}>
+                <div style={{marginTop: "10px"}}>
                     <Title level={5}>User Roles:</Title>
                     <p>{userRoles.join(", ")}</p>
                 </div>

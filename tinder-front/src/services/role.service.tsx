@@ -9,24 +9,28 @@ export interface Role {
 
 export const RoleService = {
     // Отримати всі ролі користувача
-    getUserRoles: async (username: string): Promise<string[]> => {
-        const response = await axios.get(`${API_URL}/get-roles`, {
-            params: { username },
-        });
+    getUserRoles: async (userId: string): Promise<string[]> => {
+        const response = await axios.get(`${API_URL}/get-roles/${userId}`);
+
+        return response.data;
+    },
+    getUserEmail: async (userId: string): Promise<string[]> => {
+        const response = await axios.get(`${API_URL}/get-email/${userId}`);
+
         return response.data;
     },
 
     // Додати роль користувачу
-    addRoleToUser: async (username: string, role: string): Promise<void> => {
+    addRoleToUser: async (userId: string, role: string): Promise<void> => {
         await axios.post(`${API_URL}/add-role`, null, {
-            params: { username, role },
+            params: { userId, role },
         });
     },
 
     // Видалити роль у користувача
-    removeRoleFromUser: async (username: string, role: string): Promise<void> => {
+    removeRoleFromUser: async (userId: string, role: string): Promise<void> => {
         await axios.post(`${API_URL}/remove-role`, null, {
-            params: { username, role },
+            params: { userId, role },
         });
     },
 };
