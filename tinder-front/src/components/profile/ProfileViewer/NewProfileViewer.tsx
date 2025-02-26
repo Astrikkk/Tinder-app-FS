@@ -14,21 +14,7 @@ import Kitty from "./img/Kitty.svg"
 import Setting from "./img/icon_settings.svg"
 import Security from "./img/icon_security.svg"
 import Sparkii from "./img/Sparkii.svg"
-import {jwtDecode} from "jwt-decode";
-
-
-
-const getUserIdFromToken = (token: string | null): string | null => {
-    if (!token) return null;
-
-    try {
-        const decoded: any = jwtDecode(token);
-        return decoded.nameid || null; // Спробуйте використати 'sub'
-    } catch (error) {
-        console.error("Помилка декодування JWT", error);
-        return null;
-    }
-};
+import {JwtService} from "../../../services/jwt.service";
 
 
 const NewProfileViewer: React.FC = () => {
@@ -38,6 +24,8 @@ const NewProfileViewer: React.FC = () => {
     const [myProfile, setMyProfile] = useState<Profile | null>(null);
 
     const [selectedButton, setSelectedButton] = useState<string | null>("Matches");
+    const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+
 
 
     useEffect(() => {
@@ -51,7 +39,7 @@ const NewProfileViewer: React.FC = () => {
             setProfiles(data);
 
             const token = localStorage.getItem("token");
-            let userId = getUserIdFromToken(token);
+            let userId = JwtService.getUserIdFromToken(token);
 
             if (userId) {
                 const numericUserId = Number(userId); // Конвертація у число
@@ -71,6 +59,11 @@ const NewProfileViewer: React.FC = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+
+    const handleDislike = () => {
+        setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
 
 
@@ -132,7 +125,7 @@ const NewProfileViewer: React.FC = () => {
             {loading ? (
                 <Spin size="large"/>
             ) : profiles.length > 0 ? (
-                <Card profile={profiles[0]}/>
+                <Card profile={profiles[currentProfileIndex]} onDislike={handleDislike} />
             ) : (
                 <p>No profiles available</p>
             )}
