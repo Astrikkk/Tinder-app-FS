@@ -9,7 +9,9 @@ import {ProfileItemDTO} from "../../types";
 
 interface CardProps {
     profile: ProfileItemDTO;
+    onDislike: () => void;
 }
+
 
 const calculateAge = (birthDate: Date): number => {
     const today = new Date();
@@ -25,22 +27,23 @@ const calculateAge = (birthDate: Date): number => {
 };
 
 
-const Card: React.FC<CardProps> = ({ profile }) => {
+const Card: React.FC<CardProps> = ({ profile, onDislike }) => {
     return (
         <div className="card">
             <div className="card-background">
-                <img className="card-image" src={`http://localhost:7034${profile?.imagePath}`} alt={profile.name} />
+                <img className="card-image" src={`http://localhost:7034${profile.imagePath}`} alt={profile.name} />
                 <div className="card-overlay" />
             </div>
             <div className="card-buttons">
-                <button className="dislike">
-                    <img src={Dislike} alt="Dislike" />
+                <button className="dislike" onClick={onDislike}>
+                    <img src={Dislike} alt="Dislike"/>
                 </button>
+
                 <button className="star-like">
-                    <img src={Star} alt="Super Like" />
+                    <img src={Star} alt="Super Like"/>
                 </button>
                 <button className="message">
-                    <img src={Message} alt="Message" />
+                    <img src={Message} alt="Message"/>
                 </button>
             </div>
             <div className="card-interests">
