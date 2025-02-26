@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter as Router, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
-import AdminRoute from "./components/AdminRoute"; // Доданий компонент для перевірки прав адміністратора
+import AdminRoute from "./components/routes/AdminRoute"; // Доданий компонент для перевірки прав адміністратора
 import ProfileList from "./components/profile/Content";
 import ProfileForm from "./components/profile/ProfileForm";
 import Login from "./components/Auth/Login/Login";
@@ -22,17 +22,9 @@ import CreateForm from "./components/profile/form/createForm";
 import NewProfileViewer from "./components/profile/ProfileViewer/NewProfileViewer";
 import { jwtDecode } from "jwt-decode";
 import { RoleService } from "./services/role.service";
+import PublicRoute from "./components/routes/PublicRoute";
+import {JwtService} from "./services/jwt.service";
 
-const getUserIdFromToken = (token: string | null): string | null => {
-    if (!token) return null;
-    try {
-        const decoded: any = jwtDecode(token);
-        return decoded.nameid || null; // Якщо немає 'nameid', спробуємо 'sub'
-    } catch (error) {
-        console.error("Помилка декодування JWT", error);
-        return null;
-    }
-};
 
 const App: React.FC = () => {
     const { isAuthenticated } = useAuth();
@@ -41,7 +33,7 @@ const App: React.FC = () => {
     useEffect(() => {
         const fetchRoles = async () => {
             const token = localStorage.getItem("token");
-            const userId = getUserIdFromToken(token);
+            const userId = JwtService.getUserIdFromToken(token);
             if (userId) {
                 try {
                     const roles = await RoleService.getUserRoles(userId);
@@ -65,14 +57,19 @@ const App: React.FC = () => {
     return (
         <Router>
             <div className="min-h-screen bg-gray-100 flex">
-                {isAuthenticated && <Navbar />}
                 <div className="flex-1">
                     <Routes>
                         {/* Публічні маршрути */}
                         <Route path="/auth" element={<DefaultLayout />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/create-profile" element={<CreateForm />} />
+                        {/* Публічні маршрути (доступні лише для неавтентифікованих користувачів) */}
+                        <Route element={<PublicRoute isAuthenticated={isAuthenticated} />}>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/create-profile" element={<CreateForm />} />
+                        </Route>
+
+
+
 
                         {/* Приватні маршрути для авторизованих користувачів */}
                         <Route element={<PrivateRoute />}>
@@ -96,7 +93,7 @@ const App: React.FC = () => {
                         {/* Сторінка без доступу */}
                         <Route path="/unauthorized" element={<h1 className="text-center mt-10 text-red-500">Access Denied</h1>} />
                         {/* Редірект на головну сторінку при невідомому маршруті */}
-                        <Route path="*" element={<Navigate to={isAuthenticated ? "/user-view" : "/login"} />} />
+                        <Route path="*" element={<Navigate to={isAuthenticated ? (isAdmin ? "/auth-view" : "/user-view") : "/auth"} />} />
                     </Routes>
                 </div>
             </div>

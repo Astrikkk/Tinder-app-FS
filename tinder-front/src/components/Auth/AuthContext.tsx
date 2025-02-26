@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import {JwtService} from "../../services/jwt.service";
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    login: () => void;
+    login: (token: string) => void;
     logout: () => void;
 }
 
@@ -12,13 +13,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
-        // Перевірка локального збереження токену
-        const token = localStorage.getItem("authToken");
-        setIsAuthenticated(!!token);
+        const checkAuthStatus = () => {
+            const token = localStorage.getItem("authToken");
+
+            if (token) {
+                setIsAuthenticated(true);
+            } else {
+                localStorage.removeItem("authToken"); // Видаляємо недійсний токен
+                setIsAuthenticated(false);
+            }
+        };
+
+        checkAuthStatus();
     }, []);
 
-    const login = () => {
-        localStorage.setItem("authToken", "mock-token");
+    const login = (token: string) => {
+        localStorage.setItem("authToken", token);
         setIsAuthenticated(true);
     };
 

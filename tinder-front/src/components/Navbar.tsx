@@ -20,10 +20,13 @@ const Navbar: React.FC = () => {
         <div className="h-screen w-64 bg-gray-800 text-white p-5">
             <ul>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/#">Home</a>
+                    <a href="/#">Default Page</a>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="#">Settings</a>
+                    <a href="/admin-view">Admin Panel</a>
+                </li>
+                <li className="mb-4 hover:bg-gray-700 p-2 rounded">
+                    <a href="/user-view">User Panel</a>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
                     <a href="/profile">Profile</a>

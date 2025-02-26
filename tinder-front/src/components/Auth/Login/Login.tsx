@@ -11,6 +11,7 @@ import Bow from "../img/Bow.svg";
 
 import "./Login.css";
 import ingBack from "../img/pexels-photo-1378723.png";
+import {JwtService} from "../../../services/jwt.service";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
@@ -25,7 +26,14 @@ const Login: React.FC = () => {
             if (response.token) {
                 localStorage.setItem("token", response.token);
                 console.log("Login successful!");
-                navigate("/user-view");
+                const role = JwtService.getRoleFromToken(response.token);
+                if(role?.includes("Admin"))
+                {
+                    navigate("/admin-view");
+                }
+                else{
+                    navigate("/user-view");
+                }
             } else {
                 throw new Error("Invalid token received.");
             }

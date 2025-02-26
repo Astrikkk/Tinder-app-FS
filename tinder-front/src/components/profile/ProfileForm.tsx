@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode";
 import JwtPayload from "jwt-decode";
 
 import { useLocation } from 'react-router-dom';
+import {JwtService} from "../../services/jwt.service";
 const { Option } = Select;
 
 
@@ -19,19 +20,6 @@ interface ProfileFormProps {
     onSave: () => void;
 }
 
-const getUserIdFromToken = (token: string | null): string | null => {
-    if (!token) return null;
-
-    try {
-        const decoded: any = jwtDecode(token);
-        console.log("Decoded token:", decoded);
-
-        return decoded.nameid || null; // Спробуйте використати 'sub'
-    } catch (error) {
-        console.error("Помилка декодування JWT", error);
-        return null;
-    }
-};
 
 
 
@@ -89,7 +77,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
 
         console.log("Values send server:", values);
         const token = localStorage.getItem("token");
-        const userId = getUserIdFromToken(token);
+        const userId = JwtService.getUserIdFromToken(token);
 
         if (!userId) {
             message.error("Не вдалося отримати ID користувача. Увійдіть знову.");
