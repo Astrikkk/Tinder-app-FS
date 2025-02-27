@@ -1,0 +1,19 @@
+﻿version: '3.8'
+services:
+  tinder-app:
+    build:
+      context: .
+      dockerfile: TinderApp/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"

@@ -6,6 +6,7 @@ using AutoMapper;
 using TinderApp.Mapper;
 using TinderApp.Interfaces;
 using TinderApp.Services;
+using TinderApp.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,11 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 builder.Services.AddScoped<UserManager<UserEntity>>();
 builder.Services.AddScoped<RoleManager<RoleEntity>>();
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
+
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -38,6 +44,7 @@ builder.Services.AddScoped<IAccountsService, AccountsService>();
 // Swagger configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 // CORS policy to allow React app
 builder.Services.AddCors(options =>
@@ -46,7 +53,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:3000") // React app's URL
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials(); // Ensure this is included
     });
 });
 
@@ -72,9 +80,12 @@ using (var scope = app.Services.CreateScope())
 app.UseStaticFiles();
 
 // Apply CORS policy
-app.UseCors("AllowReactApp");
+app.UseCors("AllowReactApp"); // CORS must be applied before SignalR
 
 app.UseAuthorization();
+
+app.MapHub<ChatHub>("/chathub"); // Ensure hub mapping is after CORS
+
 
 app.MapControllers();
 

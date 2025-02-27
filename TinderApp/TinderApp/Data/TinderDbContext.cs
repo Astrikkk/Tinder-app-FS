@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TinderApp.Data.Entities;
+using TinderApp.Data.Entities.Chat;
 using TinderApp.Data.Entities.Identity;
 
 namespace TinderApp.Data
@@ -17,6 +18,8 @@ namespace TinderApp.Data
         public DbSet<LookingFor> LookingForOptions { get; set; }
         public DbSet<SexualOrientation> SexualOrientations { get; set; }
         public DbSet<Interest> Interests { get; set; }
+
+        public DbSet<ChatConnection> ChatConnections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -75,6 +78,13 @@ namespace TinderApp.Data
                 .WithMany()
                 .HasForeignKey(p => p.ProfileId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ChatConnection>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             // Add unique constraints for various entities
             modelBuilder.Entity<Gender>().HasIndex(g => g.Name).IsUnique();
