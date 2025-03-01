@@ -42,7 +42,7 @@ const DefPage: React.FC = () => {
                             >
                                 How It Works
                             </Text>
-                        <Text className="text-white text-[22px] cursor-pointer">Subscription Tiers</Text>
+                        <Text className="menu-item">Subscription Tiers</Text>
                     </nav>
                 </div>
                 <div className="lang-login-header">
