@@ -18,6 +18,8 @@ import LookingForList from "./components/profileInfo/lookingFor/list";
 import LookingForForm from "./components/profileInfo/lookingFor/form";
 import SexualOrientationForm from "./components/profileInfo/sexualOrientation/form";
 import {useAuth} from "./components/Auth/AuthContext";
+import AboutUs from "./components/default/AboutUsComponent";
+import HowItWorks from "./components/default/HowitWorksComponent";
 
 const App: React.FC = () => {
     const { isAuthenticated } = useAuth(); // Отримуємо статус авторизації
@@ -35,6 +37,8 @@ const App: React.FC = () => {
                             <Route path="/auth" element={<DefaultLayout />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
+                            <Route path="/AboutUs" element={<AboutUs />} />
+                            <Route path="/HowItWorks" element={<HowItWorks />}/>
 
                             {/* Приватні сторінки */}
                             <Route element={<PrivateRoute />}>
