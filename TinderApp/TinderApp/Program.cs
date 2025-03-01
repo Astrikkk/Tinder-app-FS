@@ -1,17 +1,16 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TinderApp.Data;
 using TinderApp.Data.Entities.Identity;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using TinderApp.Mapper;
 using TinderApp.Interfaces;
 using TinderApp.Services;
 using TinderApp.Hubs;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
+// Add services to the container
+builder.Services.AddControllers();  
 
 // Database context configuration
 builder.Services.AddDbContext<TinderDbContext>(options =>
@@ -22,71 +21,47 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
-    .AddEntityFrameworkStores<TinderDbContext>()
-    .AddDefaultTokenProviders();
-
-// Register UserManager and RoleManager
-builder.Services.AddScoped<UserManager<UserEntity>>();
-builder.Services.AddScoped<RoleManager<RoleEntity>>();
-
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-});
-
-// Register AutoMapper
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+.AddEntityFrameworkStores<TinderDbContext>()
+.AddDefaultTokenProviders();
 
 // Register custom services
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 
-// Swagger configuration
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSignalR();
 
-// CORS policy to allow React app
+// CORS policy for React app
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", policy =>
+    options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000") // React app's URL
+        policy.WithOrigins("http://localhost:3000") // React frontend
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials(); // Ensure this is included
+              .AllowCredentials();
     });
 });
 
+// SignalR setup
+builder.Services.AddSignalR();
+
+builder.Services.AddSwaggerGen(); // Swagger configuration for API docs
+
 var app = builder.Build();
 
-// Seed roles and initial admin user
+// Seed roles and admin user
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    try
-    {
-        var userManager = services.GetRequiredService<UserManager<UserEntity>>();
-        var roleManager = services.GetRequiredService<RoleManager<RoleEntity>>();
-
-        await SeedRolesAndAdminUser(roleManager, userManager);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"An error occurred seeding the DB: {ex.Message}");
-    }
+    var userManager = services.GetRequiredService<UserManager<UserEntity>>();
+    var roleManager = services.GetRequiredService<RoleManager<RoleEntity>>();
+    await SeedRolesAndAdminUser(roleManager, userManager);
 }
 
 app.UseStaticFiles();
-
-// Apply CORS policy
-app.UseCors("AllowReactApp"); // CORS must be applied before SignalR
+app.UseCors(); // Apply CORS policy
 
 app.UseAuthorization();
-
-app.MapHub<ChatHub>("/chathub"); // Ensure hub mapping is after CORS
-
-
+app.MapHub<ChatHub>("/chatHub"); // SignalR hub mapping
 app.MapControllers();
 
 // Configure Swagger for development environment
@@ -108,7 +83,6 @@ static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, Use
         if (!await roleManager.RoleExistsAsync(role))
         {
             await roleManager.CreateAsync(new RoleEntity { Name = role });
-            Console.WriteLine($"Role '{role}' created.");
         }
     }
 
@@ -123,15 +97,10 @@ static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, Use
             Email = adminEmail,
             EmailConfirmed = true
         };
-        var result = await userManager.CreateAsync(adminUser, "Admin123!"); // Use a strong password
+        var result = await userManager.CreateAsync(adminUser, "Admin123!");
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");
-            Console.WriteLine("Admin user created and assigned to 'Admin' role.");
-        }
-        else
-        {
-            Console.WriteLine($"Failed to create admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
         }
     }
 }

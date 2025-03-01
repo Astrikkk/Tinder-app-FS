@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TinderApp.Data.Entities.Identity;
 using TinderApp.Interfaces;
-
-
 
 public class JwtTokenService : IJwtTokenService
 {
@@ -23,28 +22,29 @@ public class JwtTokenService : IJwtTokenService
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Конвертація у string
-            new Claim(ClaimTypes.Email, user.Email ?? string.Empty), // Уникнення null
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
             new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
         };
 
+        // Додаємо ролі користувача
         var roles = await _userManager.GetRolesAsync(user);
-        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role.ToString())));
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-
-        var secretKey = _configuration.GetValue<string>("JwtSecretKey");
-        if (string.IsNullOrEmpty(secretKey))
-            throw new InvalidOperationException("JWT secret key is not configured.");
+        var secretKey = _configuration.GetRequiredSection("Jwt:SecretKey").Value;
+        var issuer = _configuration["Jwt:Issuer"];
+        var audience = _configuration["Jwt:Audience"];
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        // Використовуємо SecurityTokenDescriptor
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(claims), // ✅ Виправлено
+            Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddDays(10),
-            SigningCredentials = credentials
+            SigningCredentials = credentials,
+            Issuer = issuer,
+            Audience = audience
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
