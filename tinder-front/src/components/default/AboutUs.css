@@ -20,7 +20,7 @@ html, body {
 }
 
 .About-ImageBG {
-    background: url(./aboutUs/AboutUs-ImageBG.jpg);
+    background: url(./AboutUs/AboutUs-ImageBG.jpg);
     background-size: cover;
     background-position: center;
     width: 100%;

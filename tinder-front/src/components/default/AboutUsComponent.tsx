@@ -7,8 +7,8 @@ import tiktok from "./mainPage/TikTok-Logo.svg";
 import youtube from "./mainPage/Youtube.svg";
 import separator from "./mainPage/Separator.svg";
 import line from "./mainPage/line.svg";
-import missionImage from "./aboutUs/AboutImage1.png"; 
-import communityImage from "./aboutUs/AboutImage2.png"; 
+import missionImage from "./AboutUs/AboutImage1.png"; 
+import communityImage from "./AboutUs/AboutImage2.png"; 
 import language from "./mainPage/language.svg";
 import { Typography } from "antd";
 
