@@ -57,5 +57,7 @@ namespace TinderApp.Data.Entities
         public int UserId { get; set; }  // Must be int to match User's Id
         public virtual UserEntity User { get; set; }
 
+        public bool IsReported { get; set; } = false;
+
     }
 }

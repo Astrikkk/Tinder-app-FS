@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TinderApp.Data;
 
@@ -11,9 +12,11 @@ using TinderApp.Data;
 namespace TinderApp.Migrations
 {
     [DbContext(typeof(TinderDbContext))]
-    partial class TinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250228170050_AddedReported")]
+    partial class AddedReported
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
