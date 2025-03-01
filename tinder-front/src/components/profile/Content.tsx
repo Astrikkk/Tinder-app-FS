@@ -4,11 +4,10 @@ import { ProfileItemDTO } from "./types";
 import ProfileForm from "./ProfileForm";
 import { ProfileService } from "../../services/profile.service";
 import { useNavigate } from "react-router-dom";
-import {RoleService} from "../../services/role.service";
+import { RoleService } from "../../services/role.service";
 import EmailCell from "./EmailCell";
-import {jwtDecode} from "jwt-decode";
-import Navbar from "../Navbar";
-
+import { jwtDecode } from "jwt-decode";
+import Navbar from "../Navbar"; // Імпортуємо Navbar
 
 const { Title } = Typography;
 
@@ -17,9 +16,7 @@ const ProfileList: React.FC = () => {
     const [selectedProfile, setSelectedProfile] = useState<ProfileItemDTO | null>(null);
     const [loading, setLoading] = useState(false);
     const [userRoles, setUserRoles] = useState<string[]>([]);
-    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
-    const navigate = useNavigate();
 
     useEffect(() => {
         fetchProfiles();
@@ -41,10 +38,6 @@ const ProfileList: React.FC = () => {
     };
 
 
-
-
-
-
     const handleDelete = async (id: number) => {
         if (window.confirm("Are you sure? This action cannot be undone.")) {
             try {
@@ -57,59 +50,13 @@ const ProfileList: React.FC = () => {
         }
     };
 
-    // Тестові функції для роботи з ролями
-    const testGetRoles = async (userId: string) => {
-        try {
-            const roles = await RoleService.getUserRoles(`${userId}`);
-            setUserRoles(roles);
-            message.success(`Roles: ${roles.join(", ")}`);
-        } catch (error) {
-            console.error("Error fetching roles:", error);
-            message.error("Failed to fetch roles");
-        }
-    };
-
-    const testAddRole = async (userId: string) => {
-        try {
-            await RoleService.addRoleToUser(`${userId}`, "Admin");
-            message.success("Role added successfully.");
-        } catch (error) {
-            console.error("Error adding role:", error);
-            message.error("Failed to add role");
-        }
-    };
-
-    const testRemoveRole = async (userId: string) => {
-        try {
-            await RoleService.removeRoleFromUser(`${userId}`, "Admin");
-            message.success("Role removed successfully.");
-        } catch (error) {
-            console.error("Error removing role:", error);
-            message.error("Failed to remove role");
-        }
-    };
-
     const columns = [
         {
             title: "Profile Image",
             dataIndex: "imagePath",
             key: "imagePath",
             render: (imagePath: string) => (
-                imagePath ? (
-                    <img
-                        src={`http://localhost:7034${imagePath}`}
-                        alt="Photo"
-                        style={{
-                            width: 50,
-                            height: 50,
-                            transition: "transform 0.3s ease-in-out",
-                            cursor: "pointer",
-                            borderRadius: "5px"
-                        }}
-                        onMouseOver={(e) => (e.currentTarget.style.transform = "scale(3)")}
-                        onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                    />
-                ) : "No Image"
+                imagePath ? <img src={`http://localhost:7034${imagePath}`} alt="Photo" width={50} /> : "No Image"
             ),
         },
         {
@@ -146,53 +93,23 @@ const ProfileList: React.FC = () => {
                 </>
             ),
         },
-        {
-            title: "Role",
-            key: "role",
-            render: (_: any, profile: ProfileItemDTO) => (
-                <>
-                    <Button type="link" onClick={() => testGetRoles(profile.userId.toString())}>
-                        Get Roles
-                    </Button>
-                    <Button type="link" onClick={() => testAddRole(profile.userId.toString())}>
-                        Add Admin Role
-                    </Button>
-                    <Button type="link" danger onClick={() => testRemoveRole(profile.userId.toString())}>
-                        Remove Admin Role
-                    </Button>
-                </>
-            ),
-        },
     ];
 
     return (
-
-        <div style={{display: "flex", minHeight: "100vh"}}>
+        <div style={{ display: "flex", minHeight: "100vh" }}>
             {/* Navbar зліва */}
-            <Navbar/>
-            <div style={{ flex: 1, padding: "20px" }}>
+            <Navbar />
 
+            {/* Основний контент */}
+            <div style={{ flex: 1, padding: "20px" }}>
                 <Title level={2}>Profiles</Title>
 
-                <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading}/>
 
-                {/* Кнопки для тестування сервісу ролей */}
-                {/*<div style={{ marginTop: "20px" }}>*/}
-                {/*    <Title level={4}>Test Role Service</Title>*/}
-                {/*    <Button onClick={testGetRoles} type="primary" style={{ marginRight: "10px" }}>*/}
-                {/*        Get User Roles*/}
-                {/*    </Button>*/}
-                {/*    <Button onClick={testAddRole} type="default" style={{ marginRight: "10px" }}>*/}
-                {/*        Add Admin Role*/}
-                {/*    </Button>*/}
-                {/*    <Button onClick={testRemoveRole} type="dashed">*/}
-                {/*        Remove Admin Role*/}
-                {/*    </Button>*/}
-                {/*</div>*/}
 
-                {/* Відображення отриманих ролей */}
+                <Table dataSource={profiles} columns={columns} rowKey="id" loading={loading} />
+
                 {userRoles.length > 0 && (
-                    <div style={{marginTop: "10px"}}>
+                    <div style={{ marginTop: "10px" }}>
                         <Title level={5}>User Roles:</Title>
                         <p>{userRoles.join(", ")}</p>
                     </div>
@@ -216,7 +133,7 @@ const ProfileList: React.FC = () => {
                 )}
             </div>
         </div>
-            );
-            };
+    );
+};
 
-            export default ProfileList;
+export default ProfileList;

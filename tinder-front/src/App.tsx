@@ -30,15 +30,13 @@ import WaitingRoom from "./components/chat/waitingRoom";
 
 
 const App: React.FC = () => {
-    //const { isAuthenticated } = useAuth();
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+    const { isAuthenticated } = useAuth();
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
     useEffect(() => {
         const fetchRoles = async () => {
             const token = localStorage.getItem("token");
             const userId = JwtService.getUserIdFromToken(token);
-            setIsAuthenticated(!!token);
             if (userId) {
                 try {
                     const roles = await RoleService.getUserRoles(userId);
