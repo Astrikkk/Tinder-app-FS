@@ -30,8 +30,18 @@ const DefPage: React.FC = () => {
                 <div className="logo-menubar-header">
                     <img className="sparkii-img" alt="Sparkii" src={sparkiiHeader}/>
                     <nav className="menubar-header">
-                        <Text className="text-white text-[22px] cursor-pointer">About Us</Text>
-                        <Text className="text-white text-[22px] cursor-pointer">How It Works</Text>
+                            <Text
+                                className="menu-item"
+                                onClick={() => navigate("/AboutUs")} 
+                            >
+                                About Us
+                            </Text>
+                            <Text 
+                                className="menu-item"
+                                onClick={() => navigate("/HowItWorks")} 
+                            >
+                                How It Works
+                            </Text>
                         <Text className="text-white text-[22px] cursor-pointer">Subscription Tiers</Text>
                     </nav>
                 </div>
