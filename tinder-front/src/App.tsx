@@ -24,6 +24,8 @@ import { jwtDecode } from "jwt-decode";
 import { RoleService } from "./services/role.service";
 import PublicRoute from "./components/routes/PublicRoute";
 import {JwtService} from "./services/jwt.service";
+import AboutUs from "./components/default/AboutUsComponent";
+import HowItWorks from "./components/default/HowitWorksComponent"
 
 
 const App: React.FC = () => {
@@ -68,8 +70,9 @@ const App: React.FC = () => {
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/create-profile" element={<CreateForm />} />
+                            <Route path="/AboutUs" element={<AboutUs />} />
+                            <Route path="/HowItWorks" element={<HowItWorks />}/>
                         </Route>
-
 
 
 
