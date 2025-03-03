@@ -15,6 +15,7 @@
         public string SexualOrientationName { get; set; }
         public ICollection<string> Interests { get; set; }
         public ICollection<string> ProfilePhotoPaths { get; set; }
+        public bool IsReported { get; set; }
 
     }
 }

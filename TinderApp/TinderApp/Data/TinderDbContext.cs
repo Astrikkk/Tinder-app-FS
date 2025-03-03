@@ -82,6 +82,10 @@ namespace TinderApp.Data
             modelBuilder.Entity<LookingFor>().HasIndex(l => l.Name).IsUnique();
             modelBuilder.Entity<SexualOrientation>().HasIndex(s => s.Name).IsUnique();
             modelBuilder.Entity<Interest>().HasIndex(i => i.Name).IsUnique();
+
+            modelBuilder.Entity<UserProfile>()
+                .Property(p => p.IsReported)
+                .HasDefaultValue(false);
         }
     }
 }

@@ -16,5 +16,6 @@ namespace TinderApp.DTOs
         public List<Interest> Interests { get; set; } = new List<Interest>();  // Add Interests
         public List<string> Photos { get; set; } = new List<string>();  // Add Photos
         public int userId {  get; set; }
+        public bool IsReported { get; set; }
     }
 }
