@@ -98,7 +98,7 @@ const App: React.FC = () => {
                         {/* Сторінка без доступу */}
                         <Route path="/unauthorized" element={<h1 className="text-center mt-10 text-red-500">Access Denied</h1>} />
                         {/* Редірект на головну сторінку при невідомому маршруті */}
-                        <Route path="*" element={<Navigate to={isAuthenticated ? (isAdmin ? "/auth-view" : "/user-view") : "/auth"} />} />
+                        <Route path="*" element={<Navigate to={isAuthenticated ? (isAdmin ? "/auth" : "/user-view") : "/auth"} />} />
                     </Routes>
                 </div>
             </div>
