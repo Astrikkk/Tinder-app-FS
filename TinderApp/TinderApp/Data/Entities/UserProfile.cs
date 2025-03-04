@@ -58,6 +58,9 @@ namespace TinderApp.Data.Entities
         public virtual UserEntity User { get; set; }
 
         public bool IsReported { get; set; } = false;
+        public virtual ICollection<UserProfile>? Matches { get; set; } = new List<UserProfile> ();
+        public virtual ICollection<UserProfile>? LikedBy { get; set; } = new List<UserProfile> ();
+
 
     }
 }

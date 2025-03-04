@@ -11,5 +11,7 @@
         public IFormFile? Image { get; set; }
         public List<int>? InterestIds { get; set; }
         public bool IsReported { get; set; }
+        public List<int> LikedByUserIds { get; set; } = new List<int>();
+        public List<int> MatchedUserIds { get; set; } = new List<int>();
     }
 }
