@@ -170,6 +170,9 @@ public async Task<IActionResult> CreateProfile([FromForm] ProfileCreateRequest m
         {
             likedUser.Matches.Add(likingUser);
             likingUser.Matches.Add(likedUser);
+
+            likedUser.LikedBy.Remove(likingUser); //remove both users from likedBy
+            likingUser.LikedBy.Remove(likedUser);
         }
 
         await _dbContext.SaveChangesAsync();
