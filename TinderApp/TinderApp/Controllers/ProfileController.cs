@@ -144,6 +144,43 @@ public async Task<IActionResult> CreateProfile([FromForm] ProfileCreateRequest m
 
         return Ok(new { Message = "Profile updated successfully." });
     }
+    [HttpPut("like")]
+    public async Task<IActionResult> LikeProfile(int likedUserId, int likedByUserId)
+    {
+        var likedUser = await _dbContext.Profiles
+            .Include(p => p.LikedBy)
+            .Include(p => p.Matches)
+            .FirstOrDefaultAsync(p => p.Id == likedUserId);
+
+        var likingUser = await _dbContext.Profiles
+            .Include(p => p.LikedBy)
+            .Include(p => p.Matches)
+            .FirstOrDefaultAsync(p => p.Id == likedByUserId);
+
+        if (likedUser == null || likingUser == null)
+            return NotFound(new { Message = "One or both profiles not found." });
+
+        if (!likedUser.LikedBy.Contains(likingUser))
+        {
+            likedUser.LikedBy.Add(likingUser);
+        }
+
+        bool isMatch = likingUser.LikedBy.Contains(likedUser);
+        if (isMatch)
+        {
+            likedUser.Matches.Add(likingUser);
+            likingUser.Matches.Add(likedUser);
+        }
+
+        await _dbContext.SaveChangesAsync();
+
+        return Ok(new
+        {
+            Message = isMatch ? "It's a match!" : "Profile liked successfully.",
+            IsMatch = isMatch
+        });
+    }
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProfile(int id)
