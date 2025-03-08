@@ -5,12 +5,13 @@ using TinderApp.Data.Entities.Identity;
 using TinderApp.Interfaces;
 using TinderApp.Services;
 using TinderApp.Hubs;
-
+using AutoMapper;
+using TinderApp.Mapper; // Ensure you have the correct namespace for MappingProfile
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddControllers();  
+builder.Services.AddControllers();
 
 // Database context configuration
 builder.Services.AddDbContext<TinderDbContext>(options =>
@@ -24,10 +25,12 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 .AddEntityFrameworkStores<TinderDbContext>()
 .AddDefaultTokenProviders();
 
+// Register AutoMapper ✅
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 // Register custom services
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
-
 
 // CORS policy for React app
 builder.Services.AddCors(options =>
