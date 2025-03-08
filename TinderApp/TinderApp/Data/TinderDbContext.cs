@@ -92,6 +92,55 @@ namespace TinderApp.Data
             modelBuilder.Entity<LookingFor>().HasIndex(l => l.Name).IsUnique();
             modelBuilder.Entity<SexualOrientation>().HasIndex(s => s.Name).IsUnique();
             modelBuilder.Entity<Interest>().HasIndex(i => i.Name).IsUnique();
+
+            modelBuilder.Entity<UserProfile>()
+                .Property(p => p.IsReported)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<UserProfile>()
+                .HasMany(p => p.Matches)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "UserProfileMatches",
+                    j => j
+                        .HasOne<UserProfile>()
+                        .WithMany()
+                        .HasForeignKey("MatchedUserId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    j => j
+                        .HasOne<UserProfile>()
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    j =>
+                    {
+                        j.HasKey("UserProfileId", "MatchedUserId");
+                        j.ToTable("UserProfileMatches");
+                    });
+
+
+
+            modelBuilder.Entity<UserProfile>()
+                .HasMany(p => p.LikedBy)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "UserProfileLikes",
+                    j => j
+                        .HasOne<UserProfile>()
+                        .WithMany()
+                        .HasForeignKey("LikedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    j => j
+                        .HasOne<UserProfile>()
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    j =>
+                    {
+                        j.HasKey("UserProfileId", "LikedByUserId");
+                        j.ToTable("UserProfileLikes");
+                    });
+
         }
     }
 }

@@ -27,6 +27,8 @@ import {JwtService} from "./services/jwt.service";
 import {HubConnectionBuilder} from "@microsoft/signalr";
 import ChatForm from "./components/chat/chatForm";
 import WaitingRoom from "./components/chat/waitingRoom";
+import AboutUs from "./components/default/AboutUsComponent";
+import HowItWorks from "./components/default/HowitWorksComponent"
 
 
 const App: React.FC = () => {
@@ -72,8 +74,9 @@ const App: React.FC = () => {
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/create-profile" element={<CreateForm />} />
+                            <Route path="/AboutUs" element={<AboutUs />} />
+                            <Route path="/HowItWorks" element={<HowItWorks />}/>
                         </Route>
-
 
 
 

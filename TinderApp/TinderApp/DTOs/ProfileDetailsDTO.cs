@@ -15,6 +15,9 @@
         public string SexualOrientationName { get; set; }
         public ICollection<string> Interests { get; set; }
         public ICollection<string> ProfilePhotoPaths { get; set; }
+        public bool IsReported { get; set; }
+        public List<int> LikedByUserIds { get; set; } = new List<int>();
+        public List<int> MatchedUserIds { get; set; } = new List<int>();
 
     }
 }
