@@ -25,7 +25,7 @@ const AboutUs: React.FC = () => {
                     <div className="logo-menubar">
                         <img src={sparkiiFooter} alt="Sparkii Logo" className="sparkii-logo" />
                         <nav className="menubar">
-                        <Text
+                            <Text
                                 className="menu-item"
                                 onClick={() => navigate("/AboutUs")} 
                             >
@@ -37,7 +37,12 @@ const AboutUs: React.FC = () => {
                             >
                                 How It Works
                             </Text>
-                            <Text className="menu-item">Subscription Tiers</Text>
+                            <Text 
+                                className="menu-item"
+                                onClick={() => navigate("/SubscriptionTiers")}
+                            >
+                                Subscription Tiers
+                            </Text>
                         </nav>
                     </div>
                     <div className="lang-login-header">

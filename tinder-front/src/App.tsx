@@ -26,6 +26,7 @@ import PublicRoute from "./components/routes/PublicRoute";
 import {JwtService} from "./services/jwt.service";
 import AboutUs from "./components/default/AboutUsComponent";
 import HowItWorks from "./components/default/HowitWorksComponent"
+import SubscriptionTiers from "./components/default/SubscriptionTiersComponent";
 
 
 const App: React.FC = () => {
@@ -72,9 +73,8 @@ const App: React.FC = () => {
                             <Route path="/create-profile" element={<CreateForm />} />
                             <Route path="/AboutUs" element={<AboutUs />} />
                             <Route path="/HowItWorks" element={<HowItWorks />}/>
+                            <Route path="/SubscriptionTiers" element={<SubscriptionTiers />} />
                         </Route>
-
-
 
                         {/* Приватні маршрути для авторизованих користувачів */}
                         <Route element={<PrivateRoute />}>
