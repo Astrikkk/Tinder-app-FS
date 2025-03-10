@@ -26,6 +26,7 @@ import PublicRoute from "./components/routes/PublicRoute";
 import {JwtService} from "./services/jwt.service";
 import AboutUs from "./components/default/AboutUsComponent";
 import HowItWorks from "./components/default/HowitWorksComponent"
+import Page404 from "./components/pages/404Page";
 
 
 const App: React.FC = () => {
@@ -74,7 +75,7 @@ const App: React.FC = () => {
                             <Route path="/HowItWorks" element={<HowItWorks />}/>
                         </Route>
 
-
+                        <Route path="/404" element={<Page404 />} />
 
                         {/* Приватні маршрути для авторизованих користувачів */}
                         <Route element={<PrivateRoute />}>
