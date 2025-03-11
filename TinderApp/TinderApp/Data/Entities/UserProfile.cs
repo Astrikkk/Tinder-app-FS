@@ -1,6 +1,7 @@
 ﻿using Data.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TinderApp.Data.Entities.Chat;
 using TinderApp.Data.Entities.Identity;
 
 namespace TinderApp.Data.Entities
@@ -54,8 +55,9 @@ namespace TinderApp.Data.Entities
             //ProfilePhotos = new List<ProfilePhoto>(); // Initialize the collection
         }
 
-        public int UserId { get; set; }  // Must be int to match User's Id
+        public int UserId { get; set; }  
         public virtual UserEntity User { get; set; }
+
 
         public bool? IsReported { get; set; } = false;
         public virtual ICollection<UserProfile>? Matches { get; set; } = new List<UserProfile> ();

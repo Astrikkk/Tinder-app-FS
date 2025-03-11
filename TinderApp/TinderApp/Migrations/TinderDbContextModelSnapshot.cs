@@ -186,6 +186,28 @@ namespace TinderApp.Migrations
                     b.ToTable("ChatConnections");
                 });
 
+            modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatKey", b =>
+                {
+                    b.Property<Guid>("ChatRoom")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParticipantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChatRoom");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.HasIndex("CreatorId", "ParticipantId")
+                        .IsUnique();
+
+                    b.ToTable("ChatKeys");
+                });
+
             modelBuilder.Entity("TinderApp.Data.Entities.Gender", b =>
                 {
                     b.Property<int>("Id")
@@ -611,6 +633,25 @@ namespace TinderApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatKey", b =>
+                {
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", "Creator")
+                        .WithMany("CreatedChats")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", "Participant")
+                        .WithMany("ParticipatedChats")
+                        .HasForeignKey("ParticipantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+
+                    b.Navigation("Participant");
+                });
+
             modelBuilder.Entity("TinderApp.Data.Entities.ProfilePhoto", b =>
                 {
                     b.HasOne("TinderApp.Data.Entities.UserProfile", "Profile")
@@ -724,6 +765,10 @@ namespace TinderApp.Migrations
 
             modelBuilder.Entity("TinderApp.Data.Entities.Identity.UserEntity", b =>
                 {
+                    b.Navigation("CreatedChats");
+
+                    b.Navigation("ParticipatedChats");
+
                     b.Navigation("Profile");
 
                     b.Navigation("UserRoles");

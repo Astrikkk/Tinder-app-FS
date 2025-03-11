@@ -13,8 +13,6 @@ namespace TinderApp.Data
     {
         public TinderDbContext(DbContextOptions<TinderDbContext> options) : base(options) { }
 
-        private readonly ConcurrentDictionary<string, UserConnection> _connections = new ConcurrentDictionary<string, UserConnection>();
-        public ConcurrentDictionary<string, UserConnection> connections => _connections;
 
         public DbSet<UserProfile> Profiles { get; set; }
         public DbSet<ProfilePhoto> ProfilePhotos { get; set; }
@@ -23,6 +21,7 @@ namespace TinderApp.Data
         public DbSet<LookingFor> LookingForOptions { get; set; }
         public DbSet<SexualOrientation> SexualOrientations { get; set; }
         public DbSet<Interest> Interests { get; set; }
+        public DbSet<ChatKey> ChatKeys { get; set; }
 
         public DbSet<ChatConnection> ChatConnections { get; set; }
 
@@ -145,6 +144,24 @@ namespace TinderApp.Data
                         j.HasKey("UserProfileId", "LikedByUserId");
                         j.ToTable("UserProfileLikes");
                     });
+
+
+            modelBuilder.Entity<UserEntity>()
+                .HasMany(u => u.CreatedChats)
+                .WithOne(c => c.Creator)
+                .HasForeignKey(c => c.CreatorId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserEntity>()
+                .HasMany(u => u.ParticipatedChats)
+                .WithOne(c => c.Participant)
+                .HasForeignKey(c => c.ParticipantId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ChatKey>()
+                .HasIndex(c => new { c.CreatorId, c.ParticipantId })
+                .IsUnique();
+
 
         }
     }

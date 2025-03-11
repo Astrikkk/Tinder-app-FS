@@ -12,8 +12,8 @@ using TinderApp.Data;
 namespace TinderApp.Migrations
 {
     [DbContext(typeof(TinderDbContext))]
-    [Migration("20250224170428_changedintereststable")]
-    partial class changedintereststable
+    [Migration("20250311174429_Test1")]
+    partial class Test1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,6 +168,51 @@ namespace TinderApp.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatConnection", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ChatRoom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ConnectionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChatConnections");
+                });
+
+            modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatKey", b =>
+                {
+                    b.Property<Guid>("ChatRoom")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserEntityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChatRoom");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.HasIndex("UserEntityId");
+
+                    b.ToTable("ChatKeys");
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.Gender", b =>
@@ -459,6 +504,11 @@ namespace TinderApp.Migrations
                     b.Property<int>("InterestedInId")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("IsReported")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<int>("LookingForId")
                         .HasColumnType("int");
 
@@ -487,6 +537,36 @@ namespace TinderApp.Migrations
                         .IsUnique();
 
                     b.ToTable("Profiles");
+                });
+
+            modelBuilder.Entity("UserProfileLikes", b =>
+                {
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LikedByUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserProfileId", "LikedByUserId");
+
+                    b.HasIndex("LikedByUserId");
+
+                    b.ToTable("UserProfileLikes", (string)null);
+                });
+
+            modelBuilder.Entity("UserProfileMatches", b =>
+                {
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchedUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserProfileId", "MatchedUserId");
+
+                    b.HasIndex("MatchedUserId");
+
+                    b.ToTable("UserProfileMatches", (string)null);
                 });
 
             modelBuilder.Entity("UserRoleEntity", b =>
@@ -549,6 +629,40 @@ namespace TinderApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatConnection", b =>
+                {
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatKey", b =>
+                {
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("TinderApp.Data.Entities.Identity.UserEntity", null)
+                        .WithMany("ChatKeys")
+                        .HasForeignKey("UserEntityId");
+
+                    b.Navigation("Creator");
+
+                    b.Navigation("Participant");
+                });
+
             modelBuilder.Entity("TinderApp.Data.Entities.ProfilePhoto", b =>
                 {
                     b.HasOne("TinderApp.Data.Entities.UserProfile", "Profile")
@@ -606,6 +720,36 @@ namespace TinderApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("UserProfileLikes", b =>
+                {
+                    b.HasOne("TinderApp.Data.Entities.UserProfile", null)
+                        .WithMany()
+                        .HasForeignKey("LikedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TinderApp.Data.Entities.UserProfile", null)
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserProfileMatches", b =>
+                {
+                    b.HasOne("TinderApp.Data.Entities.UserProfile", null)
+                        .WithMany()
+                        .HasForeignKey("MatchedUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TinderApp.Data.Entities.UserProfile", null)
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("UserRoleEntity", b =>
                 {
                     b.HasOne("TinderApp.Data.Entities.Identity.RoleEntity", "Role")
@@ -632,6 +776,8 @@ namespace TinderApp.Migrations
 
             modelBuilder.Entity("TinderApp.Data.Entities.Identity.UserEntity", b =>
                 {
+                    b.Navigation("ChatKeys");
+
                     b.Navigation("Profile");
 
                     b.Navigation("UserRoles");

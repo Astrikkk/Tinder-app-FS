@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TinderApp.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Test1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,6 +78,19 @@ namespace TinderApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_InterestedInOptions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Interests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Interests", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,6 +227,55 @@ namespace TinderApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatConnections",
+                columns: table => new
+                {
+                    ConnectionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ChatRoom = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatConnections", x => x.ConnectionId);
+                    table.ForeignKey(
+                        name: "FK_ChatConnections_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChatKeys",
+                columns: table => new
+                {
+                    ChatRoom = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatorId = table.Column<int>(type: "int", nullable: false),
+                    ParticipantId = table.Column<int>(type: "int", nullable: false),
+                    UserEntityId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatKeys", x => x.ChatRoom);
+                    table.ForeignKey(
+                        name: "FK_ChatKeys_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChatKeys_AspNetUsers_ParticipantId",
+                        column: x => x.ParticipantId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ChatKeys_AspNetUsers_UserEntityId",
+                        column: x => x.UserEntityId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Profiles",
                 columns: table => new
                 {
@@ -225,7 +287,8 @@ namespace TinderApp.Migrations
                     InterestedInId = table.Column<int>(type: "int", nullable: false),
                     LookingForId = table.Column<int>(type: "int", nullable: false),
                     SexualOrientationId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    IsReported = table.Column<bool>(type: "bit", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -263,22 +326,27 @@ namespace TinderApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Interests",
+                name: "InterestUserProfile",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserProfileId = table.Column<int>(type: "int", nullable: true)
+                    InterestsId = table.Column<int>(type: "int", nullable: false),
+                    UserProfilesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Interests", x => x.Id);
+                    table.PrimaryKey("PK_InterestUserProfile", x => new { x.InterestsId, x.UserProfilesId });
                     table.ForeignKey(
-                        name: "FK_Interests_Profiles_UserProfileId",
-                        column: x => x.UserProfileId,
+                        name: "FK_InterestUserProfile_Interests_InterestsId",
+                        column: x => x.InterestsId,
+                        principalTable: "Interests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InterestUserProfile_Profiles_UserProfilesId",
+                        column: x => x.UserProfilesId,
                         principalTable: "Profiles",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -308,6 +376,54 @@ namespace TinderApp.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserProfileLikes",
+                columns: table => new
+                {
+                    UserProfileId = table.Column<int>(type: "int", nullable: false),
+                    LikedByUserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProfileLikes", x => new { x.UserProfileId, x.LikedByUserId });
+                    table.ForeignKey(
+                        name: "FK_UserProfileLikes_Profiles_LikedByUserId",
+                        column: x => x.LikedByUserId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserProfileLikes_Profiles_UserProfileId",
+                        column: x => x.UserProfileId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserProfileMatches",
+                columns: table => new
+                {
+                    UserProfileId = table.Column<int>(type: "int", nullable: false),
+                    MatchedUserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProfileMatches", x => new { x.UserProfileId, x.MatchedUserId });
+                    table.ForeignKey(
+                        name: "FK_UserProfileMatches_Profiles_MatchedUserId",
+                        column: x => x.MatchedUserId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserProfileMatches_Profiles_UserProfileId",
+                        column: x => x.UserProfileId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -325,6 +441,19 @@ namespace TinderApp.Migrations
                     { 1, "Male" },
                     { 2, "Female" },
                     { 3, "Other" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "LookingForOptions",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Long-Term Relationship" },
+                    { 2, "Short-term romance" },
+                    { 3, "Serious relationship" },
+                    { 4, "New friends" },
+                    { 5, "Non-serious relationship" },
+                    { 6, "I'm not sure yet" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -367,6 +496,26 @@ namespace TinderApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChatConnections_UserId",
+                table: "ChatConnections",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatKeys_CreatorId",
+                table: "ChatKeys",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatKeys_ParticipantId",
+                table: "ChatKeys",
+                column: "ParticipantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatKeys_UserEntityId",
+                table: "ChatKeys",
+                column: "UserEntityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Genders_Name",
                 table: "Genders",
                 column: "Name",
@@ -385,9 +534,9 @@ namespace TinderApp.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Interests_UserProfileId",
-                table: "Interests",
-                column: "UserProfileId");
+                name: "IX_InterestUserProfile_UserProfilesId",
+                table: "InterestUserProfile",
+                column: "UserProfilesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LookingForOptions_Name",
@@ -436,6 +585,16 @@ namespace TinderApp.Migrations
                 table: "SexualOrientations",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProfileLikes_LikedByUserId",
+                table: "UserProfileLikes",
+                column: "LikedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProfileMatches_MatchedUserId",
+                table: "UserProfileMatches",
+                column: "MatchedUserId");
         }
 
         /// <inheritdoc />
@@ -457,13 +616,28 @@ namespace TinderApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Interests");
+                name: "ChatConnections");
+
+            migrationBuilder.DropTable(
+                name: "ChatKeys");
+
+            migrationBuilder.DropTable(
+                name: "InterestUserProfile");
 
             migrationBuilder.DropTable(
                 name: "ProfilePhotos");
 
             migrationBuilder.DropTable(
+                name: "UserProfileLikes");
+
+            migrationBuilder.DropTable(
+                name: "UserProfileMatches");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Interests");
 
             migrationBuilder.DropTable(
                 name: "Profiles");
