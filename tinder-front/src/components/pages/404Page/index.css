@@ -1,0 +1,146 @@
+/* Забезпечуємо, щоб контейнер займав весь екран */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.login-container {
+    width: 100vw; /* Займає всю ширину екрану */
+    height: 100vh; /* Займає всю висоту екрану */
+    position: relative;
+    background-color: #100506;
+    overflow: hidden;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Забезпечує, щоб зображення покривало весь контейнер */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.stars {
+    position: absolute;
+    left: 5%; /* Використовуємо відсотки для адаптивності */
+    top: 45%;
+}
+
+.bow {
+    position: absolute;
+    right: 5%; /* Використовуємо відсотки для адаптивності */
+    top: 13%;
+}
+
+.gradient-bar {
+    width: 100%;
+    height: 54px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(0deg, rgba(101, 17, 17, 0.00) 0%, #651111 203.7%);
+}
+
+.my-404-form {
+    position: absolute;
+    /*left: 50%;*/
+    top: 150px;
+    /*transform: translate(-50%, -50%); !* Центруємо форму *!*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    width: 100%; /* Адаптивна ширина */
+    /*max-width: 1920px; !* Максимальна ширина форми *!*/
+}
+
+
+.sparkii-logo {
+    position: absolute;
+    left: 5%;
+    top: 5%;
+}
+
+.email-input, .password-input {
+    text-transform: none !important;
+}
+
+.mybg {
+    /*margin-top: 20px;*/
+    width: 100%;
+    height: 634px;
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.60);
+}
+
+.love {
+    margin-top: 70px;
+    display: flex;
+    justify-content: center; /* Центрує горизонтально */
+    /*align-items: center; !* Центрує вертикально (якщо потрібно) *!*/
+    /*height: 100vh; !* Робить контейнер висотою всього вікна *!*/
+}
+.text-love {
+    color: #FFF;
+    margin-top: 44px;
+    text-align: center;
+    /* Akatab-Bold-56 */
+    font-family: Akatab;
+    font-size: 56px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.text-low-two {
+    text-align: center;
+    color: var(--Light-Gray, #E1DFDF);
+
+    /* Akatab-Regular-24 */
+    font-family: Akatab;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.button-love {
+
+    margin-top: 65px;
+    display: flex;
+    justify-content: center; /* Центрує горизонтально */
+
+}
+.button-love-content{
+    text-align: center;
+    width: 550px;
+    padding: 14px 16px;
+    border-radius: var(--Semi-rounded, 12px);
+    border: 2px solid var(--Red, #BF0B2C);
+    background: var(--Dark-Red-4, #240000);
+}
+
+.button-love-content a{
+    color: #FFF;
+    text-align: center;
+
+    /* Akatab-Medium-22 */
+    font-family: Akatab;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-transform: capitalize;
+}
