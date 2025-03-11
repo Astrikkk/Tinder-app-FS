@@ -25,7 +25,6 @@ import { RoleService } from "./services/role.service";
 import PublicRoute from "./components/routes/PublicRoute";
 import {JwtService} from "./services/jwt.service";
 import {HubConnectionBuilder} from "@microsoft/signalr";
-import ChatForm from "./components/chat/chatForm";
 import WaitingRoom from "./components/chat/waitingRoom";
 import AboutUs from "./components/default/AboutUsComponent";
 import HowItWorks from "./components/default/HowitWorksComponent"

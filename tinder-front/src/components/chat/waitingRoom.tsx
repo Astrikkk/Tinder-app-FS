@@ -1,56 +1,75 @@
 import React, { useState } from "react";
-import ChatForm from "./chatForm";
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
-import { Chat } from "./chat";
-import {sendMessage} from "@microsoft/signalr/dist/esm/Utils";
+import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { Col, Row } from "antd";
+import ChatRoom from "./ChatRoom";
+import JoinChatForm from "./JoinChatForm";
+import { Layout, Typography } from "antd"; // ✅ Додаємо Layout замість Container
 
-const WaitingRoom = () => {
-    const [connection, setConnection] = useState<HubConnection | null>(null);
-    const [messages, setMessages] = useState<{ id: string; text: string; user: string }[]>([]);
+const { Content } = Layout;
+const { Title } = Typography;
+
+interface Message {
+    username: string;
+    msg: string;
+}
+
+const WaitingRoom: React.FC = () => {
+    const [conn, setConnection] = useState<HubConnection | null>(null);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [chatRoom, setChatRoom] = useState<string>("");
 
-    const joinChat = async (userName: string, chatRoom: string) => {
-        var connected = new HubConnectionBuilder()
-            .withUrl("http://localhost:7034/chathub", { withCredentials: true })
-            .withAutomaticReconnect()
-            .build();
-
-        connected.on("ReceiveMessage", (userName, message) => {
-            setMessages((prevMessages) => [
-                ...prevMessages,
-                { id: crypto.randomUUID(), text: message, user: userName }
-            ]);
-        });
-
+    const joinChatRoom = async (username: string, chatroom: string) => {
         try {
-            await connected.start();
-            await connected.invoke("JoinChat", { userName, chatRoom });
+            const connection = new HubConnectionBuilder()
+                .withUrl("http://localhost:7034/Chat", { withCredentials: true })
+                .configureLogging(LogLevel.Information)
+                .build();
 
-            setConnection(connected);
-            setChatRoom(chatRoom);
-            console.log(connection);
-        } catch (error) {
-            console.log(error);
+            connection.on("ReceiveMessage", (username: string, msg: string) => {
+                setMessages((prevMessages) => [...prevMessages, { username, msg }]);
+            });
+
+            await connection.start();
+            await connection.invoke("JoinSpecificChatRoom", { username, chatroom });
+
+            setConnection(connection);
+            setChatRoom(chatroom);
+        } catch (e) {
+            console.error(e);
         }
     };
 
-    const sendMessage = (message: string) => {
-        connection?.invoke("SendMessage", message)
-    }
-
-    const closeChat = async () => {
-        await connection?.stop();
-        setConnection(null);
-    }
+    const sendMessage = async (message: string) => {
+        try {
+            if (conn) {
+                await conn.invoke("SendMessage", message);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
     return (
-        <div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg">
-            {connection ? (
-                <Chat messages={messages} chatRoom={chatRoom} sendMessage={sendMessage} closeChat={closeChat} />
-            ) : (
-                <ChatForm joinChat={joinChat} />
-            )}
-        </div>
+        <Layout style={{ minHeight: "100vh", padding: "20px" }}>
+            <Content>
+                <Row justify="center" style={{ marginBottom: "20px" }}>
+                    <Col span={24}>
+                        <Title level={2} style={{ textAlign: "center" }}>
+                            Welcome to the F1 ChatApp
+                        </Title>
+                    </Col>
+                </Row>
+                <Row justify="center">
+                    <Col span={24}>
+                        {!conn ? (
+                            <JoinChatForm joinChatRoom={joinChatRoom} />
+                        ) : (
+                            <ChatRoom messages={messages} sendMessage={sendMessage} />
+                        )}
+                    </Col>
+                </Row>
+            </Content>
+        </Layout>
     );
 };
 

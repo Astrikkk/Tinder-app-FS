@@ -1,15 +1,20 @@
 ﻿using Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Concurrent;
 using TinderApp.Data.Entities;
 using TinderApp.Data.Entities.Chat;
 using TinderApp.Data.Entities.Identity;
+using TinderApp.DTOs;
 
 namespace TinderApp.Data
 {
     public class TinderDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
     {
         public TinderDbContext(DbContextOptions<TinderDbContext> options) : base(options) { }
+
+        private readonly ConcurrentDictionary<string, UserConnection> _connections = new ConcurrentDictionary<string, UserConnection>();
+        public ConcurrentDictionary<string, UserConnection> connections => _connections;
 
         public DbSet<UserProfile> Profiles { get; set; }
         public DbSet<ProfilePhoto> ProfilePhotos { get; set; }

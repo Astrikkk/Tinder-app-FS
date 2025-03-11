@@ -6,7 +6,7 @@ using TinderApp.Interfaces;
 using TinderApp.Services;
 using TinderApp.Hubs;
 using AutoMapper;
-using TinderApp.Mapper; // Ensure you have the correct namespace for MappingProfile
+using TinderApp.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,20 +32,25 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 
+// SignalR setup
+builder.Services.AddSignalR();
 // CORS policy for React app
-builder.Services.AddCors(options =>
+builder.Services.AddCors(opt =>
 {
-    options.AddDefaultPolicy(policy =>
+    opt.AddPolicy("reactApp", builder =>
     {
-        policy.WithOrigins("http://localhost:3000") // React frontend
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        builder.WithOrigins("http://localhost:3000")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
-// SignalR setup
-builder.Services.AddSignalR();
+builder.Services.AddSingleton<ChatConnectionService>();
+
+
+
+
 
 builder.Services.AddSwaggerGen(); // Swagger configuration for API docs
 
@@ -61,10 +66,10 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseStaticFiles();
-app.UseCors(); // Apply CORS policy
+app.UseCors("reactApp"); // Apply CORS policy
 
 app.UseAuthorization();
-app.MapHub<ChatHub>("/chatHub"); // SignalR hub mapping
+app.MapHub<ChatHub>("/Chat"); // SignalR hub mapping
 app.MapControllers();
 
 // Configure Swagger for development environment
