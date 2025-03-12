@@ -88,13 +88,14 @@ const App: React.FC = () => {
                             <Route path="/interests-form" element={<InterestsForm interests={null} onSave={() => console.log("Profile saved")} />} />
                             <Route path="/looking-for" element={<LookingForList />} />
                             <Route path="/looking-for-form" element={<LookingForForm lookingFor={null} onSave={() => console.log("Profile saved")} />} />
-                            <Route path="/sexual-orientation" element={<SexualOrientationList />} />
+
                             <Route path="/sexual-orientation-form" element={<SexualOrientationForm sexualOrientation={null} onSave={() => console.log("Profile saved")} />} />
                         </Route>
 
                         {/* Приватні маршрути для адміністратора */}
                         <Route element={<AdminRoute isAdmin={isAdmin} />}>
                             <Route path="/admin-view" element={<ProfileList />} />
+                            <Route path="/sexual-orientation" element={<SexualOrientationList />} />
                         </Route>
 
                         {/* Сторінка без доступу */}
