@@ -1,4 +1,3 @@
-// profile.service.ts
 import axios from 'axios';
 
 const API_URL = `${process.env.REACT_APP_API}/Profile`;
@@ -11,25 +10,27 @@ export interface Profile {
         id: number;
         name: string;
     };
-    lookingFor:  {
+    lookingFor: {
         id: number;
         name: string;
     };
-    interestedIn:  {
+    interestedIn: {
         id: number;
         name: string;
     };
-    sexualOrientation:{
+    sexualOrientation: {
         id: number;
         name: string;
     };
     birthDay: Date;
-    interests:  {
+    interests: {
         id: number;
         name: string;
     }[];
     photos: string[];
     userId: number;
+    likedByUserIds: number[]; // Add this line
+    matchedUserIds: number[]; // Add this line
 }
 
 export const ProfileService = {
@@ -58,6 +59,4 @@ export const ProfileService = {
     deleteProfile: async (id: string): Promise<void> => {
         await axios.delete(`${API_URL}/${id}`);
     },
-
-
 };
