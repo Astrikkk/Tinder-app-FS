@@ -69,15 +69,13 @@ const App: React.FC = () => {
                         <Route path="/auth" element={<DefaultLayout />} />
                         <Route path="/AboutUs" element={<AboutUs />} />
                         <Route path="/HowItWorks" element={<HowItWorks />}/>
+                        <Route path="/SubscriptionTiers" element={<SubscriptionTiers />} />
                         <Route path="/404" element={<Page404 />} />
                         {/* Публічні маршрути (доступні лише для неавтентифікованих користувачів) */}
                         <Route element={<PublicRoute isAuthenticated={isAuthenticated} />}>
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/create-profile" element={<CreateForm />} />
-                            <Route path="/AboutUs" element={<AboutUs />} />
-                            <Route path="/HowItWorks" element={<HowItWorks />}/>
-                            <Route path="/SubscriptionTiers" element={<SubscriptionTiers />} />
                         </Route>
                         {/* Приватні маршрути для авторизованих користувачів */}
                         <Route element={<PrivateRoute />}>
