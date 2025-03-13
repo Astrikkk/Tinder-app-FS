@@ -3,25 +3,27 @@ import { ProfileInfo } from "../types";
 import { Button, message, Modal, Table, Typography } from "antd";
 import { ProfileInfoService } from "../../../services/profile.info.service";
 import LookingForForm from "./form";
+import Navbar from "../../Navbar";
+
 const { Title } = Typography;
 
 const LookingForList: React.FC = () => {
-    const [interesedsIn, setInteresedsIn] = useState<ProfileInfo[]>([]);
+    const [lookingForList, setLookingForList] = useState<ProfileInfo[]>([]);
     const [selectedLookingFor, setSelectedLookingFor] = useState<ProfileInfo | null>(null);
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
-        fetchInteresedsIn();
+        fetchLookingFor();
     }, []);
 
-    const fetchInteresedsIn = async () => {
+    const fetchLookingFor = async () => {
         setLoading(true);
         try {
             const data = await ProfileInfoService.getLookingFor();
-            setInteresedsIn(data);
+            setLookingForList(data);
         } catch (error) {
-            message.error("Failed to load profiles");
+            message.error("Failed to load looking for");
         } finally {
             setLoading(false);
         }
@@ -31,10 +33,10 @@ const LookingForList: React.FC = () => {
         if (window.confirm("Are you sure? This action cannot be undone.")) {
             try {
                 await ProfileInfoService.deleteLookingFor(id.toString());
-                message.success("Profile deleted successfully");
-                fetchInteresedsIn();
+                message.success("Looking for deleted successfully");
+                fetchLookingFor();
             } catch (error) {
-                message.error("Failed to delete profile");
+                message.error("Failed to delete looking for");
             }
         }
     };
@@ -73,29 +75,32 @@ const LookingForList: React.FC = () => {
     ];
 
     return (
-        <div style={{ padding: "20px" }}>
-            <Title level={2}>Looking For</Title>
-            <Button
-                type="primary"
-                onClick={() => {
-                    setSelectedLookingFor({ id: 0, name: "" });
-                    setModalVisible(true);
-                }}
-                style={{ marginBottom: "20px" }}
-            >
-                Create New Profile
-            </Button>
-            <Table dataSource={interesedsIn} columns={columns} rowKey="id" loading={loading} />
-
-            {modalVisible && (
-                <LookingForForm
-                    lookingFor={selectedLookingFor}
-                    onSave={() => {
-                        setModalVisible(false);
-                        fetchInteresedsIn();
+        <div style={{ display: "flex", minHeight: "100vh" }}>
+            <Navbar />
+            <div style={{ flex: 1, padding: "20px" }}>
+                <Title level={2}>Looking For</Title>
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        setSelectedLookingFor({ id: 0, name: "" });
+                        setModalVisible(true);
                     }}
-                />
-            )}
+                    style={{ marginBottom: "20px" }}
+                >
+                    Create New Looking For
+                </Button>
+                <Table dataSource={lookingForList} columns={columns} rowKey="id" loading={loading} />
+
+                {modalVisible && (
+                    <LookingForForm
+                        lookingFor={selectedLookingFor}
+                        onSave={() => {
+                            setModalVisible(false);
+                            fetchLookingFor();
+                        }}
+                    />
+                )}
+            </div>
         </div>
     );
 };
