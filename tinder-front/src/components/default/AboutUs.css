@@ -24,14 +24,12 @@ html, body {
     background-size: cover;
     background-position: center;
     width: 100%;
-    max-width: 1200px;
-    height: 45em;
+    height: 720px;
 
 }
 
 .about-us-header {
     width: 95%;
-    max-width: 1200px;
     margin-left: 2em;
     margin-top: 2.5em;
     padding: 2em;
@@ -237,9 +235,15 @@ html, body {
     font-family: cursive;
 }
 
+.main-Footer {
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    background: #100607;
+}
+
 .about-us-footer {
     width: 100%;
-    max-width: 1200px;
     background: #1D0C0E;
     display: flex;
     flex-direction: column;
@@ -247,7 +251,6 @@ html, body {
     padding: 4em 2em;
     gap: 2em;
     text-align: center;
-    border-radius: 12px;
 }
 
 .logo-text-footer {

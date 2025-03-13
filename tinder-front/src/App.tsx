@@ -27,6 +27,7 @@ import {JwtService} from "./services/jwt.service";
 import AboutUs from "./components/default/AboutUsComponent";
 import HowItWorks from "./components/default/HowitWorksComponent"
 import Page404 from "./components/pages/404Page";
+import SubscriptionTiers from "./components/default/SubscriptionTiersComponent";
 
 
 const App: React.FC = () => {
@@ -68,16 +69,16 @@ const App: React.FC = () => {
                         <Route path="/auth" element={<DefaultLayout />} />
                         <Route path="/AboutUs" element={<AboutUs />} />
                         <Route path="/HowItWorks" element={<HowItWorks />}/>
+                        <Route path="/404" element={<Page404 />} />
                         {/* Публічні маршрути (доступні лише для неавтентифікованих користувачів) */}
                         <Route element={<PublicRoute isAuthenticated={isAuthenticated} />}>
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/create-profile" element={<CreateForm />} />
-                            
+                            <Route path="/AboutUs" element={<AboutUs />} />
+                            <Route path="/HowItWorks" element={<HowItWorks />}/>
+                            <Route path="/SubscriptionTiers" element={<SubscriptionTiers />} />
                         </Route>
-
-                        <Route path="/404" element={<Page404 />} />
-
                         {/* Приватні маршрути для авторизованих користувачів */}
                         <Route element={<PrivateRoute />}>
                             <Route path="/user-view" element={<NewProfileViewer />} />
