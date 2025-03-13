@@ -29,11 +29,16 @@ public class ProfileController : ControllerBase
         var profiles = await _dbContext.Profiles
             .Include(p => p.Interests)
             .Include(p => p.ProfilePhotos)
+            .Include(p => p.User)
+                .ThenInclude(u => u.CreatedChats)
+            .Include(p => p.User)
+                .ThenInclude(u => u.ParticipatedChats)
             .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
         return Ok(profiles);
     }
+
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProfile(int id)
@@ -41,12 +46,12 @@ public class ProfileController : ControllerBase
         var profile = await _dbContext.Profiles
             .Include(p => p.ProfilePhotos)
             .Include(p => p.Interests)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .FirstOrDefaultAsync(p => p.UserId == id);
 
         if (profile == null)
             return NotFound(new { Message = $"Profile with ID {id} not found." });
 
-        return Ok(_mapper.Map<ProfileDetailsDTO>(profile));
+        return Ok(_mapper.Map<ProfileItemDTO>(profile));
     }
 [HttpPost]
 public async Task<IActionResult> CreateProfile([FromForm] ProfileCreateRequest model)
@@ -215,4 +220,28 @@ public async Task<IActionResult> CreateProfile([FromForm] ProfileCreateRequest m
         var genders = await _dbContext.Genders.ToListAsync();
         return Ok(genders);
     }
+
+    [HttpGet("{userId}/chats")]
+    public async Task<IActionResult> GetUserChats(int userId)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.CreatedChats)
+            .Include(u => u.ParticipatedChats)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+            return NotFound(new { Message = $"User with ID {userId} not found." });
+
+        var chats = user.CreatedChats.Concat(user.ParticipatedChats)
+            .Select(chat => new
+            {
+                chat.ChatRoom,
+                CreatorId = chat.CreatorId,
+                ParticipantId = chat.ParticipantId
+            })
+            .ToList();
+
+        return Ok(chats);
+    }
+
 }

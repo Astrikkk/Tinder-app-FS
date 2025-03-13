@@ -20,7 +20,10 @@ namespace TinderApp.Mapper
                 .ForMember(dto => dto.SexualOrientation, opt => opt.MapFrom(profile => profile.SexualOrientation))
                 .ForMember(dto => dto.Photos, opt => opt.MapFrom(profile => profile.ProfilePhotos.Select(photo => $"/images/{photo.Path}").ToList()))
                 .ForMember(dto => dto.LikedByUserIds, opt => opt.MapFrom(profile => profile.LikedBy != null ? profile.LikedBy.Select(u => u.Id).ToList() : new List<int>()))
-                .ForMember(dto => dto.MatchedUserIds, opt => opt.MapFrom(profile => profile.Matches != null ? profile.Matches.Select(u => u.Id).ToList() : new List<int>()));
+                .ForMember(dto => dto.MatchedUserIds, opt => opt.MapFrom(profile => profile.Matches != null ? profile.Matches.Select(u => u.Id).ToList() : new List<int>()))
+                .ForMember(dto => dto.CreatedChats, opt => opt.MapFrom(profile => profile.User != null ? profile.User.CreatedChats.Select(chat => chat.ChatRoom).ToList() : new List<Guid>()))
+                .ForMember(dto => dto.ParticipatedChats, opt => opt.MapFrom(profile => profile.User != null ? profile.User.ParticipatedChats.Select(chat => chat.ChatRoom).ToList() : new List<Guid>()));
+
 
             CreateMap<ProfileCreateRequest, UserProfile>()
                 .ForMember(entity => entity.ProfilePhotos, opt => opt.Ignore())

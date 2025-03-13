@@ -19,5 +19,9 @@ namespace TinderApp.DTOs
         public bool IsReported { get; set; }
         public List<int> LikedByUserIds { get; set; } = new List<int>();
         public List<int> MatchedUserIds { get; set; } = new List<int>();
+
+
+        public List<Guid> CreatedChats { get; set; } = new List<Guid>();
+        public List<Guid> ParticipatedChats { get; set; } = new List<Guid>();
     }
 }

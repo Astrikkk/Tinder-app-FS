@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import { Col, Row } from "antd";
+import { Col, Row, Button } from "antd";
 import ChatRoom from "./ChatRoom";
 import JoinChatForm from "./JoinChatForm";
-import { Layout, Typography } from "antd"; // ✅ Додаємо Layout замість Container
+import { Layout, Typography } from "antd";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -42,10 +42,30 @@ const WaitingRoom: React.FC = () => {
     const sendMessage = async (message: string) => {
         try {
             if (conn) {
-                await conn.invoke("SendMessage", message);
+                console.log("Sending message:", message);
+                await conn.invoke("SendMessage",chatRoom, "pavel", message);
+            } else {
+                console.warn("Connection is null!");
             }
         } catch (e) {
-            console.error(e);
+            console.error("Error sending message:", e);
+        }
+    };
+
+    // 🔹 Виклик CreatePrivateChat для тестування
+    const createPrivateChat = async () => {
+        if (!conn) {
+            console.warn("Підключення до хабу не встановлено");
+            return;
+        }
+        try {
+            const creatorId = 1; // ID користувача, який створює чат
+            const participantId = 2; // ID користувача, до якого створюється чат
+
+            await conn.invoke("CreatePrivateChat", creatorId, participantId);
+            console.log(`Приватний чат між користувачами ${creatorId} та ${participantId} створено`);
+        } catch (e) {
+            console.error("Помилка створення приватного чату:", e);
         }
     };
 
@@ -64,7 +84,14 @@ const WaitingRoom: React.FC = () => {
                         {!conn ? (
                             <JoinChatForm joinChatRoom={joinChatRoom} />
                         ) : (
-                            <ChatRoom messages={messages} sendMessage={sendMessage} />
+                            <>
+                                <ChatRoom messages={messages} sendMessage={sendMessage} />
+                                <Row justify="center" style={{ marginTop: "20px" }}>
+                                    <Button type="primary" onClick={createPrivateChat}>
+                                        Тестувати CreatePrivateChat
+                                    </Button>
+                                </Row>
+                            </>
                         )}
                     </Col>
                 </Row>

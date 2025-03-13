@@ -1,0 +1,231 @@
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    height: 80vh; /* або потрібна висота */
+    width: 1156px;
+
+    justify-content: space-between;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    align-items: center;
+    position: absolute; /* Додаємо абсолютне позиціонування */
+    top: 150px;  /* Відступ від низу */
+    right: 260px;   /* Відступ від правого краю */
+}
+
+
+.input-text {
+    flex: 1;
+    padding: 10px;
+    background-color: #1B0808; /* Колір збігається з фоном */
+    color: #B1A4A4; /* Колір тексту */
+    border: none; /* Прибираємо межу */
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+}
+
+
+.input-text::placeholder {
+    color: #B1A4A4; /* Робимо плейсхолдер таким же, як текст */
+}
+.input-text:focus {
+    border: none; /* Забороняємо зміну межі при фокусі */
+    outline: none;
+}
+
+
+.Send-Button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.Send-Button:hover {
+    background-color: #0056b3;
+}
+
+
+.chat-header{
+    display: flex;
+    width: 1156px;
+    padding: 12px 36px;
+    justify-content: space-between;
+    align-items: center;
+
+    border-radius: 12px;
+    background: #320000;
+}
+.header-info{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.header-name{
+    color: #FFF;
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.header-status{
+    color: #B1A4A4;
+    font-family: Akatab;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.header-settings{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.chat-form{
+    display: flex;
+    width: 1156px;
+    padding: 28px 36px;
+    justify-content: space-between;
+    align-items: center;
+
+    border-radius: 12px;
+    border-top: 2px solid #651111;
+    border-bottom: 2px solid #651111;
+    background: #1B0808;
+}
+
+.chat-form1{
+    display: flex;
+    align-items: center;
+    gap: 44px;
+}
+
+.chat-form2{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.import-file{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.input-text{
+    color: #B1A4A4;
+    font-family: Akatab;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.Send-Button{
+    display: flex;
+    padding: 8px 36px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 12px;
+    background: #751123;
+    color: white;
+}
+
+
+.friend-info{
+    display: flex;
+    width: 306px;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+
+.friend-title{
+    color: #FFF;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.friend-photo{
+    width: 204px;
+    height: 204px;
+
+    border-radius: 204px;
+    background: lightgray 50% / cover no-repeat;
+}
+
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 16px;
+    gap: 12px;
+}
+
+/* Повідомлення відправника */
+.message {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-family: Akatab;
+    word-wrap: break-word;
+    display: flex;
+    align-items: center;
+}
+
+/* Моє повідомлення */
+.mine {
+    align-self: flex-end;
+    background-color: #751123;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* Отримане повідомлення */
+.theirs {
+    align-self: flex-start;
+    background-color: #320000;
+    color: #B1A4A4;
+    border-bottom-left-radius: 4px;
+}
+
+/* Контейнер для аватара та повідомлення */
+.message-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+/* Аватар отриманого повідомлення */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: lightgray;
+}
+
+/* Додатковий відступ між групами повідомлень */
+.message:not(:first-child) {
+    margin-top: 4px;
+}
+

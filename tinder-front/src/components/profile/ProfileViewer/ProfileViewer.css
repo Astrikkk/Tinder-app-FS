@@ -9,6 +9,74 @@
 
 }
 
+.Chats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    height: 90vh;
+    gap: 10px;
+    overflow-y: auto; /* Якщо багато чатів */
+}
+
+.Chat-Item{
+    display: flex;
+    padding: 18px;
+    align-items: center;
+    gap: 24px;
+    align-self: stretch;
+
+    background: #240000;
+}
+
+.Name-Messanges{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.Name-Status{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.Profile-Text{
+    color: #FFF;
+
+    /* Akatab-SemiBold-18 */
+    font-family: Akatab;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: capitalize;
+}
+
+.Friend-Message{
+    display: -webkit-box;
+    max-width: 192px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+
+    color:  #B1A4A4;
+    text-overflow: ellipsis;
+
+    /* Akatab-Regular-16 */
+    font-family: Akatab;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.Prifile-Image{
+    width: 78px;
+    height: 78px;
+
+    border-radius: 78px;
+    background: lightgray 50% / cover no-repeat;
+}
+
 
 .keys{
     display: inline-flex;
@@ -194,13 +262,23 @@
     color: #FFF;
 }
 
-.match-info{
+.match-info {
     display: flex;
-    width: 301px;
     flex-direction: column;
     align-items: center;
     gap: 24px;
+    width: 100%;
 }
+
+.Chat-Match {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрує текст */
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
 
 .match-info-h2{
     align-self: stretch;

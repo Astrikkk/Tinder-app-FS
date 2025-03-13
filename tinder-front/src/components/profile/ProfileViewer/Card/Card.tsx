@@ -9,7 +9,10 @@ import {ProfileItemDTO} from "../../types";
 
 interface CardProps {
     profile: ProfileItemDTO;
+    onMessageClick: (profileId: number) => void;
+    onDislike: () => void; // Додаємо функцію для Dislike
 }
+
 
 const calculateAge = (birthDate: Date): number => {
     const today = new Date();
@@ -25,7 +28,7 @@ const calculateAge = (birthDate: Date): number => {
 };
 
 
-const Card: React.FC<CardProps> = ({ profile }) => {
+const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike }) => {
     return (
         <div className="card">
             <div className="card-background">
@@ -33,15 +36,17 @@ const Card: React.FC<CardProps> = ({ profile }) => {
                 <div className="card-overlay" />
             </div>
             <div className="card-buttons">
-                <button className="dislike">
+                <button className="dislike" onClick={onDislike}>
                     <img src={Dislike} alt="Dislike" />
                 </button>
+
                 <button className="star-like">
                     <img src={Star} alt="Super Like" />
                 </button>
-                <button className="message">
+                <button className="message" onClick={() => onMessageClick(profile.userId)}>
                     <img src={Message} alt="Message" />
                 </button>
+
             </div>
             <div className="card-interests">
                 {profile.interests.map((interest) => (

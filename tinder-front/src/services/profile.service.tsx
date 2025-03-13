@@ -59,5 +59,10 @@ export const ProfileService = {
         await axios.delete(`${API_URL}/${id}`);
     },
 
+    getUserChats: async (userId: string): Promise<any[]> => {
+        const response = await axios.get(`${API_URL}/${userId}/chats`);
+        return response.data;
+    },
+
 
 };
