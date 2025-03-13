@@ -11,6 +11,9 @@ html, body {
   height: auto;
   font-family: Arial, sans-serif;
   font-size: 1em;
+  overflow: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
 }
 
 .how-it-works {

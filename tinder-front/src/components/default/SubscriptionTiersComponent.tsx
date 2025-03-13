@@ -22,7 +22,7 @@ const SubscriptionTiers = () => {
       {/* Header */}
       <header className="subscription-tiers-header">
         <div className="logo-menubar">
-          <img src={sparkiiFooter} alt="Sparkii Logo" className="sparkii-logo" />
+          <img src={sparkiiFooter} alt="Sparkii Logo" className="sparkii-logo" onClick={() => navigate("/DefaultLayout")} />
           <nav className="menubar">
             <Text className="menu-item" onClick={() => navigate("/AboutUs")}>
               About Us

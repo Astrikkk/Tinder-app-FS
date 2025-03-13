@@ -27,7 +27,7 @@ const HowItWorks: React.FC = () => {
     <><div className="how-it-works">
       <header className="how-it-works-header">
         <div className="logo-menubar">
-          <img src={sparkiiFooter} alt="Sparkii Logo" className="sparkii-logo" />
+          <img src={sparkiiFooter} alt="Sparkii Logo" className="sparkii-logo" onClick={() => navigate("/DefaultLayout")} />
           <nav className="menubar">
             <Text
               className="menu-item"
