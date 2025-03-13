@@ -11,10 +11,13 @@ body, html {
     height: auto;
     font-family: Arial, sans-serif;
     font-size: 1em;
+    display: flex;
+    flex-direction: column;
 }
   
 
 .subscription-container {
+    flex: 1;
     width: 100%;
     min-height: 100vh;
     display: flex;
@@ -26,7 +29,6 @@ body, html {
   
 .subscription-tiers-header {
     width: 95%;
-    max-width: 1200px;
     margin-left: 2em;
     margin-top: 2.5em;
     padding: 2em;
@@ -240,9 +242,15 @@ body, html {
     margin: 10px 0;
 }
 
+.main-Footer {
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    background: #100607;
+}
+
 .subscription-tiers-footer {
     width: 100%;
-    max-width: 1200px;
     background: #1D0C0E;
     display: flex;
     flex-direction: column;
@@ -251,7 +259,6 @@ body, html {
     gap: 2em;
     margin-top: 3em;
     text-align: center;
-    border-radius: 12px;
 }
 
 .logo-text-footer {
