@@ -16,7 +16,7 @@ namespace TinderApp.Mapper
                 .ForMember(dto => dto.Gender, opt => opt.MapFrom(profile => profile.Gender))
                 .ForMember(dto => dto.LookingFor, opt => opt.MapFrom(profile => profile.LookingFor))
                 .ForMember(dto => dto.InterestedIn, opt => opt.MapFrom(profile => profile.InterestedIn))
-                .ForMember(dto => dto.Interests, opt => opt.MapFrom(profile => profile.Interests))
+                .ForMember(dto => dto.Interests, opt => opt.MapFrom(profile => profile.Interests.Select(i => i.Name).ToList()))
                 .ForMember(dto => dto.SexualOrientation, opt => opt.MapFrom(profile => profile.SexualOrientation))
                 .ForMember(dto => dto.Photos, opt => opt.MapFrom(profile => profile.ProfilePhotos.Select(photo => $"/images/{photo.Path}").ToList()))
                 .ForMember(dto => dto.LikedByUserIds, opt => opt.MapFrom(profile => profile.LikedBy != null ? profile.LikedBy.Select(u => u.Id).ToList() : new List<int>()))

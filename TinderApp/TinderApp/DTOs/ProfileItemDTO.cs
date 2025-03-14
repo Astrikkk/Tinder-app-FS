@@ -13,7 +13,7 @@ namespace TinderApp.DTOs
         public InterestedIn InterestedIn{ get; set; }
         public SexualOrientation SexualOrientation { get; set; }
         public DateOnly BirthDay { get; set; } 
-        public List<Interest> Interests { get; set; } = new List<Interest>();
+        public List<string> Interests { get; set; } = new List<string>();
         public List<string> Photos { get; set; } = new List<string>(); 
         public int userId {  get; set; }
         public bool IsReported { get; set; }
