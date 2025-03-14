@@ -3,6 +3,8 @@ import { ProfileInfo } from "../types";
 import { Button, message, Modal, Table, Typography } from "antd";
 import { ProfileInfoService } from "../../../services/profile.info.service";
 import InterestedInForm from "./form";
+import Navbar from "../../Navbar";
+
 const { Title } = Typography;
 
 const InteresedInList: React.FC = () => {
@@ -73,29 +75,32 @@ const InteresedInList: React.FC = () => {
     ];
 
     return (
-        <div style={{ padding: "20px" }}>
-            <Title level={2}>Interested In</Title>
-            <Button
-                type="primary"
-                onClick={() => {
-                    setSelectedInterestedIn({ id: 0, name: "" });
-                    setModalVisible(true);
-                }}
-                style={{ marginBottom: "20px" }}
-            >
-                Create New Profile
-            </Button>
-            <Table dataSource={interesedsIn} columns={columns} rowKey="id" loading={loading} />
-
-            {modalVisible && (
-                <InterestedInForm
-                    interestedIn={selectedInterestedIn}
-                    onSave={() => {
-                        setModalVisible(false);
-                        fetchInteresedsIn();
+        <div style={{ display: "flex", minHeight: "100vh" }}>
+            <Navbar />
+            <div style={{ flex: 1, padding: "20px" }}>
+                <Title level={2}>Interested In</Title>
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        setSelectedInterestedIn({ id: 0, name: "" });
+                        setModalVisible(true);
                     }}
-                />
-            )}
+                    style={{ marginBottom: "20px" }}
+                >
+                    Create New Profile
+                </Button>
+                <Table dataSource={interesedsIn} columns={columns} rowKey="id" loading={loading} />
+
+                {modalVisible && (
+                    <InterestedInForm
+                        interestedIn={selectedInterestedIn}
+                        onSave={() => {
+                            setModalVisible(false);
+                            fetchInteresedsIn();
+                        }}
+                    />
+                )}
+            </div>
         </div>
     );
 };

@@ -24,34 +24,39 @@ const HowItWorks: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="how-it-works">
+    <><div className="how-it-works">
       <header className="how-it-works-header">
         <div className="logo-menubar">
-          <img src={sparkiiFooter} alt="Sparkii Logo" className="logo" />
-            <nav className="menubar">
-                <Text
-                    className="menu-item"
-                    onClick={() => navigate("/AboutUs")} 
-                >
-                    About Us
-                </Text>
-                <Text 
-                    className="menu-item"
-                    onClick={() => navigate("/HowItWorks")} 
-                >
-                    How It Works
-                </Text>
-                <Text className="menu-item">Subscription Tiers</Text>
-            </nav>
+          <img src={sparkiiFooter} alt="Sparkii Logo" className="sparkii-logo" onClick={() => navigate("/DefaultLayout")} />
+          <nav className="menubar">
+            <Text
+              className="menu-item"
+              onClick={() => navigate("/AboutUs")}
+            >
+              About Us
+            </Text>
+            <Text
+              className="menu-item"
+              onClick={() => navigate("/HowItWorks")}
+            >
+              How It Works
+            </Text>
+            <Text
+              className="menu-item"
+              onClick={() => navigate("/SubscriptionTiers")}
+            >
+              Subscription Tiers
+            </Text>
+          </nav>
         </div>
         <div className="lang-login-header">
-            <button className="language-header">
-                <img src={language} alt="Language" />
-            </button>
-            <button className="log-in-header" onClick={() => navigate("/login")}>
-                <span className="text-default">Log In</span>
-                <span className="text-hover">L o g I n</span>
-            </button>
+          <button className="language-header">
+            <img src={language} alt="Language" />
+          </button>
+          <button className="log-in-header" onClick={() => navigate("/login")}>
+            <span className="text-default">Log In</span>
+            <span className="text-hover">L o g I n</span>
+          </button>
         </div>
       </header>
 
@@ -81,32 +86,33 @@ const HowItWorks: React.FC = () => {
           ))}
         </div>
       </main>
-      
-      <footer className="how-it-works-footer">
-                <div className="logo-text-footer">
-                    <img src={sparkiiFooter} alt="Footer Logo" className="sparkii-footer" />
-                    <p className="text-footer">
-                        © 2025 Sparkii. By creating a Sparkii account, you agree to be bound 
-                        by our Terms of Use. These terms outline your rights, responsibilities, 
-                        and the rules governing your use of our platform.
-                    </p>
-                </div>
-                <div className="line-footer"><img src={line} alt="Line" /></div>
-                <nav className="site-navigation-elements-footer">
-                    <a href="#" className="faq-footer">FAQ</a>
-                    <img src={separator} alt="Separator" className="separator" />
-                    <a href="#" className="faq-footer">Contact</a>
-                    <img src={separator} alt="Separator" className="separator" />
-                    <a href="#" className="faq-footer">Privacy</a>
-                    <img src={separator} alt="Separator" className="separator" />
-                    <a href="#" className="faq-footer"><img src={youtube} alt="Youtube" />Sparkii</a>
-                    <img src={separator} alt="Separator" className="separator" />
-                    <a href="#" className="faq-footer"><img src={instagram} alt="Instagram" />@sparkii</a>
-                    <img src={separator} alt="Separator" className="separator" />
-                    <a href="#" className="faq-footer"><img src={tiktok} alt="TikTok" />@sparkii</a>
-                </nav>
-      </footer>
     </div>
+    <div className="main-Footer">
+        <footer className="how-it-works-footer">
+          <div className="logo-text-footer">
+            <img src={sparkiiFooter} alt="Footer Logo" className="sparkii-footer" />
+            <p className="text-footer">
+              © 2025 Sparkii. By creating a Sparkii account, you agree to be bound
+              by our Terms of Use. These terms outline your rights, responsibilities,
+              and the rules governing your use of our platform.
+            </p>
+          </div>
+          <div className="line-footer"><img src={line} alt="Line" /></div>
+          <nav className="site-navigation-elements-footer">
+            <a href="#" className="faq-footer">FAQ</a>
+            <img src={separator} alt="Separator" className="separator" />
+            <a href="#" className="faq-footer">Contact</a>
+            <img src={separator} alt="Separator" className="separator" />
+            <a href="#" className="faq-footer">Privacy</a>
+            <img src={separator} alt="Separator" className="separator" />
+            <a href="#" className="faq-footer"><img src={youtube} alt="Youtube" />Sparkii</a>
+            <img src={separator} alt="Separator" className="separator" />
+            <a href="#" className="faq-footer"><img src={instagram} alt="Instagram" />@sparkii</a>
+            <img src={separator} alt="Separator" className="separator" />
+            <a href="#" className="faq-footer"><img src={tiktok} alt="TikTok" />@sparkii</a>
+          </nav>
+        </footer>
+      </div></>
   );
 };
 

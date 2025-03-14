@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
     const navigate = useNavigate();
@@ -15,46 +15,44 @@ const Navbar: React.FC = () => {
         }
     };
 
-
     return (
         <div className="h-screen w-64 bg-gray-800 text-white p-5">
             <ul>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/#">Default Page</a>
+                    <Link to="/">Default Page</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/admin-view">Admin Panel</a>
+                    <Link to="/admin-view">Admin Panel</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/user-view">User Panel</a>
+                    <Link to="/user-view">User Panel</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/profile">Profile</a>
+                    <Link to="/profile">Profile</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/interested-in">Interested In</a>
+                    <Link to="/interested-in">Interested In</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/interests">Interests</a>
+                    <Link to="/interests">Interests</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/looking-for">Looking For</a>
+                    <Link to="/looking-for">Looking For</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/sexual-orientation">Sexual Orientation</a>
+                    <Link to="/sexual-orientation">Sexual Orientation</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="#">Messages</a>
+                    <Link to="#">Messages</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
-                    <a href="/user-view">Profile Viewer</a>
+                    <Link to="/user-view">Profile Viewer</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded cursor-pointer">
                     <button onClick={handleLogout} className="w-full text-left">
                         Logout
                     </button>
                 </li>
-
             </ul>
         </div>
     );

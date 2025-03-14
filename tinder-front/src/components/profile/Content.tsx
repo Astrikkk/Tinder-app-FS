@@ -26,7 +26,7 @@ const ProfileList: React.FC = () => {
         setLoading(true);
         try {
             const data = await ProfileService.getProfiles();
-            console.log("Fetched profiles data:", data); // Перевірка API-відповіді
+            console.log("Fetched profiles data:", data); // Check API response
 
             setProfiles(data.map((profile: any) => (profile)));
         } catch (error: any) {
@@ -36,8 +36,7 @@ const ProfileList: React.FC = () => {
             setLoading(false);
         }
     };
-
-
+    
     const handleDelete = async (id: number) => {
         if (window.confirm("Are you sure? This action cannot be undone.")) {
             try {
