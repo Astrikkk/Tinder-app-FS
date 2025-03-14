@@ -39,7 +39,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Interests");
+                    b.ToTable("Interests", (string)null);
                 });
 
             modelBuilder.Entity("InterestUserProfile", b =>
@@ -54,7 +54,7 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("UserProfilesId");
 
-                    b.ToTable("InterestUserProfile");
+                    b.ToTable("InterestUserProfile", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -183,7 +183,7 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatConnections");
+                    b.ToTable("ChatConnections", (string)null);
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatKey", b =>
@@ -205,7 +205,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("CreatorId", "ParticipantId")
                         .IsUnique();
 
-                    b.ToTable("ChatKeys");
+                    b.ToTable("ChatKeys", (string)null);
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatMessage", b =>
@@ -239,7 +239,7 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("tbl_chat_messages");
+                    b.ToTable("tbl_chat_messages", (string)null);
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.Gender", b =>
@@ -259,7 +259,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Genders");
+                    b.ToTable("Genders", (string)null);
 
                     b.HasData(
                         new
@@ -406,7 +406,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("InterestedInOptions");
+                    b.ToTable("InterestedInOptions", (string)null);
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.LookingFor", b =>
@@ -426,7 +426,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("LookingForOptions");
+                    b.ToTable("LookingForOptions", (string)null);
 
                     b.HasData(
                         new
@@ -488,7 +488,7 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("UserProfileId");
 
-                    b.ToTable("ProfilePhotos");
+                    b.ToTable("ProfilePhotos", (string)null);
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.SexualOrientation", b =>
@@ -508,7 +508,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("SexualOrientations");
+                    b.ToTable("SexualOrientations", (string)null);
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.UserProfile", b =>
@@ -560,7 +560,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("UserProfileLikes", b =>

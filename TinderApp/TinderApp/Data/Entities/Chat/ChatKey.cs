@@ -20,6 +20,6 @@ namespace TinderApp.Data.Entities.Chat
         public int ParticipantId { get; set; }
         public UserEntity Participant { get; set; }
 
-        public virtual ICollection<ChatMessage> ChatMessages { get; set; }
+        public virtual ICollection<ChatMessage>? ChatMessages { get; set; }
     }
 }

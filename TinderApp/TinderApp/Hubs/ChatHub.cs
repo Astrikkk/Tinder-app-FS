@@ -60,10 +60,35 @@ namespace TinderApp.Hubs
         }
 
 
-        public async Task SendMessage(string chatRoom, string sender, string message)
+        public async Task SendMessage(string chatRoom, int senderId, string message)
         {
-            await Clients.Group(chatRoom).SendAsync("ReceiveMessage", sender, message);
+            // Перевіряємо, чи існує чат з таким ChatRoom
+            var chatKey = await _dbContext.ChatKeys.FirstOrDefaultAsync(c => c.ChatRoom.ToString() == chatRoom);
+
+            if (chatKey == null)
+            {
+                await Clients.Caller.SendAsync("Error", "Чат не знайдено.");
+                return;
+            }
+
+            // Створюємо об'єкт повідомлення
+            var chatMessage = new ChatMessage
+            {
+                Content = message,
+                SenderId = senderId,
+                ChatKeyId = chatKey.ChatRoom,  // GUID чату
+                Readed = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            // Додаємо в базу даних
+            _dbContext.ChatMessages.Add(chatMessage);
+            await _dbContext.SaveChangesAsync();
+
+            // Надсилаємо повідомлення всім учасникам чату
+            await Clients.Group(chatRoom).SendAsync("ReceiveMessage", senderId, message);
         }
+
 
 
 

@@ -221,7 +221,7 @@ const NewProfileViewer: React.FC = () => {
     const sendMessage = async (message: string) => {
         try {
             if (conn && activeChat) {
-                await conn.invoke("SendMessage", activeChat.chatRoom, myProfile?.name, message);
+                await conn.invoke("SendMessage", activeChat.chatRoom, myProfile?.id, message);
                 console.log(`Message sent to ${activeChat.chatRoom}: ${message}`);
             }
         } catch (e) {
