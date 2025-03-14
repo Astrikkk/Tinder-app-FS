@@ -123,29 +123,35 @@ const NewProfileViewer: React.FC = () => {
 
     const handleLike = async () => {
         const currentProfile = profiles[currentProfileIndex];
+        if (!currentProfile || currentProfile.id === 0) {
+            console.error("Invalid target profile:", currentProfile);
+            return;
+        }
+    
         const token = localStorage.getItem("token");
         let userId = JwtService.getUserIdFromToken(token);
+        if (!userId) {
+            console.error("User ID not found from token");
+            return;
+        }
     
-        if (userId && currentProfile) {
-            try {
-                // Fetch the logged-in user's profile
-                const myProfile = await ProfileService.getProfileById(userId);
-                if (!myProfile) {
-                    throw new Error("Logged-in user profile not found");
-                }
-    
-                // Pass profile IDs instead of user IDs
-                await ProfileService.likeUser(currentProfile.id, myProfile.id);
-                console.log(`You liked ${currentProfile.name}`);
-                message.success(`You liked ${currentProfile.name}`);
-            } catch (error) {
-                console.error("Error liking profile:", error);
-                message.error("Failed to like the profile");
+        try {
+            const myProfile = await ProfileService.getProfileById(userId);
+            if (!myProfile || myProfile.id === 0) {
+                throw new Error("Logged-in user profile not found or invalid ID");
             }
+    
+            await ProfileService.likeUser(currentProfile.id, myProfile.id);
+            console.log(`You liked ${currentProfile.name}`);
+            message.success(`You liked ${currentProfile.name}`);
+        } catch (error) {
+            console.error("Error liking profile:", error);
+            message.error("Failed to like the profile");
         }
     
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
+    
 
     const SetChats = async (userId: string) => {
         try {

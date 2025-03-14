@@ -66,20 +66,30 @@ export const ProfileService = {
     },
 
     likeUser: async (likedProfileId: number, likedByProfileId: number): Promise<{ message: string; isMatch: boolean }> => {
+        console.log("Sending like request with IDs:", { likedProfileId, likedByProfileId });
+    
+        if (!likedProfileId || !likedByProfileId) {
+            throw new Error("Both likedProfileId and likedByProfileId are required.");
+        }
+    
         try {
             const response = await axios.put(`${API_URL}/like`, {
-                likedUserId: likedProfileId, // Use profileId here
-                likedByUserId: likedByProfileId // Use profileId here
+                likedUserId: likedProfileId,
+                likedByUserId: likedByProfileId
             });
+    
+            console.log("Like response:", response.data);
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error("Error liking user:", error.response?.data);
-                throw new Error(error.response?.data?.message || "Failed to like user");
+                console.error("Axios error response:", error.response?.data);
+                throw new Error(error.response?.data?.message || `Error: ${error.response?.statusText || "Unknown error"}`);
             } else {
                 console.error("Unexpected error:", error);
-                throw new Error("An unexpected error occurred");
+                throw new Error("An unexpected error occurred while liking the user.");
             }
         }
     },
+    
+    
 };

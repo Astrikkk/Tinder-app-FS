@@ -110,49 +110,65 @@ public class ProfileController : ControllerBase
     }
 
     [HttpPut("like")]
-    public async Task<IActionResult> LikeProfile(int likedUserId, int likedByUserId)
+    public async Task<IActionResult> LikeProfile([FromBody] LikeProfileRequest request)
     {
-        // Log the input IDs for debugging
-        _logger.LogInformation($"Liked User ID: {likedUserId}, Liked By User ID: {likedByUserId}");
+        Console.WriteLine($"Like request received: LikedUserId = {request.LikedUserId}, LikedByUserId = {request.LikedByUserId}");
 
-        // Fetch the profiles
+        // Fetch the liked user's profile
         var likedUser = await _dbContext.Profiles
             .Include(p => p.LikedBy)
             .Include(p => p.Matches)
-            .FirstOrDefaultAsync(p => p.Id == likedUserId); // Ensure this is the correct field
+            .FirstOrDefaultAsync(p => p.Id == request.LikedUserId);
 
+        // Fetch the liking user's profile
         var likingUser = await _dbContext.Profiles
             .Include(p => p.LikedBy)
             .Include(p => p.Matches)
-            .FirstOrDefaultAsync(p => p.Id == likedByUserId); // Ensure this is the correct field
+            .FirstOrDefaultAsync(p => p.Id == request.LikedByUserId);   
 
-        // Validate that both profiles exist
-        if (likedUser == null)
-            return NotFound(new { Message = $"Profile with ID {likedUserId} not found." });
+        if (likedUser == null || likingUser == null)
+        {
+            return NotFound(new { Message = "One or both profiles not found." });
+        }
 
-        if (likingUser == null)
-            return NotFound(new { Message = $"Profile with ID {likedByUserId} not found." });
+        // Ensure lists are initialized
+        if (likedUser.LikedBy == null)
+        {
+            likedUser.LikedBy = new List<UserProfile>();
+        }
+        if (likingUser.LikedBy == null)
+        {
+            likingUser.LikedBy = new List<UserProfile>();
+        }
+        if (likedUser.Matches == null)
+        {
+            likedUser.Matches = new List<UserProfile>();
+        }
+        if (likingUser.Matches == null)
+        {
+            likingUser.Matches = new List<UserProfile>();
+        }
 
-        // Check if the likingUser has already liked likedUser
-        bool alreadyLiked = likedUser.LikedBy.Any(u => u.Id == likedByUserId);
 
+        // Check if the liking user has already liked the liked user
+        bool alreadyLiked = likedUser.LikedBy.Any(u => u.Id == request.LikedByUserId);
         if (!alreadyLiked)
         {
             likedUser.LikedBy.Add(likingUser);
         }
 
         // Check if it's a match
-        bool isMatch = likingUser.LikedBy.Any(u => u.Id == likedUserId);
-
+        bool isMatch = likingUser.LikedBy.Any(u => u.Id == request.LikedUserId);
         if (isMatch)
         {
             likedUser.Matches.Add(likingUser);
             likingUser.Matches.Add(likedUser);
-
             likedUser.LikedBy.Remove(likingUser);
             likingUser.LikedBy.Remove(likedUser);
         }
 
+        _dbContext.Attach(likedUser);
+        _dbContext.Attach(likingUser);
         await _dbContext.SaveChangesAsync();
 
         return Ok(new
@@ -161,6 +177,8 @@ public class ProfileController : ControllerBase
             IsMatch = isMatch
         });
     }
+
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProfile(int id)

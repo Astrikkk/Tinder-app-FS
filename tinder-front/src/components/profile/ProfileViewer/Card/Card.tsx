@@ -48,8 +48,8 @@ const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike 
                 </button>
             </div>
             <div className="card-interests">
-                {profile.interests.map((interest) => (
-                    <div key={interest.id} className="card-interest">
+                {profile.interests.map((interest, index) => (
+                    <div key={`${interest.id}-${index}`} className="card-interest">
                         {interest.name}
                     </div>
                 ))}
