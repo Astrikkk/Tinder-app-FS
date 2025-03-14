@@ -15,7 +15,8 @@ builder.Services.AddControllers();
 
 // Database context configuration
 builder.Services.AddDbContext<TinderDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add Identity configuration
 builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
