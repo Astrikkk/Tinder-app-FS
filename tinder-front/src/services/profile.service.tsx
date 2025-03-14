@@ -65,5 +65,11 @@ export const ProfileService = {
         return response.data;
     },
 
-
+    likeUser: async (likeclUserId: number, likeclByUserId: number): Promise<void> => {
+        const response = await axios.put(`${API_URL}/libc`, {
+            likeclUserId,
+            likeclByUserId
+        });
+        return response.data;
+    },
 };

@@ -11,6 +11,7 @@ interface CardProps {
     profile: ProfileItemDTO;
     onMessageClick: (profileId: number) => void;
     onDislike: () => void; // Додаємо функцію для Dislike
+    onLike: () => void;
 }
 
 
@@ -28,7 +29,7 @@ const calculateAge = (birthDate: Date): number => {
 };
 
 
-const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike }) => {
+const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike }) => {
     return (
         <div className="card">
             <div className="card-background">
@@ -40,7 +41,7 @@ const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike }) => {
                     <img src={Dislike} alt="Dislike" />
                 </button>
 
-                <button className="star-like">
+                <button className="star-like" onClick={() => onLike()}>
                     <img src={Star} alt="Super Like" />
                 </button>
                 <button className="message" onClick={() => onMessageClick(profile.userId)}>

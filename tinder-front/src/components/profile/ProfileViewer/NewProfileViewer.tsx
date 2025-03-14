@@ -120,6 +120,23 @@ const NewProfileViewer: React.FC = () => {
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
 
+    const handleLike = async () => {
+        const currentProfile = profiles[currentProfileIndex];
+        const token = localStorage.getItem("token");
+        let userId = JwtService.getUserIdFromToken(token);
+    
+        if (userId && currentProfile) {
+            try {
+                await ProfileService.likeUser(currentProfile.userId, Number(userId));
+                message.success(`You liked ${currentProfile.name}`);
+            } catch (error) {
+                message.error("Failed to like the profile");
+            }
+        }
+    
+        setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
+    };
+
     const SetChats = async (userId: string) => {
         try {
             const chats = await ProfileService.getUserChats(userId);
@@ -324,6 +341,7 @@ const NewProfileViewer: React.FC = () => {
                     profile={profiles[currentProfileIndex]}
                     onMessageClick={handleMessageClick}
                     onDislike={handleDislike}
+                    onLike={handleLike}
                 />
             ) : (
                 <p>No profiles available</p>
@@ -337,11 +355,11 @@ const NewProfileViewer: React.FC = () => {
                     <span className="key-text">nope</span>
                 </div>
 
-                <div className="key">
+                <div className="key" onClick={handleLike}>
                     <div className="key-box">
                         <img src={Like} />
                     </div>
-                    <span className="key-text">like</span>
+                    <span className="key-text">super like</span>
                 </div>
 
                 <div className="key">
