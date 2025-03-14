@@ -33,7 +33,7 @@ export interface Profile {
     matchedUserIds: number[];
 }
 
-export const ProfileService = {
+    export const ProfileService = {
     getProfiles: async (): Promise<Profile[]> => {
         const response = await axios.get(API_URL);
         return response.data;

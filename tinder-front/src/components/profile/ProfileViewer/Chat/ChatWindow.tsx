@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./ChatWindow.css";
 import { ProfileItemDTO } from "../../types";
 import Img1 from "./img/Group.svg";
@@ -7,7 +6,8 @@ import Img2 from "./img/Group (1).svg";
 import Img3 from "./img/Group (2).svg";
 import OutlineLink from "./img/icon-park-outline_link.svg";
 import Fluent from "./img/fluent_gif-16-regular.svg";
-import {HubConnection} from "@microsoft/signalr";
+import { HubConnection } from "@microsoft/signalr";
+import {MessageInfo} from "../../../../services/chat.service";
 
 interface ChatDTO {
     chatRoom: string;
@@ -19,49 +19,50 @@ interface ChatWindowProps {
     onClose: () => void;
     sendMessage: (message: string) => void;
     connection: HubConnection | null;
+    messages?: MessageInfo[]; // Отримуємо масив повідомлень з пропсів
 }
 
-interface Message {
-    text: string;
-    isMine: boolean;
-}
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage , connection}) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, connection, messages }) => {
     const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState<Message[]>([]);
+    const [localMessages, setLocalMessages] = useState<MessageInfo[]>(messages || []);
 
+
+    useEffect(() => {
+        setLocalMessages(messages || []); // Оновлюємо локальні повідомлення при зміні пропсів
+    }, [messages]);
 
     useEffect(() => {
         if (!connection) return;
 
-        const handleReceiveMessage = (username: string, msg: string) => {
-            console.log("Received message:", username, msg);
-            setMessages((prevMessages) => [
+        const handleReceiveMessage = (id: number, msg: string) => {
+            console.log("Received message:", id, msg);
+            setLocalMessages((prevMessages) => [
                 ...prevMessages,
-                { text: msg, isMine: username === chat.profile.name },
+                {
+                    id: new Date().getTime(), // ✅ Use number instead of string
+                    content: msg,
+                    sender: { id: id, userName: "" }, // ✅ Use proper sender structure
+                    readed: false,
+                    createdAt: new Date(),
+                },
             ]);
         };
 
-        connection.on("ReceiveMessage", handleReceiveMessage); // Додаємо новий обробник
+        connection.on("ReceiveMessage", handleReceiveMessage);
 
         return () => {
             connection.off("ReceiveMessage", handleReceiveMessage);
         };
     }, [connection, chat.chatRoom]);
 
-
-    useEffect(() => {
-        setMessages([]); // Очищаємо повідомлення при зміні чату
-    }, [chat.chatRoom]);
-
-
     const handleSendMessage = async () => {
         if (message.trim() !== "") {
-            await sendMessage(message); // Надсилаємо повідомлення серверу
-            setMessage(""); // Очищаємо поле вводу
+            await sendMessage(message);
+
+            setMessage("");
         }
     };
-
 
     return (
         <div className="chat-window">
@@ -77,19 +78,16 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage , co
                 </div>
             </div>
 
-            {messages.length === 0 ? (
+            {localMessages.length === 0 ? (
                 <div className="friend-info">
                     <div className="friend-title">You Matched with {chat.profile.name}</div>
                     <img className="friend-photo" src={`http://localhost:7034${chat.profile.imagePath}`} alt="profile" />
                 </div>
             ) : (
                 <div className="chat-messages">
-                    {messages.map((msg, index) => (
-                        <div
-                            key={index}
-                            className={`message ${msg.isMine ? "mine" : "theirs"}`}
-                        >
-                            {msg.text}
+                    {localMessages.map((msg, index) => (
+                        <div key={index} className={`message ${msg.sender.id === chat.profile.id ? "mine" : "theirs"}`}>
+                            {msg.content}
                         </div>
                     ))}
                 </div>

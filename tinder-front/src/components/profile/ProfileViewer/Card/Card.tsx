@@ -43,7 +43,7 @@ const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike 
                     <img src={Star} alt="Super Like" />
                 </button>
 
-                <button className="message" onClick={() => onMessageClick(profile.userId)}>
+                <button className="message-button" onClick={() => onMessageClick(profile.userId)}>
                     <img src={Message} alt="Message" />
                 </button>
             </div>

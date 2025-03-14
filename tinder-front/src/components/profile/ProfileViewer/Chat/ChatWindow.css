@@ -1,7 +1,23 @@
+/* Для WebKit-браузерів (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+    width: 8px; /* Тонший скролбар */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #551111; /* Темний колір скролу */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #200000; /* Темний фон треку */
+}
+
+
+
 .chat-window {
     display: flex;
     flex-direction: column;
-    height: 80vh; /* або потрібна висота */
+    height: 85vh; /* або потрібна висота */
     width: 1156px;
 
     justify-content: space-between;
@@ -10,7 +26,7 @@
     overflow: hidden;
     align-items: center;
     position: absolute; /* Додаємо абсолютне позиціонування */
-    top: 150px;  /* Відступ від низу */
+    top: 120px;  /* Відступ від низу */
     right: 260px;   /* Відступ від правого краю */
 }
 
@@ -203,6 +219,8 @@
     outline: none;
     border: none;
 }
+
+
 
 /* Отримане повідомлення */
 .mine {

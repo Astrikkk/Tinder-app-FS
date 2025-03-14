@@ -22,6 +22,7 @@ import Security from "./img/icon_security.svg";
 import Sparkii from "./img/Sparkii.svg";
 import { JwtService } from "../../../services/jwt.service";
 import { useNavigate } from "react-router-dom";
+import {ChatRoomInfo, ChatService} from "../../../services/chat.service";
 
 interface ChatDTO {
     chatRoom: string;
@@ -38,6 +39,7 @@ const NewProfileViewer: React.FC = () => {
     const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
     const [activeChat, setActiveChat] = useState<ChatDTO | null>(null);
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
+    const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomInfo| null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -212,6 +214,9 @@ const NewProfileViewer: React.FC = () => {
 
         try {
             await conn.invoke("JoinSpecificChatRoom", { username: myProfile?.name, chatRoom });
+            const data = await ChatService.getChatInfoByKey(chatRoom);
+            setChatRoomInfo(data);
+            console.log(data);
             console.log(`Приєднано до чату: ${chatRoom}`);
         } catch (e) {
             console.error("Помилка приєднання до чату:", e);
@@ -349,7 +354,13 @@ const NewProfileViewer: React.FC = () => {
             {loading ? (
                 <Spin size="large" />
             ) : activeChat ? (
-                <ChatWindow chat={activeChat} onClose={() => setActiveChat(null)} sendMessage={sendMessage} connection={conn} />
+                <ChatWindow
+                    chat={activeChat}
+                    onClose={() => setActiveChat(null)}
+                    sendMessage={sendMessage}
+                    connection={conn}
+                    messages={chatRoomInfo?.messages || []} // Ensure messages is provided
+                />
             ) : profiles.length > 0 ? (
                 <Card
                     profile={profiles[currentProfileIndex]}
