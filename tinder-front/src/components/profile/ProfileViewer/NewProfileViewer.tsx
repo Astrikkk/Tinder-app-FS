@@ -147,6 +147,8 @@ const NewProfileViewer: React.FC = () => {
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
 
+
+
     const SetChats = async (userId: string) => {
         try {
             const chats = await ProfileService.getUserChats(userId);
@@ -228,8 +230,10 @@ const NewProfileViewer: React.FC = () => {
     };
 
     const handleButtonClick = (buttonName: string) => {
+        console.log("Clicked:", buttonName);
         setSelectedButton(buttonName);
     };
+
 
     const getMatchInfoContent = () => {
         if (selectedButton === "Chats") {
@@ -241,10 +245,10 @@ const NewProfileViewer: React.FC = () => {
                                 {userChats.map((chat, index) => (
                                     <button
                                         key={`${chat.chatRoom}-${index}`}
-                                        className="Chat-Item"
+                                        className={`Chat-Item ${activeChat?.chatRoom === chat.chatRoom ? "active" : ""}`}
                                         onClick={() => openChat(chat)}
                                     >
-                                        <img
+                                    <img
                                             className="Prifile-Image"
                                             src={`http://localhost:7034${chat.profile.imagePath}`}
                                             alt="Chat Avatar"
@@ -357,6 +361,7 @@ const NewProfileViewer: React.FC = () => {
                 <p>No profiles available</p>
             )}
 
+            {!activeChat && (
             <div className="keys">
                 <div className="key" >
                     <div className="key-box">
@@ -400,6 +405,7 @@ const NewProfileViewer: React.FC = () => {
                     <span className="key-text">next photo</span>
                 </div>
             </div>
+            )}
 
             <Modal
                 title="Settings"

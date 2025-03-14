@@ -39,6 +39,12 @@
     align-items: center;
     gap: 8px;
 }
+
+.chat-item.active {
+    border-right: 2px solid #BF0B2C;
+    background: #320000;
+}
+
 .Profile-Text{
     color: #FFF;
 
