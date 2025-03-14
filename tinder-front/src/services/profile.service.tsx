@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_URL = `${process.env.REACT_APP_API}/Profile`;
 
 export interface Profile {
-    id: number;
+    id: number; // Ensure this is included
     name: string;
     imagePath: string;
     gender: {
@@ -29,8 +29,8 @@ export interface Profile {
     }[];
     photos: string[];
     userId: number;
-    likedByUserIds: number[]; // Add this line
-    matchedUserIds: number[]; // Add this line
+    likedByUserIds: number[];
+    matchedUserIds: number[];
 }
 
 export const ProfileService = {
@@ -65,11 +65,21 @@ export const ProfileService = {
         return response.data;
     },
 
-    likeUser: async (likeclUserId: number, likeclByUserId: number): Promise<void> => {
-        const response = await axios.put(`${API_URL}/libc`, {
-            likeclUserId,
-            likeclByUserId
-        });
-        return response.data;
+    likeUser: async (likedProfileId: number, likedByProfileId: number): Promise<{ message: string; isMatch: boolean }> => {
+        try {
+            const response = await axios.put(`${API_URL}/like`, {
+                likedUserId: likedProfileId, // Use profileId here
+                likedByUserId: likedByProfileId // Use profileId here
+            });
+            return response.data;
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error("Error liking user:", error.response?.data);
+                throw new Error(error.response?.data?.message || "Failed to like user");
+            } else {
+                console.error("Unexpected error:", error);
+                throw new Error("An unexpected error occurred");
+            }
+        }
     },
 };

@@ -49,6 +49,37 @@ const ProfileList: React.FC = () => {
         }
     };
 
+    const testGetRoles = async (userId: string) => {
+        try {
+            const roles = await RoleService.getUserRoles(`${userId}`);
+            setUserRoles(roles);
+            message.success(`Roles: ${roles.join(", ")}`);
+        } catch (error) {
+            console.error("Error fetching roles:", error);
+            message.error("Failed to fetch roles");
+        }
+    };
+
+    const testAddRole = async (userId: string) => {
+        try {
+            await RoleService.addRoleToUser(`${userId}`, "Admin");
+            message.success("Role added successfully.");
+        } catch (error) {
+            console.error("Error adding role:", error);
+            message.error("Failed to add role");
+        }
+    };
+
+    const testRemoveRole = async (userId: string) => {
+        try {
+            await RoleService.removeRoleFromUser(`${userId}`, "Admin");
+            message.success("Role removed successfully.");
+        } catch (error) {
+            console.error("Error removing role:", error);
+            message.error("Failed to remove role");
+        }
+    };
+
     const columns = [
         {
             title: "Profile Image",
@@ -88,6 +119,23 @@ const ProfileList: React.FC = () => {
                     </Button>
                     <Button type="link" danger onClick={() => handleDelete(profile.id)}>
                         Delete
+                    </Button>
+                </>
+            ),
+        },
+        {
+            title: "Role",
+            key: "role",
+            render: (_: any, profile: ProfileItemDTO) => (
+                <>
+                    <Button type="link" onClick={() => testGetRoles(profile.userId.toString())}>
+                        Get Roles
+                    </Button>
+                    <Button type="link" onClick={() => testAddRole(profile.userId.toString())}>
+                        Add Admin Role
+                    </Button>
+                    <Button type="link" danger onClick={() => testRemoveRole(profile.userId.toString())}>
+                        Remove Admin Role
                     </Button>
                 </>
             ),

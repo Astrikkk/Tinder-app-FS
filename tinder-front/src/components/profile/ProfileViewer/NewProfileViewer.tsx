@@ -128,9 +128,18 @@ const NewProfileViewer: React.FC = () => {
     
         if (userId && currentProfile) {
             try {
-                await ProfileService.likeUser(currentProfile.userId, Number(userId));
+                // Fetch the logged-in user's profile
+                const myProfile = await ProfileService.getProfileById(userId);
+                if (!myProfile) {
+                    throw new Error("Logged-in user profile not found");
+                }
+    
+                // Pass profile IDs instead of user IDs
+                await ProfileService.likeUser(currentProfile.id, myProfile.id);
+                console.log(`You liked ${currentProfile.name}`);
                 message.success(`You liked ${currentProfile.name}`);
             } catch (error) {
+                console.error("Error liking profile:", error);
                 message.error("Failed to like the profile");
             }
         }
