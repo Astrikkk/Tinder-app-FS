@@ -117,6 +117,7 @@ const NewProfileViewer: React.FC = () => {
     };
 
     const handleDislike = () => {
+        console.log("Dislike triggered"); // Debugging log
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
 
@@ -348,14 +349,14 @@ const NewProfileViewer: React.FC = () => {
             )}
 
             <div className="keys">
-                <div className="key">
+                <div className="key" >
                     <div className="key-box">
                         <img src={Nope} />
                     </div>
                     <span className="key-text">nope</span>
                 </div>
 
-                <div className="key" onClick={handleLike}>
+                <div className="key">
                     <div className="key-box">
                         <img src={Like} />
                     </div>

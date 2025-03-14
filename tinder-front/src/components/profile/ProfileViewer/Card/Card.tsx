@@ -1,19 +1,18 @@
 import React from "react";
 import "./Card.css";
 
-import Group from "./img/Group.svg"
-import Dislike from "./img/icon_dislike.svg"
-import Star from "./img/icon_star-super-like.svg"
-import Message from "./img/icon_message.svg"
-import {ProfileItemDTO} from "../../types";
+import Group from "./img/Group.svg";
+import Dislike from "./img/icon_dislike.svg";
+import Star from "./img/icon_star-super-like.svg";
+import Message from "./img/icon_message.svg";
+import { ProfileItemDTO } from "../../types";
 
 interface CardProps {
     profile: ProfileItemDTO;
     onMessageClick: (profileId: number) => void;
-    onDislike: () => void; // Додаємо функцію для Dislike
+    onDislike: () => void;
     onLike: () => void;
 }
-
 
 const calculateAge = (birthDate: Date): number => {
     const today = new Date();
@@ -28,7 +27,6 @@ const calculateAge = (birthDate: Date): number => {
     return age;
 };
 
-
 const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike }) => {
     return (
         <div className="card">
@@ -37,17 +35,17 @@ const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike 
                 <div className="card-overlay" />
             </div>
             <div className="card-buttons">
-                <button className="dislike" onClick={onDislike}>
+                <button className="dislike" onClick={() => { console.log("Dislike clicked"); onDislike(); }}>
                     <img src={Dislike} alt="Dislike" />
                 </button>
 
-                <button className="star-like" onClick={() => onLike()}>
+                <button className="star-like" onClick={() => { console.log("Like clicked"); onLike(); }}>
                     <img src={Star} alt="Super Like" />
                 </button>
+
                 <button className="message" onClick={() => onMessageClick(profile.userId)}>
                     <img src={Message} alt="Message" />
                 </button>
-
             </div>
             <div className="card-interests">
                 {profile.interests.map((interest) => (
@@ -71,4 +69,3 @@ const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike 
 };
 
 export default Card;
-
