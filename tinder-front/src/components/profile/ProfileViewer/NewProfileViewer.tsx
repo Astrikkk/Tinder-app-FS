@@ -58,7 +58,6 @@ const NewProfileViewer: React.FC = () => {
         setLoading(true);
         try {
             const data = await ProfileService.getProfiles();
-            setProfiles(data);
 
             const token = localStorage.getItem("token");
             let userId = JwtService.getUserIdFromToken(token);
@@ -70,8 +69,13 @@ const NewProfileViewer: React.FC = () => {
                 console.log("Fetched profiles:", data);
 
                 if (!isNaN(numericUserId)) {
+                    // Отримуємо профіль поточного користувача
                     const userProfile = data.find((profile: Profile) => profile.userId === numericUserId);
                     setMyProfile(userProfile || null);
+
+                    // Фільтруємо масив, прибираючи поточного користувача
+                    const filteredProfiles = data.filter((profile: Profile) => profile.userId !== numericUserId);
+                    setProfiles(filteredProfiles);
                 }
             }
         } catch (error) {
@@ -214,9 +218,7 @@ const NewProfileViewer: React.FC = () => {
 
         try {
             await conn.invoke("JoinSpecificChatRoom", { username: myProfile?.name, chatRoom });
-            const data = await ChatService.getChatInfoByKey(chatRoom);
-            setChatRoomInfo(data);
-            console.log(data);
+
             console.log(`Приєднано до чату: ${chatRoom}`);
         } catch (e) {
             console.error("Помилка приєднання до чату:", e);

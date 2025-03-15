@@ -7,7 +7,7 @@ import Img3 from "./img/Group (2).svg";
 import OutlineLink from "./img/icon-park-outline_link.svg";
 import Fluent from "./img/fluent_gif-16-regular.svg";
 import { HubConnection } from "@microsoft/signalr";
-import {MessageInfo} from "../../../../services/chat.service";
+import {ChatService, MessageInfo} from "../../../../services/chat.service";
 
 interface ChatDTO {
     chatRoom: string;
@@ -29,8 +29,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
 
 
     useEffect(() => {
+        fetchChatInfo();
         setLocalMessages(messages || []); // Оновлюємо локальні повідомлення при зміні пропсів
     }, [messages]);
+
+
 
     useEffect(() => {
         if (!connection) return;
@@ -49,12 +52,23 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
             ]);
         };
 
+
         connection.on("ReceiveMessage", handleReceiveMessage);
 
         return () => {
             connection.off("ReceiveMessage", handleReceiveMessage);
         };
     }, [connection, chat.chatRoom]);
+
+    const fetchChatInfo = async () => {
+        try {
+            const data = await ChatService.getChatInfoByKey(chat.chatRoom);
+            setLocalMessages(data.messages);
+            console.log(data);
+        } catch (error) {
+            console.error("Error fetching chat info:", error);
+        }
+    };
 
     const handleSendMessage = async () => {
         if (message.trim() !== "") {
