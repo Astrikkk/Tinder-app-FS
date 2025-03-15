@@ -92,6 +92,7 @@ export const ProfileService = {
     },
 
     reportProfile: async (profileId: number): Promise<void> => {
+        console.log("Reporting profile with ID:", profileId); // Debugging log
         await axios.post(`${API_URL}/${profileId}/report`);
     },
     
