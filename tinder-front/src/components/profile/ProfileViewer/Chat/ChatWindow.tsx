@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./ChatWindow.css";
 import { ProfileItemDTO } from "../../types";
 import Img1 from "./img/Group.svg";
@@ -7,7 +6,8 @@ import Img2 from "./img/Group (1).svg";
 import Img3 from "./img/Group (2).svg";
 import OutlineLink from "./img/icon-park-outline_link.svg";
 import Fluent from "./img/fluent_gif-16-regular.svg";
-import {HubConnection} from "@microsoft/signalr";
+import { HubConnection } from "@microsoft/signalr";
+import {ChatService, MessageInfo} from "../../../../services/chat.service";
 
 interface ChatDTO {
     chatRoom: string;
@@ -19,30 +19,57 @@ interface ChatWindowProps {
     onClose: () => void;
     sendMessage: (message: string) => void;
     connection: HubConnection | null;
+    messages?: MessageInfo[]; // Отримуємо масив повідомлень з пропсів
 }
 
-interface Message {
-    text: string;
-    isMine: boolean;
-}
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage , connection}) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, connection, messages }) => {
     const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState<Message[]>([]);
+    const [localMessages, setLocalMessages] = useState<MessageInfo[]>(messages || []);
+
+
+    const fetchChatInfo = async () => {
+        try {
+            const data = await ChatService.getChatInfoByKey(chat.chatRoom);
+            setLocalMessages(data.messages);
+        } catch (error) {
+            console.error("Error fetching chat info:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchChatInfo();
+    }, [chat.chatRoom]);
+
+    useEffect(() => {
+        setLocalMessages(messages || []);
+    }, [messages]);
 
 
     useEffect(() => {
         if (!connection) return;
 
-        const handleReceiveMessage = (username: string, msg: string) => {
-            console.log("Received message:", username, msg);
-            setMessages((prevMessages) => [
+        const handleReceiveMessage = async (id: number, msg: string) => {
+            console.log("Received message:", id, msg);
+
+            // Оновлюємо локальний стан
+            setLocalMessages((prevMessages) => [
                 ...prevMessages,
-                { text: msg, isMine: username === chat.profile.name },
+                {
+                    id: new Date().getTime(),
+                    content: msg,
+                    sender: { id: id, userName: "" },
+                    readed: false,
+                    createdAt: new Date(),
+                },
             ]);
+
+            // Динамічно оновлюємо історію чату після отримання нового повідомлення
+            await fetchChatInfo();
         };
 
-        connection.on("ReceiveMessage", handleReceiveMessage); // Додаємо новий обробник
+        connection.on("ReceiveMessage", handleReceiveMessage);
 
         return () => {
             connection.off("ReceiveMessage", handleReceiveMessage);
@@ -50,18 +77,15 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage , co
     }, [connection, chat.chatRoom]);
 
 
-    useEffect(() => {
-        setMessages([]); // Очищаємо повідомлення при зміні чату
-    }, [chat.chatRoom]);
-
-
     const handleSendMessage = async () => {
         if (message.trim() !== "") {
-            await sendMessage(message); // Надсилаємо повідомлення серверу
-            setMessage(""); // Очищаємо поле вводу
+            await sendMessage(message);
+            setMessage("");
+
+            // Після надсилання повідомлення оновлюємо список повідомлень
+            await fetchChatInfo();
         }
     };
-
 
     return (
         <div className="chat-window">
@@ -77,19 +101,16 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage , co
                 </div>
             </div>
 
-            {messages.length === 0 ? (
+            {localMessages.length === 0 ? (
                 <div className="friend-info">
                     <div className="friend-title">You Matched with {chat.profile.name}</div>
                     <img className="friend-photo" src={`http://localhost:7034${chat.profile.imagePath}`} alt="profile" />
                 </div>
             ) : (
                 <div className="chat-messages">
-                    {messages.map((msg, index) => (
-                        <div
-                            key={index}
-                            className={`message ${msg.isMine ? "mine" : "theirs"}`}
-                        >
-                            {msg.text}
+                    {localMessages.map((msg, index) => (
+                        <div key={index} className={`message ${msg.sender.id === chat.profile.id ? "mine" : "theirs"}`}>
+                            {msg.content}
                         </div>
                     ))}
                 </div>

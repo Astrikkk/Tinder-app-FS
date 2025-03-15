@@ -22,6 +22,7 @@ import Security from "./img/icon_security.svg";
 import Sparkii from "./img/Sparkii.svg";
 import { JwtService } from "../../../services/jwt.service";
 import { useNavigate } from "react-router-dom";
+import {ChatRoomInfo, ChatService} from "../../../services/chat.service";
 
 interface ChatDTO {
     chatRoom: string;
@@ -40,6 +41,7 @@ const NewProfileViewer: React.FC = () => {
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
     const [isInfoModalVisible, setIsInfoModalVisible] = useState(false); // State for Info modal
     const [selectedProfileId, setSelectedProfileId] = useState<number | null>(null); // State for selected profile ID
+    const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomInfo| null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -58,7 +60,6 @@ const NewProfileViewer: React.FC = () => {
         setLoading(true);
         try {
             const data = await ProfileService.getProfiles();
-            setProfiles(data);
 
             const token = localStorage.getItem("token");
             let userId = JwtService.getUserIdFromToken(token);
@@ -70,8 +71,13 @@ const NewProfileViewer: React.FC = () => {
                 console.log("Fetched profiles:", data);
 
                 if (!isNaN(numericUserId)) {
+                    // Отримуємо профіль поточного користувача
                     const userProfile = data.find((profile: Profile) => profile.userId === numericUserId);
                     setMyProfile(userProfile || null);
+
+                    // Фільтруємо масив, прибираючи поточного користувача
+                    const filteredProfiles = data.filter((profile: Profile) => profile.userId !== numericUserId);
+                    setProfiles(filteredProfiles);
                 }
             }
         } catch (error) {
@@ -240,6 +246,7 @@ const NewProfileViewer: React.FC = () => {
 
         try {
             await conn.invoke("JoinSpecificChatRoom", { username: myProfile?.name, chatRoom });
+
             console.log(`Приєднано до чату: ${chatRoom}`);
         } catch (e) {
             console.error("Помилка приєднання до чату:", e);
@@ -249,7 +256,7 @@ const NewProfileViewer: React.FC = () => {
     const sendMessage = async (message: string) => {
         try {
             if (conn && activeChat) {
-                await conn.invoke("SendMessage", activeChat.chatRoom, myProfile?.name, message);
+                await conn.invoke("SendMessage", activeChat.chatRoom, myProfile?.id, message);
                 console.log(`Message sent to ${activeChat.chatRoom}: ${message}`);
             }
         } catch (e) {
@@ -258,8 +265,10 @@ const NewProfileViewer: React.FC = () => {
     };
 
     const handleButtonClick = (buttonName: string) => {
+        console.log("Clicked:", buttonName);
         setSelectedButton(buttonName);
     };
+
 
     const getMatchInfoContent = () => {
         if (selectedButton === "Chats") {
@@ -271,10 +280,10 @@ const NewProfileViewer: React.FC = () => {
                                 {userChats.map((chat, index) => (
                                     <button
                                         key={`${chat.chatRoom}-${index}`}
-                                        className="Chat-Item"
+                                        className={`Chat-Item ${activeChat?.chatRoom === chat.chatRoom ? "active" : ""}`}
                                         onClick={() => openChat(chat)}
                                     >
-                                        <img
+                                    <img
                                             className="Prifile-Image"
                                             src={`http://localhost:7034${chat.profile.imagePath}`}
                                             alt="Chat Avatar"
@@ -375,7 +384,13 @@ const NewProfileViewer: React.FC = () => {
             {loading ? (
                 <Spin size="large" />
             ) : activeChat ? (
-                <ChatWindow chat={activeChat} onClose={() => setActiveChat(null)} sendMessage={sendMessage} connection={conn} />
+                <ChatWindow
+                    chat={activeChat}
+                    onClose={() => setActiveChat(null)}
+                    sendMessage={sendMessage}
+                    connection={conn}
+                    messages={chatRoomInfo?.messages || []} // Ensure messages is provided
+                />
             ) : profiles.length > 0 ? (
                 <Card
                     profile={profiles[currentProfileIndex]}
@@ -388,6 +403,7 @@ const NewProfileViewer: React.FC = () => {
                 <p>No profiles available</p>
             )}
 
+            {!activeChat && (
             <div className="keys">
                 <div className="key" >
                     <div className="key-box">
@@ -431,6 +447,7 @@ const NewProfileViewer: React.FC = () => {
                     <span className="key-text">next photo</span>
                 </div>
             </div>
+            )}
 
             <Modal
                 title="Settings"

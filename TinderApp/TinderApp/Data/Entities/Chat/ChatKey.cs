@@ -19,5 +19,7 @@ namespace TinderApp.Data.Entities.Chat
         [ForeignKey(nameof(Participant))]
         public int ParticipantId { get; set; }
         public UserEntity Participant { get; set; }
+
+        public virtual ICollection<ChatMessage>? ChatMessages { get; set; }
     }
 }
