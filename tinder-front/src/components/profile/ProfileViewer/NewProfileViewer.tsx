@@ -151,6 +151,17 @@ const NewProfileViewer: React.FC = () => {
     
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
+
+
+    const handleReport = async (profileId: number) => {
+        try {
+            await ProfileService.reportProfile(profileId);
+            alert("Profile reported successfully.");
+        } catch (error) {
+            console.error("Error reporting profile:", error);
+            alert("Failed to report profile.");
+        }
+    };
     
 
     const SetChats = async (userId: string) => {

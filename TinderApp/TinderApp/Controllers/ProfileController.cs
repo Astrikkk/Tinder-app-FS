@@ -234,4 +234,51 @@ public class ProfileController : ControllerBase
         return Ok(chats);
     }
 
+    [HttpGet("reported")]
+    public async Task<IActionResult> GetAllReportedProfiles()
+    {
+        try
+        {
+            var reportedProfiles = await _dbContext.Profiles
+                .Where(p => p.IsReported)
+                .Include(p => p.Interests)
+                .Include(p => p.ProfilePhotos)
+                .Include(p => p.User)
+                    .ThenInclude(u => u.CreatedChats)
+                .Include(p => p.User)
+                    .ThenInclude(u => u.ParticipatedChats)
+                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return Ok(reportedProfiles);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred while fetching reported profiles.", Details = ex.Message });
+        }
+    }
+
+    [HttpPost("{profileId}/report")]
+    public async Task<IActionResult> ReportProfile(int profileId)
+    {
+        try
+        {
+            var profile = await _dbContext.Profiles.FindAsync(profileId);
+
+            if (profile == null)
+            {
+                return NotFound(new { Message = "Profile not found." });
+            }
+
+            profile.IsReported = true;
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { Message = "Profile has been reported successfully." });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred while reporting the profile.", Details = ex.Message });
+        }
+    }
+
 }

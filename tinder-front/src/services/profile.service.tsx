@@ -90,6 +90,13 @@ export const ProfileService = {
             }
         }
     },
+
+    reportProfile: async (profileId: number): Promise<void> => {
+        await axios.post(`${API_URL}/${profileId}/report`);
+    },
     
-    
+    getReportedProfiles: async (): Promise<Profile[]> => {
+        const response = await axios.get(`${API_URL}/reported`);
+        return response.data;
+    }
 };
