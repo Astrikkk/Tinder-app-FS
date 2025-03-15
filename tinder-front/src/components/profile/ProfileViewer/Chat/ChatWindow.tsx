@@ -28,30 +28,46 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
     const [localMessages, setLocalMessages] = useState<MessageInfo[]>(messages || []);
 
 
+    const fetchChatInfo = async () => {
+        try {
+            const data = await ChatService.getChatInfoByKey(chat.chatRoom);
+            setLocalMessages(data.messages);
+        } catch (error) {
+            console.error("Error fetching chat info:", error);
+        }
+    };
+
+
     useEffect(() => {
         fetchChatInfo();
-        setLocalMessages(messages || []); // Оновлюємо локальні повідомлення при зміні пропсів
-    }, [messages]);
+    }, [chat.chatRoom]);
 
+    useEffect(() => {
+        setLocalMessages(messages || []);
+    }, [messages]);
 
 
     useEffect(() => {
         if (!connection) return;
 
-        const handleReceiveMessage = (id: number, msg: string) => {
+        const handleReceiveMessage = async (id: number, msg: string) => {
             console.log("Received message:", id, msg);
+
+            // Оновлюємо локальний стан
             setLocalMessages((prevMessages) => [
                 ...prevMessages,
                 {
-                    id: new Date().getTime(), // ✅ Use number instead of string
+                    id: new Date().getTime(),
                     content: msg,
-                    sender: { id: id, userName: "" }, // ✅ Use proper sender structure
+                    sender: { id: id, userName: "" },
                     readed: false,
                     createdAt: new Date(),
                 },
             ]);
-        };
 
+            // Динамічно оновлюємо історію чату після отримання нового повідомлення
+            await fetchChatInfo();
+        };
 
         connection.on("ReceiveMessage", handleReceiveMessage);
 
@@ -60,21 +76,14 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
         };
     }, [connection, chat.chatRoom]);
 
-    const fetchChatInfo = async () => {
-        try {
-            const data = await ChatService.getChatInfoByKey(chat.chatRoom);
-            setLocalMessages(data.messages);
-            console.log(data);
-        } catch (error) {
-            console.error("Error fetching chat info:", error);
-        }
-    };
 
     const handleSendMessage = async () => {
         if (message.trim() !== "") {
             await sendMessage(message);
-
             setMessage("");
+
+            // Після надсилання повідомлення оновлюємо список повідомлень
+            await fetchChatInfo();
         }
     };
 
