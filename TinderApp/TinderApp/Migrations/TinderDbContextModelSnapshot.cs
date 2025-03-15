@@ -39,7 +39,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Interests", (string)null);
+                    b.ToTable("Interests");
                 });
 
             modelBuilder.Entity("InterestUserProfile", b =>
@@ -54,7 +54,7 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("UserProfilesId");
 
-                    b.ToTable("InterestUserProfile", (string)null);
+                    b.ToTable("InterestUserProfile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -183,7 +183,7 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatConnections", (string)null);
+                    b.ToTable("ChatConnections");
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatKey", b =>
@@ -205,7 +205,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("CreatorId", "ParticipantId")
                         .IsUnique();
 
-                    b.ToTable("ChatKeys", (string)null);
+                    b.ToTable("ChatKeys");
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.Chat.ChatMessage", b =>
@@ -239,7 +239,7 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("tbl_chat_messages", (string)null);
+                    b.ToTable("tbl_chat_messages");
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.Gender", b =>
@@ -259,7 +259,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Genders", (string)null);
+                    b.ToTable("Genders");
 
                     b.HasData(
                         new
@@ -406,7 +406,24 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("InterestedInOptions", (string)null);
+                    b.ToTable("InterestedInOptions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Male"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Female"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "bOTH"
+                        });
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.LookingFor", b =>
@@ -426,7 +443,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("LookingForOptions", (string)null);
+                    b.ToTable("LookingForOptions");
 
                     b.HasData(
                         new
@@ -488,7 +505,7 @@ namespace TinderApp.Migrations
 
                     b.HasIndex("UserProfileId");
 
-                    b.ToTable("ProfilePhotos", (string)null);
+                    b.ToTable("ProfilePhotos");
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.SexualOrientation", b =>
@@ -508,7 +525,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("SexualOrientations", (string)null);
+                    b.ToTable("SexualOrientations");
                 });
 
             modelBuilder.Entity("TinderApp.Data.Entities.UserProfile", b =>
@@ -560,7 +577,7 @@ namespace TinderApp.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Profiles", (string)null);
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("UserProfileLikes", b =>

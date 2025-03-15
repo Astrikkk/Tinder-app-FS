@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TinderApp.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDatabase : Migration
+    public partial class InitnewDBPostgres : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -465,6 +465,16 @@ namespace TinderApp.Migrations
                     { 1, "Male" },
                     { 2, "Female" },
                     { 3, "Other" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "InterestedInOptions",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Male" },
+                    { 2, "Female" },
+                    { 3, "bOTH" }
                 });
 
             migrationBuilder.InsertData(

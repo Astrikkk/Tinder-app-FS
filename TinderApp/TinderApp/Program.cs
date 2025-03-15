@@ -88,15 +88,15 @@ app.MapHub<ChatHub>("/Chat"); // SignalR hub mapping
 app.MapControllers();
 
 
-app.MapGet("/api/account/login/google", ([FromQuery] string returnUrl, LinkGenerator linkGenerator, 
-    SignInManager<UserEntity> signManager, HttpContext context) =>
-{
-    var properties = signManager.ConfigureExternalAuthenticationProperties("Google",
-        linkGenerator.GetPathByName(context, "GoogleLoginCaIIback") + $"?returnUrl={returnUrl}");
+//app.MapGet("/api/account/login/google", ([FromQuery] string returnUrl, LinkGenerator linkGenerator, 
+//    SignInManager<UserEntity> signManager, HttpContext context) =>
+//{
+//    var properties = signManager.ConfigureExternalAuthenticationProperties("Google",
+//        linkGenerator.GetPathByName(context, "GoogleLoginCaIIback") + $"?returnUrl={returnUrl}");
 
-    return Results.Challenge(properties, ["Google"]);
+//    return Results.Challenge(properties, ["Google"]);
 
-});
+//});
 
 
 // Configure Swagger for development environment
