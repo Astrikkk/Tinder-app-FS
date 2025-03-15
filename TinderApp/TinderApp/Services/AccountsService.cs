@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using TinderApp.Data.Entities.Identity;
 using TinderApp.DTOs;
 using TinderApp.Interfaces;
@@ -45,6 +48,13 @@ namespace TinderApp.Services
             //await _signInManager.SignInAsync(user, true);
             return await _jwtTokenService.CreateTokenAsync(user);
         }
+
+
+        public async Task GoogleLoginAsync(string googleAccessToken)
+        {
+            
+        }
+
 
         public async Task Logout()
         {

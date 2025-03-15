@@ -46,5 +46,14 @@ public class AuthController : ControllerBase
         }
     }
 
-    
+
+    //[HttpPost("login/google")]
+    //public async Task<IActionResult> GoogleLogin([FromQuery] string googleAccessToken)
+    //{
+    //    var authResponse = await _accountsService.GoogleLoginAsync(googleAccessToken);
+    //    // SetHttpOnlyCookies(authResponse.RefreshToken);
+    //    return Ok(authResponse);
+    //}
+
+
 }
