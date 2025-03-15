@@ -5,10 +5,11 @@
   "dependencies": {
     "@chakra-ui/react": "^3.8.1",
     "@microsoft/signalr": "^8.0.7",
+    "@react-oauth/google": "^0.12.1",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
     "@types/react-router-dom": "^5.3.3",
-    "antd": "^5.23.3",
+    "antd": "^5.24.3",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "jwt-decode": "^4.0.0",
