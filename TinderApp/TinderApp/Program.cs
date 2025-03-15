@@ -8,6 +8,7 @@ using TinderApp.Hubs;
 using AutoMapper;
 using TinderApp.Mapper;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
@@ -50,8 +51,6 @@ builder.Services.AddSingleton<ChatConnectionService>();
 
 
 
-
-
 builder.Services.AddSwaggerGen(); // Swagger configuration for API docs
 
 var app = builder.Build();
@@ -62,7 +61,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var userManager = services.GetRequiredService<UserManager<UserEntity>>();
     var roleManager = services.GetRequiredService<RoleManager<RoleEntity>>();
-    await SeedRolesAndAdminUser(roleManager, userManager);
+    await RolesSeeder.SeedRolesAndAdminUser(roleManager, userManager);
 }
 
 app.UseStaticFiles();
@@ -81,34 +80,3 @@ if (app.Environment.IsDevelopment())
 
 await app.RunAsync();
 
-// Seed roles and admin user
-static async Task SeedRolesAndAdminUser(RoleManager<RoleEntity> roleManager, UserManager<UserEntity> userManager)
-{
-    var roles = new[] { "User", "Admin" };
-
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-        {
-            await roleManager.CreateAsync(new RoleEntity { Name = role });
-        }
-    }
-
-    var adminEmail = "admin@example.com";
-    var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-    if (adminUser == null)
-    {
-        adminUser = new UserEntity
-        {
-            UserName = "admin",
-            Email = adminEmail,
-            EmailConfirmed = true
-        };
-        var result = await userManager.CreateAsync(adminUser, "Admin123!");
-        if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(adminUser, "Admin");
-        }
-    }
-}
