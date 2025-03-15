@@ -99,5 +99,36 @@ export const ProfileService = {
     getReportedProfiles: async (): Promise<Profile[]> => {
         const response = await axios.get(`${API_URL}/reported`);
         return response.data;
-    }
+    },
+
+    getUserMatches: async (userId: number): Promise<Profile[]> => {
+        try {
+            const response = await axios.get(`${API_URL}/${userId}/matches`);
+            // Mapping the response to match the Profile interface
+            const matches = response.data.map((match: any) => ({
+                id: match.id,
+                name: match.name,
+                imagePath: match.imagePath, // Assuming imagePath is part of the response
+                gender: match.gender,
+                lookingFor: match.lookingFor,
+                interestedIn: match.interestedIn,
+                sexualOrientation: match.sexualOrientation,
+                birthDay: new Date(match.birthDay), // Ensuring the date is formatted correctly
+                interests: match.interests,
+                photos: match.profilePhotos,
+                userId: match.userId,
+                likedByUserIds: match.likedByUserIds || [], // Handling the case where this could be undefined
+                matchedUserIds: match.matchedUserIds || [], // Same as above
+            }));
+            return matches;
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error("Axios error response:", error.response?.data);
+                throw new Error(error.response?.data?.message || `Error: ${error.response?.statusText || "Unknown error"}`);
+            } else {
+                console.error("Unexpected error:", error);
+                throw new Error("An unexpected error occurred while fetching user matches.");
+            }
+        }
+    },
 };

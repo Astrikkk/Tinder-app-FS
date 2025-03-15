@@ -41,6 +41,7 @@ namespace TinderApp.Mapper
             CreateMap<UserProfile, ProfileDetailsDTO>()
                 .ForMember(dest => dest.GenderName, opt => opt.MapFrom(src => src.Gender.Name))
                 .ForMember(dest => dest.ProfilePhotoPaths, opt => opt.MapFrom(src => src.ProfilePhotos.Select(p => $"/images/{p.Path}")));
+
         }
     }
 }
