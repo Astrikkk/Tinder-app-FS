@@ -30,6 +30,7 @@ import AboutUs from "./components/default/AboutUsComponent";
 import HowItWorks from "./components/default/HowitWorksComponent"
 import Page404 from "./components/pages/404Page";
 import SubscriptionTiers from "./components/default/SubscriptionTiersComponent";
+import ReportedList from "./components/profileInfo/reported/Content";
 
 
 const App: React.FC = () => {
@@ -84,8 +85,14 @@ const App: React.FC = () => {
                         <Route element={<PrivateRoute />}>
                             <Route path="/chat-form" element={<WaitingRoom />} />
                             <Route path="/user-view" element={<NewProfileViewer />} />
+                        </Route>
+
+                        {/* Приватні маршрути для адміністратора */}
+                        <Route element={<AdminRoute isAdmin={isAdmin} />}>
+                            <Route path="/admin-view" element={<ProfileList />} />
                             <Route path="/profile" element={<ProfileForm profile={null} onSave={() => console.log("Profile saved")} />} />
                             <Route path="/interested-in" element={<InteresedInList />} />
+                            <Route path="/reported" element={<ReportedList />} />
                             <Route path="/interested-in-form" element={<InterestedInForm interestedIn={null} onSave={() => console.log("Profile saved")} />} />
                             <Route path="/interests" element={<InterestsList />} />
                             <Route path="/interests-form" element={<InterestsForm interests={null} onSave={() => console.log("Profile saved")} />} />
@@ -93,11 +100,6 @@ const App: React.FC = () => {
                             <Route path="/looking-for-form" element={<LookingForForm lookingFor={null} onSave={() => console.log("Profile saved")} />} />
                             <Route path="/sexual-orientation" element={<SexualOrientationList />} />
                             <Route path="/sexual-orientation-form" element={<SexualOrientationForm sexualOrientation={null} onSave={() => console.log("Profile saved")} />} />
-                        </Route>
-
-                        {/* Приватні маршрути для адміністратора */}
-                        <Route element={<AdminRoute isAdmin={isAdmin} />}>
-                            <Route path="/admin-view" element={<ProfileList />} />
                         </Route>
 
                         {/* Сторінка без доступу */}

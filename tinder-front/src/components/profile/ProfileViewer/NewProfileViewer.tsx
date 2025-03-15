@@ -39,6 +39,8 @@ const NewProfileViewer: React.FC = () => {
     const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
     const [activeChat, setActiveChat] = useState<ChatDTO | null>(null);
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
+    const [isInfoModalVisible, setIsInfoModalVisible] = useState(false); // State for Info modal
+    const [selectedProfileId, setSelectedProfileId] = useState<number | null>(null); // State for selected profile ID
     const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomInfo| null>(null);
     const navigate = useNavigate();
 
@@ -123,36 +125,62 @@ const NewProfileViewer: React.FC = () => {
     };
 
     const handleDislike = () => {
-        console.log("Dislike triggered"); // Debugging log
+        console.log("Dislike triggered");
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
 
     const handleLike = async () => {
         const currentProfile = profiles[currentProfileIndex];
+        if (!currentProfile || currentProfile.id === 0) {
+            console.error("Invalid target profile:", currentProfile);
+            return;
+        }
+
         const token = localStorage.getItem("token");
         let userId = JwtService.getUserIdFromToken(token);
-    
-        if (userId && currentProfile) {
-            try {
-                // Fetch the logged-in user's profile
-                const myProfile = await ProfileService.getProfileById(userId);
-                if (!myProfile) {
-                    throw new Error("Logged-in user profile not found");
-                }
-    
-                // Pass profile IDs instead of user IDs
-                await ProfileService.likeUser(currentProfile.id, myProfile.id);
-                console.log(`You liked ${currentProfile.name}`);
-                message.success(`You liked ${currentProfile.name}`);
-            } catch (error) {
-                console.error("Error liking profile:", error);
-                message.error("Failed to like the profile");
-            }
+        if (!userId) {
+            console.error("User ID not found from token");
+            return;
         }
-    
+
+        try {
+            const myProfile = await ProfileService.getProfileById(userId);
+            if (!myProfile || myProfile.id === 0) {
+                throw new Error("Logged-in user profile not found or invalid ID");
+            }
+
+            await ProfileService.likeUser(currentProfile.id, myProfile.id);
+            console.log(`You liked ${currentProfile.name}`);
+            message.success(`You liked ${currentProfile.name}`);
+        } catch (error) {
+            console.error("Error liking profile:", error);
+            message.error("Failed to like the profile");
+        }
+
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
 
+    const showInfoModal = (profileId: number) => {
+        setSelectedProfileId(profileId);
+        setIsInfoModalVisible(true);
+    };
+
+    const handleInfoModalCancel = () => {
+        setIsInfoModalVisible(false);
+        setSelectedProfileId(null);
+    };
+
+    const handleReport = async () => {
+        if (selectedProfileId !== null) {
+            console.log("Selected Profile ID:", selectedProfileId); // Debugging log
+            try {
+                await ProfileService.reportProfile(selectedProfileId);
+                message.success("Profile reported successfully.");
+            } catch (error) {
+                console.error("Error reporting profile:", error);
+            }
+        }
+    };
 
 
     const SetChats = async (userId: string) => {
@@ -369,6 +397,7 @@ const NewProfileViewer: React.FC = () => {
                     onMessageClick={handleMessageClick}
                     onDislike={handleDislike}
                     onLike={handleLike}
+                    onInfoClick={showInfoModal}
                 />
             ) : (
                 <p>No profiles available</p>
@@ -431,6 +460,22 @@ const NewProfileViewer: React.FC = () => {
                         Logout
                     </Button>
                 </div>
+            </Modal>
+
+            <Modal
+                title="Profile Info"
+                visible={isInfoModalVisible}
+                onCancel={handleInfoModalCancel}
+                footer={[
+                    <Button key="back" onClick={handleInfoModalCancel}>
+                        Cancel
+                    </Button>,
+                    <Button key="submit" type="primary" danger onClick={handleReport}>
+                        Report
+                    </Button>,
+                ]}
+            >
+                <p>Are you sure you want to report this profile?</p>
             </Modal>
         </div>
     );

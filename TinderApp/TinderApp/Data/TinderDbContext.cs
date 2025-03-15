@@ -60,6 +60,12 @@ namespace TinderApp.Data
           //    new InterestedIn { Id = 3, Name = "Both" }
           //);
 
+            modelBuilder.Entity<InterestedIn>().HasData(
+                new Gender { Id = 1, Name = "Male" },
+                new Gender { Id = 2, Name = "Female" },
+                new Gender { Id = 3, Name = "bOTH" }
+            );
+
             // Seed initial data for Roles
             modelBuilder.Entity<RoleEntity>().HasData(
                 new RoleEntity { Id = 1, Name = "User", NormalizedName = "USER" },

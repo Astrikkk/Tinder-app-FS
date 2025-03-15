@@ -12,6 +12,7 @@ interface CardProps {
     onMessageClick: (profileId: number) => void;
     onDislike: () => void;
     onLike: () => void;
+    onInfoClick: (profileId: number) => void; // New prop for Info button
 }
 
 const calculateAge = (birthDate: Date): number => {
@@ -27,7 +28,7 @@ const calculateAge = (birthDate: Date): number => {
     return age;
 };
 
-const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike }) => {
+const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike, onInfoClick }) => {
     return (
         <div className="card">
             <div className="card-background">
@@ -48,13 +49,16 @@ const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike 
                 </button>
             </div>
             <div className="card-interests">
-                {profile.interests.map((interest) => (
-                    <div key={interest.id} className="card-interest">
+                {profile.interests.map((interest, index) => (
+                    <div key={`${interest.id}-${index}`} className="card-interest">
                         {interest.name}
                     </div>
                 ))}
             </div>
-            <button className="card-info-icon">
+            <button className="card-info-icon" onClick={() => {
+                console.log("Profile ID:", profile.id); // Debugging log
+                onInfoClick(profile.id);
+            }}>
                 <img src={Group} alt="More Info" />
             </button>
             <div className="card-name-status">

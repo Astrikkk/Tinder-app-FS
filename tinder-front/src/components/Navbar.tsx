@@ -31,6 +31,9 @@ const Navbar: React.FC = () => {
                     <Link to="/profile">Profile</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
+                    <Link to="/reported">Reported</Link>
+                </li>
+                <li className="mb-4 hover:bg-gray-700 p-2 rounded">
                     <Link to="/interested-in">Interested In</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
@@ -42,12 +45,12 @@ const Navbar: React.FC = () => {
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
                     <Link to="/sexual-orientation">Sexual Orientation</Link>
                 </li>
-                <li className="mb-4 hover:bg-gray-700 p-2 rounded">
+                {/* <li className="mb-4 hover:bg-gray-700 p-2 rounded">
                     <Link to="#">Messages</Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded">
                     <Link to="/user-view">Profile Viewer</Link>
-                </li>
+                </li> */}
                 <li className="mb-4 hover:bg-gray-700 p-2 rounded cursor-pointer">
                     <button onClick={handleLogout} className="w-full text-left">
                         Logout
