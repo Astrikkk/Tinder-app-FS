@@ -47,13 +47,20 @@ public class AuthController : ControllerBase
     }
 
 
-    //[HttpPost("login/google")]
-    //public async Task<IActionResult> GoogleLogin([FromQuery] string googleAccessToken)
-    //{
-    //    var authResponse = await _accountsService.GoogleLoginAsync(googleAccessToken);
-    //    // SetHttpOnlyCookies(authResponse.RefreshToken);
-    //    return Ok(authResponse);
-    //}
+    [HttpPost("login/google")]
+    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginDTO model)
+    {
+        try
+        {
+            var token = await _accountsService.GoogleLoginAsync(model.Token);
+            return Ok(new { Token = token });
+        }
+        catch (Exception ex)
+        {
+            return Unauthorized(new { Error = ex.Message });
+        }
+    }
+
 
 
 }

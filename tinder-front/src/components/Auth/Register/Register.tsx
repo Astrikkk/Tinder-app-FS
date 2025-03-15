@@ -8,6 +8,9 @@ import Bow from "../img/Bow.svg";
 import ingBack from "./img/image.png";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../../services/auth.service";
+import {GoogleOutlined} from "@ant-design/icons";
+import GoogleLoginButton from "../Login/GoogleLoginButton";
+import {GoogleOAuthProvider} from "@react-oauth/google";
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState("");
@@ -39,7 +42,31 @@ const Register: React.FC = () => {
         }
     };
 
+    const onLoginGoogleResult = async (idToken: string) => {
+        console.log("Google ID Token", idToken);
+        try {
+            const response = await fetch("http://localhost:7034/api/Auth/login/google", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token: idToken }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                console.log("Server Response:", data);
+                localStorage.setItem("token", data.token); // Збереження JWT
+                navigate("/create-profile");
+            } else {
+                throw new Error(data.error || "Login failed");
+            }
+        } catch (error) {
+            console.error("Google login error:", error);
+        }
+    };
+
+    const CLIENT_ID = '799604217377-hjdjqa368b4tlt2p40gpvmmf5boq4615.apps.googleusercontent.com';
     return (
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
         <div className="register-container">
             <div className="background">
                 <img className="background-image" src={ingBack} alt="background" />
@@ -112,11 +139,15 @@ const Register: React.FC = () => {
                 <div className="form-actions">
                     <div className="sign-up-but">
                         <button className="login-button" onClick={handleRegister}>Sign Up</button>
+                        {/*<button className="google-login-button">*/}
+                        {/*    <img src={Google} alt="Google" />*/}
+                        {/*    Sign Up with Google*/}
+                        {/*</button>*/}
                         <button className="google-login-button">
                             <img src={Google} alt="Google" />
-                            Sign Up with Google
+                            <GoogleLoginButton icon={<GoogleOutlined />} title='Увійти з Google' onLogin={onLoginGoogleResult} />
                         </button>
-                    </div>
+                        </div>
                     <div className="sign-up-link">
                         Already have an account? <a href="/login">Login</a>
                     </div>
@@ -132,6 +163,7 @@ const Register: React.FC = () => {
                 <img src={Sparkii} alt="Sparkii" />
             </div>
         </div>
+        </GoogleOAuthProvider>
     );
 };
 

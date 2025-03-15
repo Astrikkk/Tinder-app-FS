@@ -48,14 +48,12 @@ const Login: React.FC = () => {
     };
 
 
-    const onLoginGoogleResult = (tokenGoogle:string) => {
-        console.log("google token", tokenGoogle);
-    }
 
 
-    const CLIENT_ID = '799604217377-hjdjqa368b4tlt2p40gpvmmf5boq4615.apps.googleusercontent.com';
+
+
     return (
-        <GoogleOAuthProvider clientId={CLIENT_ID}>
+
         <div className="login-container">
             <div className="background">
                 <img className="background-image" src={ingBack} alt="background"/>
@@ -112,7 +110,7 @@ const Login: React.FC = () => {
                 <div className="form-actions">
                     <button className="login-button" onClick={handleLogin}>Log In</button>
 
-                    <GoogleLoginButton icon={<GoogleOutlined />} title='Увійти з Google' onLogin={onLoginGoogleResult} />
+
 
                     {/* <button className="google-login-button">
                         <img src={Google} alt="Google"/>
@@ -131,7 +129,6 @@ const Login: React.FC = () => {
                 <img src={Sparkii} alt="Sparkii"/>
             </div>
         </div>
-        </GoogleOAuthProvider>
     );
 };
 

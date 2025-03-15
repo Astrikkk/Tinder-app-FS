@@ -6,5 +6,7 @@ namespace TinderApp.Interfaces
     {
         Task<int> Register(RegisterDTO model);
         Task<string> Login(LoginDTO model);
+        Task<string> GoogleLoginAsync(string googleToken);
+
     }
 }
