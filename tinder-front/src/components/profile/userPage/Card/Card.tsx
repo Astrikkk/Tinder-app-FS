@@ -9,7 +9,6 @@ import { ProfileItemDTO } from "../../types";
 
 interface CardProps {
     profile: ProfileItemDTO;
-    onMessageClick: (profileId: number) => void;
     onDislike: () => void;
     onLike: () => void;
     onInfoClick: (profileId: number) => void; // New prop for Info button
@@ -28,7 +27,7 @@ const calculateAge = (birthDate: Date): number => {
     return age;
 };
 
-const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike, onInfoClick }) => {
+const Card: React.FC<CardProps> = ({ profile,  onDislike, onLike, onInfoClick }) => {
     return (
         <div className="card">
             <div className="card-background">
@@ -44,7 +43,7 @@ const Card: React.FC<CardProps> = ({ profile, onMessageClick, onDislike, onLike,
                     <img src={Star} alt="Super Like" />
                 </button>
 
-                <button className="message-button" onClick={() => onMessageClick(profile.userId)}>
+                <button className="message-button">
                     <img src={Message} alt="Message" />
                 </button>
             </div>

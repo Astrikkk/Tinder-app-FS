@@ -16,11 +16,11 @@ import Interests from "./modal/interests/interests";
 import SexualOrientation from "./modal/sexualOrientation/sexualOrientation";
 import {jwtDecode} from "jwt-decode";
 import {Form, message} from "antd";
-import {ProfileService} from "../../../services/profile.service";
+import {ProfileService} from "../../../../services/profile.service";
 import lookingFor from "./modal/lookingFor/lookingFor";
 import sexualOrientation from "./modal/sexualOrientation/sexualOrientation";
 import {useNavigate} from "react-router-dom";
-import {RoleService} from "../../../services/role.service";
+import {RoleService} from "../../../../services/role.service";
 import interests from "./modal/interests/interests";
 
 const getUserIdFromToken = (token: string | null): string | null => {

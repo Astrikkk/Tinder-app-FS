@@ -92,12 +92,60 @@ public class ProfileController : ControllerBase
         return profiles != null ? Ok(profiles) : NotFound();
     }
 
-    [HttpGet("{id}/profiles")]
-    public async Task<IActionResult> GetMyProfile(int id)
+
+    [HttpGet("{userId}/matches")]
+    public async Task<IActionResult> GetUserMatches(int userId)
     {
-        var profiles = await _profileService.GetFilteredProfiles(id);
-        return profiles != null ? Ok(profiles) : NotFound();
+        try
+        {
+            var userProfile = await _dbContext.Profiles
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.Gender)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.InterestedIn)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.LookingFor)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.SexualOrientation)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.Interests)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.ProfilePhotos)
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (userProfile == null)
+            {
+                return NotFound(new { Message = $"User with ID {userId} not found." });
+            }
+
+            var matches = userProfile.Matches.Select(match => new ProfileDetailsDTO
+            {
+                Id = match.Id,
+                Name = match.Name,
+                BirthDay = match.BirthDay,
+                GenderId = match.Gender?.Id ?? 0,
+                GenderName = match.Gender?.Name,
+                InterestedInId = match.InterestedIn?.Id ?? 0,
+                InterestedInName = match.InterestedIn?.Name,
+                LookingForId = match.LookingFor?.Id ?? 0,
+                LookingForName = match.LookingFor?.Name,
+                SexualOrientationId = match.SexualOrientation?.Id ?? 0,
+                SexualOrientationName = match.SexualOrientation?.Name,
+                Interests = match.Interests.Select(i => i.Name).ToList(),
+                ProfilePhotoPaths = match.ProfilePhotos.Select(p => p.Path).ToList(),
+                IsReported = false,  // Assuming a default value since it's not included in the entity
+                LikedByUserIds = new List<int>(), // Adjust this if needed
+                MatchedUserIds = new List<int>()  // Adjust this if needed
+            }).ToList();
+
+            return Ok(matches);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred while fetching user matches.", Details = ex.Message });
+        }
     }
+
 
 
 }

@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import {JwtService} from "../../services/jwt.service";
 
 interface AuthContextType {
     isAuthenticated: boolean;

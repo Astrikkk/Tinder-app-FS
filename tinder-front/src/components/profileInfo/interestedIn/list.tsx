@@ -3,7 +3,7 @@ import { ProfileInfo } from "../types";
 import { Button, message, Modal, Table, Typography } from "antd";
 import { ProfileInfoService } from "../../../services/profile.info.service";
 import InterestedInForm from "./form";
-import Navbar from "../../Navbar";
+import Navbar from "../../profile/adminPage/Navbar";
 
 const { Title } = Typography;
 

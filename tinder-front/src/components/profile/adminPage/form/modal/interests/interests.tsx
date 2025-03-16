@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./interests.css";
-import { ProfileInfoService } from "../../../../../services/profile.info.service";
+import { ProfileInfoService } from "../../../../../../services/profile.info.service";
 
 interface Interest {
     id: number;

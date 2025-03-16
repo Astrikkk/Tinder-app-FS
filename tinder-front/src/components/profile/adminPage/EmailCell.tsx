@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {RoleService} from "../../services/role.service";
+import {RoleService} from "../../../services/role.service";
 import ProfileList from "./Content";
 
 const EmailCell: React.FC<{ userId: number }> = ({ userId }) => {

@@ -1,0 +1,249 @@
+.settings-container {
+    display: inline-flex;
+    padding: 36px;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+
+    border-radius: 12px;
+    border: 2px solid #FFCC7E;
+    background: #240000;
+}
+
+.sett-title {
+    color: #FFCC7E;
+    text-align: center;
+    align-self: stretch;
+
+    /* Akatab-Bold-24 */
+    font-family: Akatab;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: capitalize;
+}
+
+.Settings-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.Settings-block {
+    display: flex;
+    width: 465px;
+    min-width: 465px;
+    max-height: 97px;
+    padding: 16px 24px;
+    justify-content: space-between;
+    align-items: center;
+
+    border-radius: 12px;
+    background: #320000;
+}
+
+.Settings-text {
+    width: 50%;
+    flex-shrink: 0;
+
+    color: #FFF;
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+}
+
+.Choose {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #320000; /* Видаляє фон кнопки */
+    border: none; /* Видаляє рамку кнопки */
+    padding: 0; /* Видаляє внутрішні відступи */
+    margin: 0; /* Видаляє зовнішні відступи */
+    cursor: pointer; /* Додає курсор-покажчик при наведенні */
+    text-align: left; /* Вирівнює текст по лівому краю */
+    font-family: inherit; /* Використовує шрифт батьківського елемента */
+    font-size: inherit; /* Використовує розмір шрифту батьківського елемента */
+    color: inherit; /* Використовує колір тексту батьківського елемента */
+}
+
+.Choose-text {
+    color: #B1A4A4;
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+}
+
+.Choose-arrow {
+    color: #B1A4A4; /* Колір стрілки */
+    font-size: 20px; /* Розмір стрілки */
+    margin-left: 8px; /* Відступ між текстом і стрілкою */
+}
+
+/* Стилі для перемикача */
+.toggle-switch {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.switch-body {
+    width: 54px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 50px;
+    background: #B1A4A4; /* Колір фону у вимкненому стані */
+    box-shadow: 0px 6px 8px 3px rgba(0, 0, 0, 0.10) inset;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.switch-body.active {
+    background: #BF0B2C; /* Колір фону увімкненого стану */
+}
+
+.switch {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    background: #E8EAEA; /* Колір повзунка */
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(2px 1px 6px rgba(0, 0, 0, 0.25));
+}
+
+.switch-body.active .switch {
+    transform: translateX(26px); /* Переміщення повзунка при активному стані */
+}
+
+.Settings-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+    flex: 1 0 0;
+}
+
+.Settings-group-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+}
+
+.Choose-1 {
+    width: 417px;
+    height: 22px;
+}
+
+.age-range-slider {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.range-track {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    background: #B1A4A4;
+    border-radius: 4px;
+}
+
+.range-fill {
+    position: absolute;
+    height: 6px;
+    background: #BF0B2C;
+    border-radius: 4px;
+}
+
+.age-range-slider input[type="range"] {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    appearance: none;
+    background: none;
+    pointer-events: none;
+}
+
+.age-range-slider input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.age-range-slider input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.Settings-btns{
+    display: flex;
+    align-items: center;
+    gap: 21px;
+}
+
+.Settings-btn {
+    display: flex;
+    width: 222px;
+    max-height: 59px;
+    padding: 16px 32px;
+    justify-content: center; /* Центрує контент по горизонталі */
+    align-items: center; /* Центрує контент по вертикалі */
+    border-radius: 12px;
+    background: #551E28;
+    cursor: pointer;
+    text-align: center;
+}
+
+
+
+
+.Settings-btn-text{
+    color: #FFF;
+    cursor: pointer;
+    /* Akatab-Regular-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+}
+
+.Button-Save{
+    display: flex;
+    width: 240px;
+    padding: 12px 52px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 12px;
+    border: 2px solid  #BF0B2C;
+    cursor: pointer;
+}

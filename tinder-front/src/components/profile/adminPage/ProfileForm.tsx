@@ -2,27 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select, DatePicker, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import {ProfileCreateDTO, ProfileItemDTO} from './types';
-import { ProfileService } from "../../services/profile.service";
-import { ProfileInfoService } from "../../services/profile.info.service";
+import {ProfileCreateDTO, ProfileItemDTO} from '../types';
+import { ProfileService } from "../../../services/profile.service";
+import { ProfileInfoService } from "../../../services/profile.info.service";
 import { jwtDecode } from "jwt-decode";
 
 import JwtPayload from "jwt-decode";
 
 import { useLocation } from 'react-router-dom';
-import {JwtService} from "../../services/jwt.service";
+import {JwtService} from "../../../services/jwt.service";
 const { Option } = Select;
-
-
-
 interface ProfileFormProps {
     profile: ProfileCreateDTO | null;
     onSave: () => void;
 }
-
-
-
-
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ profile, onSave }) => {
     const [form] = Form.useForm();

@@ -1,0 +1,36 @@
+/* LeftHeader.css */
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Темний фон */
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Переконайтеся, що модальне вікно поверх інших елементів */
+}
+
+.custom-modal-content {
+    border-radius: 12px;
+    background-color: #320000; /* Темний колір для контенту */
+    width: 800px; /* Ширина модального вікна */
+    max-width: 90%; /* Максимальна ширина */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Тінь */
+}
+
+.custom-modal-content button {
+    margin-top: 16px;
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-modal-content button:hover {
+    background-color: #666;
+}

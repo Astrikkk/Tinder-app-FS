@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter as Router, Navigate } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import PrivateRoute from "./components/PrivateRoute";
+import Navbar from "./components/profile/adminPage/Navbar";
+import PrivateRoute from "./components/routes/PrivateRoute";
 import AdminRoute from "./components/routes/AdminRoute"; // Доданий компонент для перевірки прав адміністратора
-import ProfileList from "./components/profile/Content";
-import ProfileForm from "./components/profile/ProfileForm";
+import ProfileList from "./components/profile/adminPage/Content";
+import ProfileForm from "./components/profile/adminPage/ProfileForm";
 import Login from "./components/Auth/Login/Login";
 import Register from "./components/Auth/Register/Register";
 import DefaultLayout from "./components/default/DefaultLayout";
 import SexualOrientationList from "./components/profileInfo/sexualOrientation/list";
-import ProfileViewer from "./components/profile/ProfileViewer";
 import InteresedInList from "./components/profileInfo/interestedIn/list";
 import InterestedInForm from "./components/profileInfo/interestedIn/form";
 import InterestsList from "./components/profileInfo/interests/list";
@@ -18,14 +17,13 @@ import LookingForList from "./components/profileInfo/lookingFor/list";
 import LookingForForm from "./components/profileInfo/lookingFor/form";
 import SexualOrientationForm from "./components/profileInfo/sexualOrientation/form";
 import { useAuth } from "./components/Auth/AuthContext";
-import CreateForm from "./components/profile/form/createForm";
-import NewProfileViewer from "./components/profile/ProfileViewer/NewProfileViewer";
+import CreateForm from "./components/profile/adminPage/form/createForm";
+import NewProfileViewer from "./components/profile/userPage/NewProfileViewer";
 import { jwtDecode } from "jwt-decode";
 import { RoleService } from "./services/role.service";
 import PublicRoute from "./components/routes/PublicRoute";
 import {JwtService} from "./services/jwt.service";
 import {HubConnectionBuilder} from "@microsoft/signalr";
-import WaitingRoom from "./components/chat/waitingRoom";
 import AboutUs from "./components/default/AboutUsComponent";
 import HowItWorks from "./components/default/HowitWorksComponent"
 import Page404 from "./components/pages/404Page";
@@ -83,7 +81,6 @@ const App: React.FC = () => {
                         </Route>
                         {/* Приватні маршрути для авторизованих користувачів */}
                         <Route element={<PrivateRoute />}>
-                            <Route path="/chat-form" element={<WaitingRoom />} />
                             <Route path="/user-view" element={<NewProfileViewer />} />
                         </Route>
 

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Table, Button, message, Typography } from "antd";
 import { ProfileItemDTO } from "../../profile/types";
-import ProfileForm from "../../profile/ProfileForm";
+import ProfileForm from "../../profile/adminPage/ProfileForm";
 import { ProfileService } from "../../../services/profile.service";
 import { useNavigate } from "react-router-dom";
 import { RoleService } from "../../../services/role.service";
-import EmailCell from "../../profile/EmailCell";
+import EmailCell from "../../profile/adminPage/EmailCell";
 import { jwtDecode } from "jwt-decode";
-import Navbar from "../../Navbar";
+import Navbar from "../../profile/adminPage/Navbar";
 
 const { Title } = Typography;
 

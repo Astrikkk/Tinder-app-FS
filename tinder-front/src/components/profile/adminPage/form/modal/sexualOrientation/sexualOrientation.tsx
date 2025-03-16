@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import "./sexualOrientation.css";
-import {ProfileInfoService} from "../../../../../services/profile.info.service";
+import {ProfileInfoService} from "../../../../../../services/profile.info.service";
 
 interface Orientation {
     id: number;

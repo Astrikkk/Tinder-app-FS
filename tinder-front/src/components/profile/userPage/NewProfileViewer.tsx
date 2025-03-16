@@ -23,8 +23,13 @@ import Sparkii from "./img/Sparkii.svg";
 import { JwtService } from "../../../services/jwt.service";
 import { useNavigate } from "react-router-dom";
 import {ChatRoomInfo, ChatService} from "../../../services/chat.service";
+import Settings from "./SidePanel/Settings/Settings";
+import Matches from "./SidePanel/Items/Matches";
+import Chats from "./SidePanel/Items/Chats";
+import Explore from "./SidePanel/Items/Explore";
+import LeftHeader from "./SidePanel/LeftHeader";
 
-interface ChatDTO {
+export interface ChatDTO {
     chatRoom: string;
     profile: ProfileItemDTO;
 }
@@ -44,24 +49,47 @@ const NewProfileViewer: React.FC = () => {
     const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomInfo| null>(null);
     const navigate = useNavigate();
 
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+    const showSettingsModal = () => setIsSettingsOpen(true);
+    const closeSettingsModal = () => setIsSettingsOpen(false);
+
     useEffect(() => {
-        fetchProfiles();
-        if (!conn) {
-            initChatConnection();
-        } else {
-            conn.onclose(async () => {
-                console.warn("SignalR підключення закрилося. Перепідключення...");
-                await initChatConnection();
-            });
-        }
+        const initialize = async () => {
+            await fetchProfiles();
+            if (!conn) {
+                try {
+                    const connection = await ChatService.initChatConnection();
+                    setConnection(connection);
+                    connection.onclose(async () => {
+                        console.warn("SignalR підключення закрилося. Перепідключення...");
+                        try {
+                            const newConnection = await ChatService.initChatConnection();
+                            setConnection(newConnection);
+                        } catch (error) {
+                            console.error("Помилка перепідключення до SignalR:", error);
+                        }
+                    });
+                } catch (error) {
+                    console.error("Помилка ініціалізації SignalR:", error);
+                }
+            }
+        };
+        initialize();
+        return () => {
+            if (conn) {
+                conn.off("ReceiveMessage");
+                conn.stop();
+            }
+        };
     }, []);
+
 
     const fetchProfiles = async () => {
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
             let userId = JwtService.getUserIdFromToken(token);
-
 
 
             if (userId) {
@@ -79,42 +107,7 @@ const NewProfileViewer: React.FC = () => {
         }
     };
 
-    const initChatConnection = async () => {
-        try {
-            const connection = new HubConnectionBuilder()
-                .withUrl("http://localhost:7034/Chat")
-                .configureLogging(LogLevel.Information)
-                .build();
 
-            connection.on("ReceiveMessage", (username: string, msg: string) => {
-                console.log(`Message from ${username}: ${msg}`);
-            });
-
-            await connection.start();
-            console.log("Підключено до SignalR");
-            setConnection(connection);
-        } catch (e) {
-            console.error("Помилка підключення до чату:", e);
-            message.error("Не вдалося підключитися до чату. Спробуйте пізніше.");
-        }
-    };
-
-    const createPrivateChat = async (participantId: number) => {
-        if (!conn || !myProfile) {
-            console.warn("Підключення до хабу не встановлено або не знайдено профіль користувача");
-            return;
-        }
-        try {
-            await conn.invoke("CreatePrivateChat", myProfile.userId, participantId);
-            console.log(`Приватний чат між ${myProfile.userId} та ${participantId} створено`);
-        } catch (e) {
-            console.error("Помилка створення приватного чату:", e);
-        }
-    };
-
-    const handleMessageClick = (profileId: number) => {
-        createPrivateChat(profileId);
-    };
 
     const handleDislike = () => {
         console.log("Dislike triggered");
@@ -220,39 +213,24 @@ const NewProfileViewer: React.FC = () => {
         }
     };
 
-    const openChat = (chat: ChatDTO) => {
+    const openChat = async (chat: ChatDTO) => {
         setActiveChat(chat);
-        joinChatRoom(chat.chatRoom);
-    };
-
-    const joinChatRoom = async (chatRoom: string) => {
-        if (!conn) {
-            console.warn("SignalR підключення не встановлено.");
-            return;
-        }
-
-        if (conn.state !== HubConnectionState.Connected) {
-            console.warn("SignalR підключення ще не готове. Очікуємо...");
-            await conn.start();
-        }
-
-        try {
-            await conn.invoke("JoinSpecificChatRoom", { username: myProfile?.name, chatRoom });
-
-            console.log(`Приєднано до чату: ${chatRoom}`);
-        } catch (e) {
-            console.error("Помилка приєднання до чату:", e);
+        if (conn && myProfile) {
+            try {
+                await ChatService.joinChatRoom(conn, chat.chatRoom, myProfile.name);
+            } catch (error) {
+                console.error("Помилка приєднання до чату:", error);
+            }
         }
     };
 
     const sendMessage = async (message: string) => {
-        try {
-            if (conn && activeChat) {
-                await conn.invoke("SendMessage", activeChat.chatRoom, myProfile?.id, message);
-                console.log(`Message sent to ${activeChat.chatRoom}: ${message}`);
+        if (conn && activeChat && myProfile) {
+            try {
+                await ChatService.sendMessage(conn, activeChat.chatRoom, myProfile.userId, message);
+            } catch (error) {
+                console.error("Помилка надсилання повідомлення:", error);
             }
-        } catch (e) {
-            console.error("Error sending message:", e);
         }
     };
 
@@ -262,94 +240,39 @@ const NewProfileViewer: React.FC = () => {
     };
 
 
-    const getMatchInfoContent = () => {
-        if (selectedButton === "Chats") {
-            return (
-                <>
-                    {userChats.length > 0 ? (
-                        <div className="Chat-Match">
-                            <div className="Chats">
-                                {userChats.map((chat, index) => (
-                                    <button
-                                        key={`${chat.chatRoom}-${index}`}
-                                        className={`Chat-Item ${activeChat?.chatRoom === chat.chatRoom ? "active" : ""}`}
-                                        onClick={() => openChat(chat)}
-                                    >
-                                    <img
-                                            className="Prifile-Image"
-                                            src={`http://localhost:7034${chat.profile.imagePath}`}
-                                            alt="Chat Avatar"
-                                        />
-                                        <div className="Name-Messages">
-                                            <div className="Name-Status">
-                                                <div className="Profile-Text">{chat.profile.name}</div>
-                                                <img src={Heart} />
-                                            </div>
-                                            <div className="Friend-Message">Tap to start chatting...</div>
-                                        </div>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="Chat-Match no-chats">
-                            <h2 className="match-info-h2">No Chats Yet</h2>
-                            <p className="match-info-p">
-                                Start conversations with your matches! When you and another user mutually
-                                like each other, you'll be able to chat here.
-                            </p>
-                        </div>
-                    )}
-                </>
-            );
+    const renderContent = () => {
+        switch (selectedButton) {
+            case "Matches":
+                return <Matches />;
+            case "Chats":
+                return <Chats userChats={userChats} activeChat={activeChat} openChat={openChat} />;
+            case "Explore":
+                return <Explore />;
+            default:
+                return null;
         }
-
-        return (
-            <div className="Chat-Match no-chats">
-                <h2 className="match-info-h2">It's a Match!</h2>
-                <p className="match-info-p">
-                    See who likes you back! When you and another user mutually like each other, you'll become a match and appear in this section. Start chatting and see where it goes!
-                </p>
-                <img src={Kitty} alt="Kitty" className="kitty-image" />
-            </div>
-        );
     };
 
-    const showSettingsModal = () => {
-        setIsSettingsModalVisible(true);
-    };
 
-    const handleSettingsModalCancel = () => {
-        setIsSettingsModalVisible(false);
-    };
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        navigate("/login");
-    };
+
+     const handleSettingsModalCancel = () => {
+         setIsSettingsModalVisible(false);
+     };
+     const handleLogout = () => {
+         localStorage.removeItem("token");
+         navigate("/login");
+     };
 
     return (
         <div className="custom-container">
             <div className="bg-left">
-                <div className="left-header">
-                    <div className="bg-left-3"></div>
-                    <div className="section-1">
-                        <div className="account">
-                            <img
-                                className="your-avatar"
-                                src={`http://localhost:7034${myProfile?.imagePath}`}
-                                alt="Your Avatar"
-                            />
-                            <div className="your-name">{myProfile?.name || "Unknown"}</div>
-                        </div>
-
-                        <div className="security-settings">
-                            <button><img src={Security} /></button>
-                            <button onClick={showSettingsModal}><img src={Setting} /></button>
-                        </div>
-                    </div>
-                    <div className="bg-left-2"></div>
-                </div>
+                <LeftHeader
+                    myProfile={myProfile}
+                    isSettingsOpen={isSettingsOpen}
+                    showSettingsModal={showSettingsModal}
+                    closeSettingsModal={closeSettingsModal}
+                />
                 <div className="bg-left-1">
                     <div className="section-2">
                         {["Matches", "Chats", "Explore"].map((buttonName) => (
@@ -363,7 +286,7 @@ const NewProfileViewer: React.FC = () => {
                         ))}
                     </div>
                     <div>
-                        {getMatchInfoContent()}
+                        {renderContent()}
                     </div>
                 </div>
             </div>
@@ -381,12 +304,11 @@ const NewProfileViewer: React.FC = () => {
                     onClose={() => setActiveChat(null)}
                     sendMessage={sendMessage}
                     connection={conn}
-                    messages={chatRoomInfo?.messages || []} // Ensure messages is provided
+                    messages={chatRoomInfo?.messages || []}
                 />
             ) : profiles.length > 0 ? (
                 <Card
                     profile={profiles[currentProfileIndex]}
-                    onMessageClick={handleMessageClick}
                     onDislike={handleDislike}
                     onLike={handleLike}
                     onInfoClick={showInfoModal}
@@ -396,51 +318,45 @@ const NewProfileViewer: React.FC = () => {
             )}
 
             {!activeChat && (
-            <div className="keys">
-                <div className="key" >
-                    <div className="key-box">
-                        <img src={Nope} />
+                <div className="keys">
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={Nope} />
+                        </div>
+                        <span className="key-text">nope</span>
                     </div>
-                    <span className="key-text">nope</span>
-                </div>
-
-                <div className="key">
-                    <div className="key-box">
-                        <img src={Like} />
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={Like} />
+                        </div>
+                        <span className="key-text">super like</span>
                     </div>
-                    <span className="key-text">super like</span>
-                </div>
-
-                <div className="key">
-                    <div className="key-box">
-                        <img src={Open} />
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={Open} />
+                        </div>
+                        <span className="key-text">open profile</span>
                     </div>
-                    <span className="key-text">open profile</span>
-                </div>
-
-                <div className="key">
-                    <div className="key-box">
-                        <img src={Close} />
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={Close} />
+                        </div>
+                        <span className="key-text">close profile</span>
                     </div>
-                    <span className="key-text">close profile</span>
-                </div>
-
-                <div className="key">
-                    <div className="key-box">
-                        <img src={SuperLike} />
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={SuperLike} />
+                        </div>
+                        <span className="key-text">super like</span>
                     </div>
-                    <span className="key-text">super like</span>
-                </div>
-
-                <div className="key">
-                    <div className="key-box">
-                        <img src={NextPh} />
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={NextPh} />
+                        </div>
+                        <span className="key-text">next photo</span>
                     </div>
-                    <span className="key-text">next photo</span>
                 </div>
-            </div>
             )}
-
             <Modal
                 title="Settings"
                 visible={isSettingsModalVisible}
@@ -453,6 +369,7 @@ const NewProfileViewer: React.FC = () => {
                     </Button>
                 </div>
             </Modal>
+
 
             <Modal
                 title="Profile Info"
