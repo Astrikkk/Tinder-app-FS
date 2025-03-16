@@ -9,9 +9,13 @@ import Eye from "../img/eye.svg";
 import Stars from "../img/Stars.svg";
 import Bow from "../img/Bow.svg";
 
+
+import { GoogleOutlined } from '@ant-design/icons';
 import "./Login.css";
 import ingBack from "../img/pexels-photo-1378723.png";
 import {JwtService} from "../../../services/jwt.service";
+import {GoogleOAuthProvider} from "@react-oauth/google";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
@@ -43,7 +47,13 @@ const Login: React.FC = () => {
         }
     };
 
+
+
+
+
+
     return (
+
         <div className="login-container">
             <div className="background">
                 <img className="background-image" src={ingBack} alt="background"/>
@@ -99,6 +109,9 @@ const Login: React.FC = () => {
                 </div>
                 <div className="form-actions">
                     <button className="login-button" onClick={handleLogin}>Log In</button>
+
+
+
                     {/* <button className="google-login-button">
                         <img src={Google} alt="Google"/>
                         Log in with Google

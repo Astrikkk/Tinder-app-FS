@@ -39,8 +39,12 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
 
 
     useEffect(() => {
-        fetchChatInfo();
-    }, [chat.chatRoom]);
+        const interval = setInterval(() => {
+            fetchChatInfo();
+        }, 1000);
+
+        return () => clearInterval(interval);
+    });
 
     useEffect(() => {
         setLocalMessages(messages || []);

@@ -35,6 +35,11 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Register custom services
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+
+
+builder.Services.AddHttpClient<IGoogleAuthService, GoogleAuthService>();
+
 
 // SignalR setup
 builder.Services.AddSignalR();
