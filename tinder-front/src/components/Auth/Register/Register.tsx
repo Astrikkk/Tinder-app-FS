@@ -63,7 +63,6 @@ const Register: React.FC = () => {
             console.error("Google login error:", error);
         }
     };
-
     const CLIENT_ID = '799604217377-hjdjqa368b4tlt2p40gpvmmf5boq4615.apps.googleusercontent.com';
     return (
         <GoogleOAuthProvider clientId={CLIENT_ID}>
@@ -81,6 +80,7 @@ const Register: React.FC = () => {
                         <label className="email-label">Email</label>
                         <input
                             type="email"
+                            autoComplete="off"
                             className="email-input"
                             placeholder="Email"
                             value={email}
@@ -144,8 +144,7 @@ const Register: React.FC = () => {
                         {/*    Sign Up with Google*/}
                         {/*</button>*/}
                         <button className="google-login-button">
-                            <img src={Google} alt="Google" />
-                            <GoogleLoginButton icon={<GoogleOutlined />} title='Увійти з Google' onLogin={onLoginGoogleResult} />
+                        <GoogleLoginButton icon={<GoogleOutlined />} title='Увійти з Google' onLogin={onLoginGoogleResult} />
                         </button>
                         </div>
                     <div className="sign-up-link">
