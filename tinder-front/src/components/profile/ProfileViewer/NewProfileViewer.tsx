@@ -59,26 +59,18 @@ const NewProfileViewer: React.FC = () => {
     const fetchProfiles = async () => {
         setLoading(true);
         try {
-            const data = await ProfileService.getProfiles();
-
             const token = localStorage.getItem("token");
             let userId = JwtService.getUserIdFromToken(token);
 
+
+
             if (userId) {
-                const numericUserId = Number(userId);
+                const filteredProfiles = await ProfileService.getFilteredProfilesById(userId);
+                setProfiles(filteredProfiles || null);
+                const userProfile = await ProfileService.getProfileById(userId);
+                setMyProfile(userProfile || null);
+
                 SetChats(userId);
-                console.log("numericUserId:", numericUserId);
-                console.log("Fetched profiles:", data);
-
-                if (!isNaN(numericUserId)) {
-                    // Отримуємо профіль поточного користувача
-                    const userProfile = data.find((profile: Profile) => profile.userId === numericUserId);
-                    setMyProfile(userProfile || null);
-
-                    // Фільтруємо масив, прибираючи поточного користувача
-                    const filteredProfiles = data.filter((profile: Profile) => profile.userId !== numericUserId);
-                    setProfiles(filteredProfiles);
-                }
             }
         } catch (error) {
             message.error("Failed to load profiles");

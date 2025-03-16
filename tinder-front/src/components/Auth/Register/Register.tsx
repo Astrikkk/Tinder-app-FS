@@ -9,8 +9,8 @@ import ingBack from "./img/image.png";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../../services/auth.service";
 import {GoogleOutlined} from "@ant-design/icons";
-import GoogleLoginButton from "../Login/GoogleLoginButton";
 import {GoogleOAuthProvider} from "@react-oauth/google";
+import GoogleLoginButton from "../GoogleLoginButton";
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState("");

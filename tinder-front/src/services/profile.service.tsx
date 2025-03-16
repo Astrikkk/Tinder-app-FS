@@ -44,6 +44,11 @@ export interface Profile {
         return response.data;
     },
 
+    getFilteredProfilesById: async (id: string): Promise<Profile[]> => {
+        const response = await axios.get(`${API_URL}/${id}/profiles`);
+        return response.data;
+    },
+
     createProfile: async (formData: FormData): Promise<void> => {
         await axios.post(API_URL, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },

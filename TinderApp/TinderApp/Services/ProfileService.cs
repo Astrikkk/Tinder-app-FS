@@ -218,6 +218,5 @@ namespace TinderApp.Services
 
             return profiles;
         }
-
     }
 }

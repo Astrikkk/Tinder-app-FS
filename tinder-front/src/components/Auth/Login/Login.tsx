@@ -10,12 +10,9 @@ import Stars from "../img/Stars.svg";
 import Bow from "../img/Bow.svg";
 
 
-import { GoogleOutlined } from '@ant-design/icons';
 import "./Login.css";
 import ingBack from "../img/pexels-photo-1378723.png";
 import {JwtService} from "../../../services/jwt.service";
-import {GoogleOAuthProvider} from "@react-oauth/google";
-import GoogleLoginButton from "./GoogleLoginButton";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");

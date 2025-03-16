@@ -92,5 +92,12 @@ public class ProfileController : ControllerBase
         return profiles != null ? Ok(profiles) : NotFound();
     }
 
+    [HttpGet("{id}/profiles")]
+    public async Task<IActionResult> GetMyProfile(int id)
+    {
+        var profiles = await _profileService.GetFilteredProfiles(id);
+        return profiles != null ? Ok(profiles) : NotFound();
+    }
+
 
 }
