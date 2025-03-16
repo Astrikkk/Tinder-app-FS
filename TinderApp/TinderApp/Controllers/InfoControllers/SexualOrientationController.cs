@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TinderApp.Data;
 using TinderApp.Data.Entities;
+using TinderApp.Data.Entities.ProfileProp;
 using TinderApp.DTOs;
 
 namespace TinderApp.Controllers.InfoControllers

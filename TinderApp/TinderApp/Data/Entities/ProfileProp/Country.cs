@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TinderApp.Data.Entities
+namespace TinderApp.Data.Entities.ProfileProp
 {
-    public class InterestedIn
+    public class Country
     {
         [Key]
         public int Id { get; set; }

@@ -1,10 +1,10 @@
-﻿using Data.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 using TinderApp.Data.Entities;
 using TinderApp.Data.Entities.Chat;
 using TinderApp.Data.Entities.Identity;
+using TinderApp.Data.Entities.ProfileProp;
 using TinderApp.DTOs;
 
 namespace TinderApp.Data
@@ -22,6 +22,7 @@ namespace TinderApp.Data
         public DbSet<SexualOrientation> SexualOrientations { get; set; }
         public DbSet<Interest> Interests { get; set; }
         public DbSet<ChatKey> ChatKeys { get; set; }
+        public DbSet<Country> Countries { get; set; }
 
         public DbSet<ChatMessage> ChatMessages { get; set; }
 

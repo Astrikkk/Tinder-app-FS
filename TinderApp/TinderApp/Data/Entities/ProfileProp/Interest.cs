@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TinderApp.Data.Entities;
 
-namespace Data.Entities
+namespace TinderApp.Data.Entities.ProfileProp
 {
     public class Interest
     {

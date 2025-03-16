@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TinderApp.Data.Entities
+namespace TinderApp.Data.Entities.ProfileProp
 {
     public class ProfilePhoto
     {

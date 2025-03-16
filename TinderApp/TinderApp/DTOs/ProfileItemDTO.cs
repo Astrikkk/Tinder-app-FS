@@ -1,5 +1,5 @@
-﻿using Data.Entities;
-using TinderApp.Data.Entities;
+﻿
+using TinderApp.Data.Entities.ProfileProp;
 
 namespace TinderApp.DTOs
 {

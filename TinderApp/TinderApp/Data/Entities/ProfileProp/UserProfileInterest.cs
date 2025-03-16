@@ -1,6 +1,4 @@
-﻿using Data.Entities;
-
-namespace TinderApp.Data.Entities
+﻿namespace TinderApp.Data.Entities.ProfileProp
 {
     public class UserProfileInterest
     {

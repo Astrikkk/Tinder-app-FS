@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TinderApp.Data.Entities
+namespace TinderApp.Data.Entities.ProfileProp
 {
     public class Gender
     {

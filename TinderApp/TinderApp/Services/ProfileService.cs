@@ -7,6 +7,7 @@ using TinderApp.Data.Entities;
 using TinderApp.DTOs;
 using TinderApp.Interfaces;
 using System.Text.Json;
+using TinderApp.Data.Entities.ProfileProp;
 
 namespace TinderApp.Services
 {
