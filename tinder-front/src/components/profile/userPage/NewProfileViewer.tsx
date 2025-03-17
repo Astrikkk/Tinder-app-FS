@@ -133,14 +133,16 @@ const NewProfileViewer: React.FC = () => {
             if (!myProfile || myProfile.id === 0) {
                 throw new Error("Logged-in user profile not found or invalid ID");
             }
+            console.log("id",myProfile.userId, currentProfile.userId);
 
-            await ProfileService.likeUser(currentProfile.id, myProfile.id);
+            await ProfileService.likeUser(currentProfile.userId, myProfile.userId);
             console.log(`You liked ${currentProfile.name}`);
             message.success(`You liked ${currentProfile.name}`);
         } catch (error) {
             console.error("Error liking profile:", error);
             message.error("Failed to like the profile");
         }
+        SetChats(userId);
 
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };

@@ -8,6 +8,9 @@ using TinderApp.DTOs;
 using TinderApp.Interfaces;
 using System.Text.Json;
 using TinderApp.Data.Entities.ProfileProp;
+using TinderApp.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using TinderApp.Data.Entities.Chat;
 
 namespace TinderApp.Services
 {
@@ -16,12 +19,15 @@ namespace TinderApp.Services
         private readonly TinderDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IHubContext<ChatHub> _chatHub;
 
-        public ProfileService(TinderDbContext dbContext, IMapper mapper, IConfiguration configuration)
+        public ProfileService(TinderDbContext dbContext, IMapper mapper, IConfiguration configuration, IHubContext<ChatHub> chatHub)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _configuration = configuration;
+            _chatHub = chatHub;
+
         }
 
         public async Task<List<ProfileItemDTO>> GetAllProfiles()
@@ -96,34 +102,51 @@ namespace TinderApp.Services
             var likedUser = await _dbContext.Profiles
                 .Include(p => p.LikedBy)
                 .Include(p => p.Matches)
-                .FirstOrDefaultAsync(p => p.Id == request.LikedUserId);
+                .FirstOrDefaultAsync(p => p.UserId == request.LikedUserId);
 
-            var likingUser = await _dbContext.Profiles
+            var likedByUser = await _dbContext.Profiles
                 .Include(p => p.LikedBy)
                 .Include(p => p.Matches)
-                .FirstOrDefaultAsync(p => p.Id == request.LikedByUserId);
+                .FirstOrDefaultAsync(p => p.UserId == request.LikedByUserId);
 
-            if (likedUser == null || likingUser == null)
+            if (likedUser == null || likedByUser == null)
                 return false;
 
-            if (!likedUser.LikedBy.Any(u => u.Id == request.LikedByUserId))
-                likedUser.LikedBy.Add(likingUser);
+            if (!likedUser.LikedBy.Any(u => u.UserId == request.LikedByUserId))
+                likedUser.LikedBy.Add(likedByUser);
 
-            bool isMatch = likingUser.LikedBy.Any(u => u.Id == request.LikedUserId);
+            bool isMatch = likedUser.LikedBy.Any(u => u.UserId == request.LikedByUserId);
             if (isMatch)
             {
-                likedUser.Matches.Add(likingUser);
-                likingUser.Matches.Add(likedUser);
-                likedUser.LikedBy.Remove(likingUser);
-                likingUser.LikedBy.Remove(likedUser);
-            }
+                likedUser.Matches.Add(likedByUser);
+                likedByUser.Matches.Add(likedUser);
+                likedUser.LikedBy.Remove(likedByUser);
+                likedByUser.LikedBy.Remove(likedUser);
 
-            _dbContext.Attach(likedUser);
-            _dbContext.Attach(likingUser);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.Attach(likedUser);
+                _dbContext.Attach(likedByUser);
+                await _dbContext.SaveChangesAsync();
+
+                // Створюємо приватний чат для нового матчу
+                var chatRoomId = Guid.NewGuid();
+                var newChat = new ChatKey
+                {
+                    ChatRoom = chatRoomId,
+                    CreatorId = request.LikedByUserId,
+                    ParticipantId = request.LikedUserId
+                };
+
+                _dbContext.ChatKeys.Add(newChat);
+                await _dbContext.SaveChangesAsync();
+
+                // Повідомляємо користувачів про створення нового чату через SignalR
+                await _chatHub.Clients.User(request.LikedByUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
+                await _chatHub.Clients.User(request.LikedUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
+            }
 
             return isMatch;
         }
+
 
         public async Task<bool> DeleteProfile(int id)
         {
