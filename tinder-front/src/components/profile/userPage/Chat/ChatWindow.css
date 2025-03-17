@@ -252,3 +252,64 @@
     margin-top: 4px;
 }
 
+
+
+
+.More-Select {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    display: flex;
+    width: 220px;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #1D0C0E;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    padding: 8px 0;
+    z-index: 100;
+}
+
+.More-chat-item {
+    display: flex;
+    padding: 8px 18px;
+    align-items: center;
+    gap: 12px;
+    align-self: stretch;
+    background: #1D0C0E;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.More-chat-item:hover {
+    background: #3A1A1E;
+}
+
+.More-chat-item-text.white{
+    color: #E1DFDF;
+    gap: 5px;
+    text-align: center;
+    display: flex;
+    /* Akatab-Regular-18 */
+    font-family: Akatab;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.More-chat-item-text.red{
+    color: #FF4F4F;
+    display: flex;
+    gap: 5px;
+    text-align: center;
+    /* Akatab-Regular-18 */
+    font-family: Akatab;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+

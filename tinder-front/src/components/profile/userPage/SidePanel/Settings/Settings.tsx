@@ -156,12 +156,12 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
                 </div>
             </div>
             <div className="Settings-btns">
-            <div className="Button-Save" onClick={closeSettings}>
-                <div className="Settings-btn-text">Cancel</div>
-            </div>
-            <div className="Button-Save" onClick={handleSaveSettings}>
-                <div className="Settings-btn-text">Save</div>
-            </div>
+                <div className="Button-Save" onClick={closeSettings}>
+                    <div className="Settings-btn-text">Cancel</div>
+                </div>
+                <div className="Button-Save" onClick={handleSaveSettings}>
+                    <div className="Settings-btn-text">Save</div>
+                </div>
             </div>
 
         </div>

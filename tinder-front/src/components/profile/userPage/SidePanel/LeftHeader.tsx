@@ -1,24 +1,33 @@
 import React from "react";
-import Security from "../img/icon_security.svg";
 import SettingsPng from "../img/icon_settings.svg";
+import SecurityPng from "../img/icon_security.svg";
 import Settings from "./Settings/Settings";
-import "./LeftHeader.css"; // Імпорт стилів
+import Security from "./Security/Security";
+import "./LeftHeader.css";
 
 interface LeftHeaderProps {
     myProfile: {
         imagePath: string;
         name: string;
     } | null;
+    selectedProfileId: number | null;
     isSettingsOpen: boolean;
+    isSecurityOpen: boolean;
     showSettingsModal: () => void;
+    showSecurityModal: () => void;
     closeSettingsModal: () => void;
+    closeSecurityModal: () => void;
 }
 
 const LeftHeader: React.FC<LeftHeaderProps> = ({
                                                    myProfile,
+                                                   selectedProfileId,
                                                    isSettingsOpen,
+                                                   isSecurityOpen,
                                                    showSettingsModal,
+                                                   showSecurityModal,
                                                    closeSettingsModal,
+                                                   closeSecurityModal,
                                                }) => {
     return (
         <div className="left-header">
@@ -34,8 +43,8 @@ const LeftHeader: React.FC<LeftHeaderProps> = ({
                 </div>
 
                 <div className="security-settings">
-                    <button>
-                        <img src={Security} alt="Security" />
+                    <button onClick={showSecurityModal}>
+                        <img src={SecurityPng} alt="Security" />
                     </button>
 
                     <button onClick={showSettingsModal}>
@@ -50,6 +59,13 @@ const LeftHeader: React.FC<LeftHeaderProps> = ({
                 <div className="custom-modal-overlay">
                     <div className="custom-modal-content">
                         <Settings closeSettings={closeSettingsModal} />
+                    </div>
+                </div>
+            )}
+            {isSecurityOpen && (
+                <div className="custom-modal-overlay">
+                    <div className="custom-modal-content">
+                        <Security closeSettings={closeSecurityModal} selectedProfileId={selectedProfileId} />
                     </div>
                 </div>
             )}

@@ -16,7 +16,7 @@
 .custom-modal-content {
     border-radius: 12px;
     background-color: #320000; /* Темний колір для контенту */
-    width: 800px; /* Ширина модального вікна */
+    width: auto; /* Ширина модального вікна */
     max-width: 90%; /* Максимальна ширина */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Тінь */
 }

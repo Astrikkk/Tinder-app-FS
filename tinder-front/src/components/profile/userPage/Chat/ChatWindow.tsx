@@ -4,6 +4,10 @@ import { ProfileItemDTO } from "../../types";
 import Img1 from "./img/Group.svg";
 import Img2 from "./img/Group (1).svg";
 import Img3 from "./img/Group (2).svg";
+
+import Clear from "./img/Clear.svg";
+import Delete from "./img/Delete.svg";
+import Block from "./img/Block.svg";
 import OutlineLink from "./img/icon-park-outline_link.svg";
 import Fluent from "./img/fluent_gif-16-regular.svg";
 import { HubConnection } from "@microsoft/signalr";
@@ -26,6 +30,11 @@ interface ChatWindowProps {
 const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, connection, messages }) => {
     const [message, setMessage] = useState("");
     const [localMessages, setLocalMessages] = useState<MessageInfo[]>(messages || []);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
 
 
     const fetchChatInfo = async () => {
@@ -49,6 +58,18 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
     useEffect(() => {
         setLocalMessages(messages || []);
     }, [messages]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (isModalOpen && !document.getElementById("more-options")?.contains(event.target as Node)) {
+                setIsModalOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isModalOpen]);
+
 
 
     useEffect(() => {
@@ -100,10 +121,24 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
                 </div>
                 <div className="header-settings">
                     <button><img src={Img1} alt="settings" /></button>
-                    <button><img src={Img2} alt="options" /></button>
+                    <button onClick={toggleModal}><img src={Img2} alt="options" /></button>
                     <button onClick={onClose}><img src={Img3} alt="close" /></button>
                 </div>
             </div>
+            {isModalOpen && (
+                <div className="More-Select">
+                    <div className="More-chat-item">
+                        <div className="More-chat-item-text white"><img src={Clear}/>Clear history</div>
+                    </div>
+                    <div className="More-chat-item">
+                        <div className="More-chat-item-text red"><img src={Delete}/>Delete chat</div>
+                    </div>
+                    <div className="More-chat-item">
+                        <div className="More-chat-item-text red"><img src={Block}/>Block user</div>
+                    </div>
+                </div>
+            )}
+
 
             {localMessages.length === 0 ? (
                 <div className="friend-info">

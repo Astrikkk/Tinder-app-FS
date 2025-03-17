@@ -50,9 +50,13 @@ const NewProfileViewer: React.FC = () => {
     const navigate = useNavigate();
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isSecurityOpen, setIsSecurityOpen] = useState(false);
 
     const showSettingsModal = () => setIsSettingsOpen(true);
-    const closeSettingsModal = () => setIsSettingsOpen(false);
+
+
+    const showSecurityModal = () => setIsSecurityOpen(true);
+    const closeSecurityModal = () => setIsSecurityOpen(false);
 
     useEffect(() => {
         const initialize = async () => {
@@ -84,6 +88,12 @@ const NewProfileViewer: React.FC = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (profiles.length > 0) {
+            setSelectedProfileId(profiles[currentProfileIndex]?.userId || null);
+        }
+    }, [currentProfileIndex, profiles]);
+
 
     const fetchProfiles = async () => {
         setLoading(true);
@@ -93,8 +103,7 @@ const NewProfileViewer: React.FC = () => {
 
 
             if (userId) {
-                const filteredProfiles = await ProfileService.getFilteredProfilesById(userId);
-                setProfiles(filteredProfiles || null);
+                UpdateProfiles(userId);
                 const userProfile = await ProfileService.getProfileById(userId);
                 setMyProfile(userProfile || null);
 
@@ -106,6 +115,19 @@ const NewProfileViewer: React.FC = () => {
             setLoading(false);
         }
     };
+
+    const UpdateProfiles = async (userId:string)=>{
+        const filteredProfiles = await ProfileService.getFilteredProfilesById(userId);
+        setProfiles(filteredProfiles || null);
+    }
+
+    const closeSettingsModal = () => {
+        setIsSettingsOpen(false);
+        if (myProfile) {
+            UpdateProfiles(myProfile.userId.toString());
+        }
+    };
+
 
 
 
@@ -150,23 +172,6 @@ const NewProfileViewer: React.FC = () => {
     const showInfoModal = (profileId: number) => {
         setSelectedProfileId(profileId);
         setIsInfoModalVisible(true);
-    };
-
-    const handleInfoModalCancel = () => {
-        setIsInfoModalVisible(false);
-        setSelectedProfileId(null);
-    };
-
-    const handleReport = async () => {
-        if (selectedProfileId !== null) {
-            console.log("Selected Profile ID:", selectedProfileId); // Debugging log
-            try {
-                await ProfileService.reportProfile(selectedProfileId);
-                message.success("Profile reported successfully.");
-            } catch (error) {
-                console.error("Error reporting profile:", error);
-            }
-        }
     };
 
 
@@ -216,7 +221,7 @@ const NewProfileViewer: React.FC = () => {
     };
 
     const openChat = async (chat: ChatDTO) => {
-        setActiveChat(chat);
+
         if (conn && myProfile) {
             try {
                 await ChatService.joinChatRoom(conn, chat.chatRoom, myProfile.name);
@@ -224,6 +229,7 @@ const NewProfileViewer: React.FC = () => {
                 console.error("Помилка приєднання до чату:", error);
             }
         }
+        setActiveChat(chat);
     };
 
     const sendMessage = async (message: string) => {
@@ -256,24 +262,18 @@ const NewProfileViewer: React.FC = () => {
     };
 
 
-
-
-     const handleSettingsModalCancel = () => {
-         setIsSettingsModalVisible(false);
-     };
-     const handleLogout = () => {
-         localStorage.removeItem("token");
-         navigate("/login");
-     };
-
     return (
         <div className="custom-container">
             <div className="bg-left">
                 <LeftHeader
                     myProfile={myProfile}
+                    selectedProfileId={selectedProfileId}
                     isSettingsOpen={isSettingsOpen}
+                    isSecurityOpen={isSecurityOpen}
                     showSettingsModal={showSettingsModal}
+                    showSecurityModal={showSecurityModal}
                     closeSettingsModal={closeSettingsModal}
+                    closeSecurityModal={closeSecurityModal}
                 />
                 <div className="bg-left-1">
                     <div className="section-2">
@@ -287,7 +287,7 @@ const NewProfileViewer: React.FC = () => {
                             </button>
                         ))}
                     </div>
-                    <div>
+                    <div className="Chat-Conatiner">
                         {renderContent()}
                     </div>
                 </div>
@@ -359,35 +359,9 @@ const NewProfileViewer: React.FC = () => {
                     </div>
                 </div>
             )}
-            <Modal
-                title="Settings"
-                visible={isSettingsModalVisible}
-                onCancel={handleSettingsModalCancel}
-                footer={null}
-            >
-                <div style={{ textAlign: "center" }}>
-                    <Button type="primary" danger onClick={handleLogout}>
-                        Logout
-                    </Button>
-                </div>
-            </Modal>
 
 
-            <Modal
-                title="Profile Info"
-                visible={isInfoModalVisible}
-                onCancel={handleInfoModalCancel}
-                footer={[
-                    <Button key="back" onClick={handleInfoModalCancel}>
-                        Cancel
-                    </Button>,
-                    <Button key="submit" type="primary" danger onClick={handleReport}>
-                        Report
-                    </Button>,
-                ]}
-            >
-                <p>Are you sure you want to report this profile?</p>
-            </Modal>
+
         </div>
     );
 };

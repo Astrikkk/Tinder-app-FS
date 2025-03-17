@@ -20,8 +20,11 @@ const Chats: React.FC<ChatsProps> = ({ userChats, activeChat, openChat }) => {
                         {userChats.map((chat, index) => (
                             <button
                                 key={`${chat.chatRoom}-${index}`}
-                                className={`Chat-Item ${activeChat?.chatRoom === chat.chatRoom ? "active" : ""}`}
-                                onClick={() => openChat(chat)}
+                                className={`Chat-Item ${activeChat?.chatRoom === chat.chatRoom ? "selected" : ""}`}
+                                onClick={() => {
+                                    console.log("Chat clicked:", chat);
+                                    openChat(chat);
+                                }}
                             >
                                 <img
                                     className="Prifile-Image"
