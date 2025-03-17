@@ -28,6 +28,26 @@ export const ProfileInfoService = {
         await axios.delete(`${API_URL}/interests/${id}`);
     },
 
+
+    // Country
+    getCountries: async (): Promise<{ id: number; name: string }[]> => {
+        const response = await axios.get(`${API_URL}/country`);
+        return response.data;
+    },
+    createCountry: async (data: { name: string }): Promise<void> => {
+        await axios.post(`${API_URL}/country`, data, {
+            headers: { "Content-Type": "application/json" },
+        });
+    },
+    updateCountry: async (id: string, data: { name: string }): Promise<void> => {
+        await axios.put(`${API_URL}/country/${id}`, data, {
+            headers: { "Content-Type": "application/json" },
+        });
+    },
+    deleteCountry: async (id: string): Promise<void> => {
+        await axios.delete(`${API_URL}/country/${id}`);
+    },
+
     // Interested In
     getInterestedIn: async (): Promise<{ id: number; name: string }[]> => {
         const response = await axios.get(`${API_URL}/interestedIn`);

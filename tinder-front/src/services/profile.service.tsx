@@ -31,6 +31,13 @@ export interface Profile {
     userId: number;
     likedByUserIds: number[];
     matchedUserIds: number[];
+    location?:{
+        id: number;
+        name: string;
+    } ;
+    minAge?: number;
+    maxAge?: number;
+    showMe?: boolean;
 }
 
     export const ProfileService = {
@@ -104,5 +111,29 @@ export interface Profile {
     getReportedProfiles: async (): Promise<Profile[]> => {
         const response = await axios.get(`${API_URL}/reported`);
         return response.data;
+    },
+
+
+    updateSettings: async (id: string, settings: {
+        locationId?: number;
+        minAge?: number;
+        maxAge?: number;
+        showMe?: boolean;
+    }): Promise<void> => {
+        try {
+            const response = await axios.put(`${API_URL}/${id}/settings`, settings);
+            console.log("Settings updated successfully:", response.data);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error("Axios error response:", error.response?.data);
+                throw new Error(error.response?.data?.message || `Error: ${error.response?.statusText || "Unknown error"}`);
+            } else {
+                console.error("Unexpected error:", error);
+                throw new Error("An unexpected error occurred while updating settings.");
+            }
+        }
     }
-};
+
+
+
+    };

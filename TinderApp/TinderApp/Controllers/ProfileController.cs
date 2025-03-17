@@ -98,46 +98,11 @@ public class ProfileController : ControllerBase
     {
         try
         {
-            var userProfile = await _dbContext.Profiles
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.Gender)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.InterestedIn)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.LookingFor)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.SexualOrientation)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.Interests)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.ProfilePhotos)
-                .FirstOrDefaultAsync(p => p.UserId == userId);
-
-            if (userProfile == null)
+            var matches = await _profileService.GetUserMatchesAsync(userId);
+            if (!matches.Any())
             {
-                return NotFound(new { Message = $"User with ID {userId} not found." });
+                return NotFound(new { Message = $"No matches found for user with ID {userId}." });
             }
-
-            var matches = userProfile.Matches.Select(match => new ProfileDetailsDTO
-            {
-                Id = match.Id,
-                Name = match.Name,
-                BirthDay = match.BirthDay,
-                GenderId = match.Gender?.Id ?? 0,
-                GenderName = match.Gender?.Name,
-                InterestedInId = match.InterestedIn?.Id ?? 0,
-                InterestedInName = match.InterestedIn?.Name,
-                LookingForId = match.LookingFor?.Id ?? 0,
-                LookingForName = match.LookingFor?.Name,
-                SexualOrientationId = match.SexualOrientation?.Id ?? 0,
-                SexualOrientationName = match.SexualOrientation?.Name,
-                Interests = match.Interests.Select(i => i.Name).ToList(),
-                ProfilePhotoPaths = match.ProfilePhotos.Select(p => p.Path).ToList(),
-                IsReported = false,  // Assuming a default value since it's not included in the entity
-                LikedByUserIds = new List<int>(), // Adjust this if needed
-                MatchedUserIds = new List<int>()  // Adjust this if needed
-            }).ToList();
-
             return Ok(matches);
         }
         catch (Exception ex)
@@ -146,6 +111,11 @@ public class ProfileController : ControllerBase
         }
     }
 
-
+    [HttpPut("{userId}/settings")]
+    public async Task<IActionResult> UpdateSettings(int userId, [FromBody] ProfileSettingsRequest request)
+    {
+        var updated = await _profileService.UpdateSettings(userId, request);
+        return updated ? Ok("Settings updated successfully.") : NotFound("User profile not found.");
+    }
 
 }

@@ -202,8 +202,9 @@ namespace TinderApp.Services
             IQueryable<UserProfile> query = _dbContext.Profiles
                 .Include(p => p.Interests)
                 .Include(p => p.ProfilePhotos)
-                .Where(p => p.UserId != userId);
+                .Where(p => p.UserId != userId && p.ShowMe == true);
 
+            // Фільтр за статтю
             if (profile.InterestedInId == 1)
             {
                 query = query.Where(p => p.GenderId == 1);
@@ -213,12 +214,95 @@ namespace TinderApp.Services
                 query = query.Where(p => p.GenderId == 2);
             }
 
-            var profiles = await query
-                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            // Фільтр за локацією
+            if (profile.LocationId.HasValue)
+            {
+                query = query.Where(p => p.LocationId == profile.LocationId);
+            }
 
-            return profiles;
+            // Отримуємо профілі без фільтрації за віком
+            var profiles = await query.ToListAsync();
+
+            // Фільтрація за віком на стороні C#
+            var filteredProfiles = profiles
+                .Where(p => (!profile.MinAge.HasValue || CalculateAge(p.BirthDay.ToDateTime(TimeOnly.MinValue)) >= profile.MinAge)
+                         && (!profile.MaxAge.HasValue || CalculateAge(p.BirthDay.ToDateTime(TimeOnly.MinValue)) <= profile.MaxAge))
+                .ToList();
+
+            return _mapper.Map<List<ProfileItemDTO>>(filteredProfiles);
         }
+
+        // Функція підрахунку віку
+        private int CalculateAge(DateTime birthDate)
+        {
+            var today = DateTime.Today;
+            int age = today.Year - birthDate.Year;
+            if (birthDate.Date > today.AddYears(-age)) age--;
+            return age;
+        }
+
+
+
+
+        public async Task<List<ProfileDetailsDTO>> GetUserMatchesAsync(int userId)
+        {
+            var userProfile = await _dbContext.Profiles
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.Gender)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.InterestedIn)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.LookingFor)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.SexualOrientation)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.Interests)
+                .Include(p => p.Matches)
+                    .ThenInclude(m => m.ProfilePhotos)
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (userProfile == null)
+            {
+                return new List<ProfileDetailsDTO>(); // Порожній список, якщо користувач не знайдений
+            }
+
+            return userProfile.Matches.Select(match => new ProfileDetailsDTO
+            {
+                Id = match.Id,
+                Name = match.Name,
+                BirthDay = match.BirthDay,
+                GenderId = match.Gender?.Id ?? 0,
+                GenderName = match.Gender?.Name,
+                InterestedInId = match.InterestedIn?.Id ?? 0,
+                InterestedInName = match.InterestedIn?.Name,
+                LookingForId = match.LookingFor?.Id ?? 0,
+                LookingForName = match.LookingFor?.Name,
+                SexualOrientationId = match.SexualOrientation?.Id ?? 0,
+                SexualOrientationName = match.SexualOrientation?.Name,
+                Interests = match.Interests.Select(i => i.Name).ToList(),
+                ProfilePhotoPaths = match.ProfilePhotos.Select(p => p.Path).ToList(),
+                IsReported = false,
+                LikedByUserIds = new List<int>(), // Додай, якщо є логіка обробки
+                MatchedUserIds = new List<int>()  // Додай, якщо є логіка обробки
+            }).ToList();
+        }
+
+
+        public async Task<bool> UpdateSettings(int userId, ProfileSettingsRequest request)
+        {
+            var profile = await _dbContext.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
+            if (profile == null) return false;
+
+            profile.LocationId = request.LocationId;
+            profile.MinAge = request.MinAge;
+            profile.MaxAge = request.MaxAge;
+            profile.ShowMe = request.ShowMe;
+
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+
 
     }
 }

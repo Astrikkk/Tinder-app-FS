@@ -23,7 +23,9 @@ namespace TinderApp.Mapper
                 .ForMember(dto => dto.LikedByUserIds, opt => opt.MapFrom(profile => profile.LikedBy != null ? profile.LikedBy.Select(u => u.Id).ToList() : new List<int>()))
                 .ForMember(dto => dto.MatchedUserIds, opt => opt.MapFrom(profile => profile.Matches != null ? profile.Matches.Select(u => u.Id).ToList() : new List<int>()))
                 .ForMember(dto => dto.CreatedChats, opt => opt.MapFrom(profile => profile.User != null ? profile.User.CreatedChats.Select(chat => chat.ChatRoom).ToList() : new List<Guid>()))
-                .ForMember(dto => dto.ParticipatedChats, opt => opt.MapFrom(profile => profile.User != null ? profile.User.ParticipatedChats.Select(chat => chat.ChatRoom).ToList() : new List<Guid>()));
+                .ForMember(dto => dto.ParticipatedChats, opt => opt.MapFrom(profile => profile.User != null ? profile.User.ParticipatedChats.Select(chat => chat.ChatRoom).ToList() : new List<Guid>()))
+                .ForMember(dto => dto.Location, opt => opt.MapFrom(profile => profile.Location));
+
 
 
             CreateMap<ProfileCreateRequest, UserProfile>()

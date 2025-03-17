@@ -26,7 +26,14 @@ export interface ProfileItemDTO {
     photos: string[];
     userId: number;
     likedByUserIds: number[]; 
-    matchedUserIds: number[]; 
+    matchedUserIds: number[];
+    location?:{
+        id: number;
+        name: string;
+    } ;
+    minAge?: number;
+    maxAge?: number;
+    showMe?: boolean;
 }
 
 export interface ProfileCreateDTO {

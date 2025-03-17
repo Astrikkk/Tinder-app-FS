@@ -4,6 +4,10 @@
     {
         public string Name { get; set; }
     }
+    public class CountryDto
+    {
+        public string Name { get; set; }
+    }
     public class InterestsDto
     {
         public string Name { get; set; }
