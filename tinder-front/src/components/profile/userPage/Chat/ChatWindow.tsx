@@ -62,7 +62,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (isModalOpen && !document.getElementById("more-options")?.contains(event.target as Node)) {
-                setIsModalOpen(false);
+                //setIsModalOpen(false);
             }
         };
 
@@ -102,6 +102,31 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
     }, [connection, chat.chatRoom]);
 
 
+    const clearMessage = async () => {
+        console.log("Clear history clicked");
+        try {
+            await ChatService.clearChat(chat.chatRoom);
+            setLocalMessages([]);
+            await fetchChatInfo(); // Оновлюємо після очищення
+        } catch (error) {
+            console.error("Помилка очищення історії чату:", error);
+        }
+        setIsModalOpen(false);
+    };
+
+
+    const deleteChat = async () => {
+        console.log("Delete chat clicked");
+        try {
+            await ChatService.deleteChat(chat.chatRoom);
+            await fetchChatInfo(); // Оновлюємо історію
+            onClose();
+        } catch (error) {
+            console.error("Помилка видалення чату:", error);
+        }
+        setIsModalOpen(false);
+    };
+
     const handleSendMessage = async () => {
         if (message.trim() !== "") {
             await sendMessage(message);
@@ -128,10 +153,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
             {isModalOpen && (
                 <div className="More-Select">
                     <div className="More-chat-item">
-                        <div className="More-chat-item-text white"><img src={Clear}/>Clear history</div>
+                            <div onClick={clearMessage} className="More-chat-item-text white"><img src={Clear}/>Clear history</div>
                     </div>
                     <div className="More-chat-item">
-                        <div className="More-chat-item-text red"><img src={Delete}/>Delete chat</div>
+                        <div onClick={deleteChat} className="More-chat-item-text red"><img src={Delete}/>Delete chat</div>
                     </div>
                     <div className="More-chat-item">
                         <div className="More-chat-item-text red"><img src={Block}/>Block user</div>
@@ -167,7 +192,12 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
                         placeholder="Type a message..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                                e.preventDefault(); // Запобігає створенню нового рядка
+                                handleSendMessage();
+                            }
+                        }}
                     />
                 </div>
                 <div className="chat-form2">

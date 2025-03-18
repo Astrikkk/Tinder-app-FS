@@ -40,6 +40,27 @@ export const ChatService = {
         return response.data;
     },
 
+    deleteChat: async (key: string): Promise<void> => {
+        try {
+            await axios.delete(`${API_URL}/${key}`);
+            console.log(`Чат ${key} успішно видалено`);
+        } catch (error) {
+            console.error("Помилка видалення чату:", error);
+            throw new Error("Не вдалося видалити чат.");
+        }
+    },
+
+    clearChat: async (key: string): Promise<void> => {
+        try {
+            await axios.delete(`${API_URL}/${key}/clear`);
+            console.log(`Повідомлення в чаті ${key} успішно очищено`);
+        } catch (error) {
+            console.error("Помилка очищення чату:", error);
+            throw new Error("Не вдалося очистити чат.");
+        }
+    },
+
+
     // Ініціалізація підключення до SignalR
     initChatConnection: async (): Promise<HubConnection> => {
         try {
