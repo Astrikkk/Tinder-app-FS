@@ -56,17 +56,53 @@ namespace TinderApp.Controllers
         }
 
 
+        [HttpDelete("{chatKey}")]
+        public async Task<IActionResult> DeleteChat(string chatKey)
+        {
+            if (!Guid.TryParse(chatKey, out Guid chatRoomId))
+            {
+                return BadRequest("Невірний формат ключа чату.");
+            }
 
-        //public async Task<IActionResult> GetMessagesByChatKey(string chatKey)
-        //{
-        //    var chatRoom = await _dbContext.ChatKeys
-        //        .Include(p => p.ChatMessages)
-        //        .FirstOrDefaultAsync(p => p.ChatRoom == chatKey);
+            var chatRoom = await _dbContext.ChatKeys
+                .Include(c => c.ChatMessages)
+                .FirstOrDefaultAsync(c => c.ChatRoom == chatRoomId);
 
-        //    if (chatRoom == null)
-        //        return NotFound(new { Message = $"Profile with ChatRoom {chatKey} not found." });
+            if (chatRoom == null)
+            {
+                return NotFound("Чат не знайдено.");
+            }
 
-        //    return Ok(chatRoom);
-        //}
+            _dbContext.ChatMessages.RemoveRange(chatRoom.ChatMessages);
+            _dbContext.ChatKeys.Remove(chatRoom);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { Message = "Чат видалено успішно." });
+        }
+
+        [HttpDelete("{chatKey}/clear")]
+        public async Task<IActionResult> ClearChat(string chatKey)
+        {
+            if (!Guid.TryParse(chatKey, out Guid chatRoomId))
+            {
+                return BadRequest("Невірний формат ключа чату.");
+            }
+
+            var chatRoom = await _dbContext.ChatKeys
+                .Include(c => c.ChatMessages)
+                .FirstOrDefaultAsync(c => c.ChatRoom == chatRoomId);
+
+            if (chatRoom == null)
+            {
+                return NotFound("Чат не знайдено.");
+            }
+
+            _dbContext.ChatMessages.RemoveRange(chatRoom.ChatMessages);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { Message = "Повідомлення у чаті очищено." });
+        }
+
+
     }
 }
