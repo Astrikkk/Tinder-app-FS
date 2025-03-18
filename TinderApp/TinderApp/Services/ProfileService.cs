@@ -112,21 +112,42 @@ namespace TinderApp.Services
             if (likedUser == null || likedByUser == null)
                 return false;
 
-            if (!likedUser.LikedBy.Any(u => u.UserId == request.LikedByUserId))
-                likedUser.LikedBy.Add(likedByUser);
+             if (likedUser.LikedBy == null)
+            {
+                likedUser.LikedBy = new List<UserProfile>();
+            }
+            if (likedByUser.LikedBy == null)
+            {
+                likedByUser.LikedBy = new List<UserProfile>();
+            }
+            if (likedUser.Matches == null)
+            {
+                likedUser.Matches = new List<UserProfile>();
+            }
+            if (likedByUser.Matches == null)
+            {
+                likedByUser.Matches = new List<UserProfile>();
+            }
 
-            bool isMatch = likedUser.LikedBy.Any(u => u.UserId == request.LikedByUserId);
+            bool alreadyLiked = likedUser.LikedBy.Any(u => u.Id == request.LikedByUserId);
+            if (!alreadyLiked)
+            {
+                likedUser.LikedBy.Add(likedByUser);
+            }
+
+            bool isMatch = likedByUser.LikedBy.Any(u => u.UserId == request.LikedUserId);
             if (isMatch)
             {
                 likedUser.Matches.Add(likedByUser);
                 likedByUser.Matches.Add(likedUser);
                 likedUser.LikedBy.Remove(likedByUser);
-                likedByUser.LikedBy.Remove(likedUser);  
+                likedByUser.LikedBy.Remove(likedUser);
 
                 _dbContext.Attach(likedUser);
                 _dbContext.Attach(likedByUser);
                 await _dbContext.SaveChangesAsync();
 
+                // Створюємо приватний чат для нового матчу
                 var chatRoomId = Guid.NewGuid();
                 var newChat = new ChatKey
                 {
@@ -138,9 +159,14 @@ namespace TinderApp.Services
                 _dbContext.ChatKeys.Add(newChat);
                 await _dbContext.SaveChangesAsync();
 
+                // Повідомляємо користувачів про створення нового чату через SignalR
                 await _chatHub.Clients.User(request.LikedByUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
                 await _chatHub.Clients.User(request.LikedUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
             }
+
+            _dbContext.Attach(likedUser);
+            _dbContext.Attach(likedByUser);
+            await _dbContext.SaveChangesAsync();
 
             return isMatch;
         }
