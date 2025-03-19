@@ -29,6 +29,7 @@ import HowItWorks from "./components/default/HowitWorksComponent"
 import Page404 from "./components/pages/404Page";
 import SubscriptionTiers from "./components/default/SubscriptionTiersComponent";
 import ReportedList from "./components/profileInfo/reported/Content";
+import {setOffline, setOnline} from "./services/auth.service";
 
 
 const App: React.FC = () => {
@@ -54,6 +55,32 @@ const App: React.FC = () => {
 
         fetchRoles();
     }, []);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+
+        const resetTimer = () => {
+            clearTimeout(timer);
+            setOnline() // Відправляємо запит про активність
+            timer = setTimeout(() => {
+                console.log("User inactive for 2 minutes. Logging out...");
+                setOffline();
+            }, 60 * 1000);
+        };
+
+        ["mousemove", "keydown", "click", "scroll"].forEach((event) => {
+            window.addEventListener(event, resetTimer);
+        });
+
+        resetTimer();
+
+        return () => {
+            clearTimeout(timer);
+            ["mousemove", "keydown", "click", "scroll"].forEach((event) => {
+                window.removeEventListener(event, resetTimer);
+            });
+        };
+    }, [isAuthenticated]);
 
 
 

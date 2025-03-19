@@ -48,13 +48,10 @@ export const register = async (email: string, password: string): Promise<Registe
     return await parseJSON(response);
 };
 
-export const logout = async () => {
+export const setOffline = async () =>{
     try {
         const token = localStorage.getItem("token");
         const email = JwtService.getEmailFromToken(token);
-
-        console.log("Extracted email:", email); // Debugging log
-
         if (token && email) {
             const requestBody = JSON.stringify({ email });
             console.log("Request body:", requestBody); // Debugging log
@@ -74,6 +71,44 @@ export const logout = async () => {
             }
         }
 
+
+    }catch (error) {
+        console.error("Logout failed:", error);
+    }
+}
+
+export const setOnline = async () =>{
+    try {
+        const token = localStorage.getItem("token");
+        const email = JwtService.getEmailFromToken(token);
+        if (token && email) {
+            const requestBody = JSON.stringify({ email });
+            console.log("Request body:", requestBody);
+
+            const response = await fetch(`${API_BASE_URL}/online-status`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: requestBody,
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                console.error("Server error response:", errorResponse);
+            }
+        }
+
+
+    }catch (error) {
+        console.error("Logout failed:", error);
+    }
+}
+
+export const logout = async () => {
+    try {
+        setOffline();
         localStorage.removeItem("token"); // Remove token
     } catch (error) {
         console.error("Logout failed:", error);

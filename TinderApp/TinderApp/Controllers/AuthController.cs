@@ -87,6 +87,25 @@ public class AuthController : ControllerBase
         }
     }
 
+    [HttpPost("online-status")]
+    public async Task<IActionResult> OnlineStatus([FromBody] EmailRequest request)
+    {
+        try
+        {
+            if (request == null || string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest(new { Error = "Email is required." });
+            }
+
+            await _userStatusService.SetOnline(request.Email);
+            return Ok(new { Message = "Online status successfully" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Error = ex.Message });
+        }
+    }
+
 
     public class EmailRequest
     {
