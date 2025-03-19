@@ -36,6 +36,8 @@ namespace TinderApp.DTOs
         public int? MinAge { get; set; }
         public int? MaxAge { get; set; }
 
-        public bool? ShowMe { get; set; } = true;
+        public bool ShowMe { get; set; } = true;
+
+        public bool isOnline { get; set; } = false;
     }
 }

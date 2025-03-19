@@ -36,6 +36,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IUserStatusService, UserStatusService>();
 
 
 builder.Services.AddHttpClient<IGoogleAuthService, GoogleAuthService>();

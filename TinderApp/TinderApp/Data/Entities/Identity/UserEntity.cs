@@ -11,5 +11,6 @@ namespace TinderApp.Data.Entities.Identity
         public virtual ICollection<ChatKey>? ParticipatedChats { get; set; } = new List<ChatKey>();
         public virtual ICollection<ChatMessage>? ChatMessages { get; set; }
 
+        public bool IsOnline { get; set; } = false;
     }
 }

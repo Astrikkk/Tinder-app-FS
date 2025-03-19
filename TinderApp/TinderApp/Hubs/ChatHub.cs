@@ -20,7 +20,6 @@ namespace TinderApp.Hubs
 
         public async Task CreatePrivateChat(int creatorId, int participantId)
         {
-            // Перевіряємо, чи чат між цими користувачами вже існує
             var existingChat = await _dbContext.ChatKeys
                 .FirstOrDefaultAsync(c =>
                     (c.CreatorId == creatorId && c.ParticipantId == participantId) ||
@@ -32,7 +31,6 @@ namespace TinderApp.Hubs
                 return;
             }
 
-            // Генеруємо новий GUID для кімнати
             var chatRoomId = Guid.NewGuid();
             var newChat = new ChatKey
             {
@@ -44,25 +42,20 @@ namespace TinderApp.Hubs
             _dbContext.ChatKeys.Add(newChat);
             await _dbContext.SaveChangesAsync();
 
-            // Повідомляємо обох користувачів про новий чат
             await Clients.User(creatorId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
             await Clients.User(participantId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
         }
 
         public async Task JoinSpecificChatRoom(UserConnection conn)
         {
-            //Console.WriteLine($"User {conn.Username} joining room {conn.ChatRoom}");
 
             await Groups.AddToGroupAsync(Context.ConnectionId, conn.ChatRoom);
             _chatConnectionService.AddConnection(Context.ConnectionId, conn);
-
-            //await Clients.Group(conn.ChatRoom).SendAsync("ReceiveMessage", "admin", $"{conn.Username} has joined {conn.ChatRoom}");
         }
 
 
         public async Task SendMessage(string chatRoom, int senderId, string message)
         {
-            // Перевіряємо, чи існує чат з таким ChatRoom
             var chatKey = await _dbContext.ChatKeys.FirstOrDefaultAsync(c => c.ChatRoom.ToString() == chatRoom);
 
             if (chatKey == null)
@@ -71,21 +64,18 @@ namespace TinderApp.Hubs
                 return;
             }
 
-            // Створюємо об'єкт повідомлення
             var chatMessage = new ChatMessage
             {
                 Content = message,
                 SenderId = senderId,
-                ChatKeyId = chatKey.ChatRoom,  // GUID чату
+                ChatKeyId = chatKey.ChatRoom, 
                 Readed = false,
                 CreatedAt = DateTime.UtcNow
             };
 
-            // Додаємо в базу даних
             _dbContext.ChatMessages.Add(chatMessage);
             await _dbContext.SaveChangesAsync();
 
-            // Надсилаємо повідомлення всім учасникам чату
             await Clients.Group(chatRoom).SendAsync("ReceiveMessage", senderId, message);
         }
 

@@ -45,3 +45,25 @@ export const register = async (email: string, password: string): Promise<Registe
 
     return await parseJSON(response);
 };
+
+export const logout = async (email: string) => {
+    try {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            await fetch(`${API_BASE_URL}/offline-status`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ email }), // Передаємо email у тілі запиту
+            });
+        }
+
+        localStorage.removeItem("token"); // Видаляємо токен
+        console.error("Logout failed:", error);
+    }
+};
+
+

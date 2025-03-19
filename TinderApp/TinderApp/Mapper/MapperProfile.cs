@@ -15,7 +15,7 @@ namespace TinderApp.Mapper
                         : "/images/profiles/noimage.jpg"))
                 .ForMember(dto => dto.Gender, opt => opt.MapFrom(profile => profile.Gender))
                 .ForMember(dto => dto.LookingFor, opt => opt.MapFrom(profile => profile.LookingFor))
-                .ForMember(dto => dto.InterestedIn, opt => opt.MapFrom(profile => profile.InterestedIn))    
+                .ForMember(dto => dto.InterestedIn, opt => opt.MapFrom(profile => profile.InterestedIn))
                .ForMember(dto => dto.Interests, opt => opt.MapFrom(profile => profile.Interests
                 .Select(i => new InterestForProfileDTO { Id = i.Id, Name = i.Name }).ToList()))
                .ForMember(dto => dto.SexualOrientation, opt => opt.MapFrom(profile => profile.SexualOrientation))
@@ -24,7 +24,8 @@ namespace TinderApp.Mapper
                 .ForMember(dto => dto.MatchedUserIds, opt => opt.MapFrom(profile => profile.Matches != null ? profile.Matches.Select(u => u.Id).ToList() : new List<int>()))
                 .ForMember(dto => dto.CreatedChats, opt => opt.MapFrom(profile => profile.User != null ? profile.User.CreatedChats.Select(chat => chat.ChatRoom).ToList() : new List<Guid>()))
                 .ForMember(dto => dto.ParticipatedChats, opt => opt.MapFrom(profile => profile.User != null ? profile.User.ParticipatedChats.Select(chat => chat.ChatRoom).ToList() : new List<Guid>()))
-                .ForMember(dto => dto.Location, opt => opt.MapFrom(profile => profile.Location));
+                .ForMember(dto => dto.Location, opt => opt.MapFrom(profile => profile.Location))
+                .ForMember(dto => dto.isOnline, opt => opt.MapFrom(profile => profile.User.IsOnline));
 
 
 

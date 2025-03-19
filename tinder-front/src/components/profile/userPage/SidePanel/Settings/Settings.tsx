@@ -5,6 +5,7 @@ import "./Settings.css";
 import {ProfileInfoService} from "../../../../../services/profile.info.service";
 import {ProfileService} from "../../../../../services/profile.service";
 import {JwtService} from "../../../../../services/jwt.service";
+import {logout} from "../../../../../services/auth.service";
 
 export interface SettingsProfile {
     location?: {
@@ -45,7 +46,7 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
     const handleToggle = () => setIsToggled(!isToggled);
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
+
         navigate("/auth");
     };
 

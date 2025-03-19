@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TinderApp.DTOs;
 using TinderApp.Interfaces;
 using TinderApp.Services;
@@ -10,10 +11,13 @@ using TinderApp.Services;
 public class AuthController : ControllerBase
 {
     private readonly IAccountsService _accountsService;
+    private readonly IUserStatusService _userStatusService;
 
-    public AuthController(IAccountsService accountsService)
+
+    public AuthController(IAccountsService accountsService, IUserStatusService userStatusService)
     {
         _accountsService = accountsService;
+        _userStatusService = userStatusService;
     }
 
     [HttpPost("register")]
@@ -24,6 +28,7 @@ public class AuthController : ControllerBase
             await _accountsService.Register(model);
 
             var token = await _accountsService.Login(new LoginDTO { Email = model.Email, Password=model.Password });
+            await _userStatusService.SetOnline(model.Email);
             return Ok(new { Token = token });
         }
         catch (Exception ex)
@@ -38,6 +43,7 @@ public class AuthController : ControllerBase
         try
         {
             var token = await _accountsService.Login(model);
+            await _userStatusService.SetOnline(model.Email);
             return Ok(new { Token = token }); // Ensures proper casing for JSON response
         }
         catch (Exception ex)
@@ -53,11 +59,28 @@ public class AuthController : ControllerBase
         try
         {
             var token = await _accountsService.GoogleLoginAsync(model.Token);
+
             return Ok(new { Token = token });
         }
         catch (Exception ex)
         {
             return Unauthorized(new { Error = ex.Message });
+        }
+    }
+
+    [HttpPost("offline-status")]
+    public async Task<IActionResult> OfflineStatus(string email)
+    {
+        try
+        {
+
+            await _userStatusService.SetOffline(email); 
+
+            return Ok(new { Message = "Offline status successfully" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Error = ex.Message });
         }
     }
 
