@@ -10,7 +10,7 @@ interface LeftHeaderProps {
         imagePath: string;
         name: string;
     } | null;
-    selectedProfileId: number | null;
+    selectedProfileId: number;
     isSettingsOpen: boolean;
     isSecurityOpen: boolean;
     showSettingsModal: () => void;

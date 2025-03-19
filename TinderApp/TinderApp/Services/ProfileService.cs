@@ -48,7 +48,12 @@ namespace TinderApp.Services
             var profile = await _dbContext.Profiles
                 .Include(p => p.ProfilePhotos)
                 .Include(p => p.Interests)
-                .FirstOrDefaultAsync(p => p.UserId == id);
+                .Include(p => p.User)
+                    .ThenInclude(u => u.CreatedChats)
+                .Include(p => p.User)
+                    .ThenInclude(u => u.ParticipatedChats)
+                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(p => p.userId == id);
 
             return profile == null ? null : _mapper.Map<ProfileItemDTO>(profile);
         }

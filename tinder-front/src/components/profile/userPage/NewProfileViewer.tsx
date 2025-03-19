@@ -37,7 +37,7 @@ const NewProfileViewer: React.FC = () => {
     const [activeChat, setActiveChat] = useState<ChatDTO | null>(null);
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
     const [isInfoModalVisible, setIsInfoModalVisible] = useState(false); // State for Info modal
-    const [selectedProfileId, setSelectedProfileId] = useState<number | null>(null); // State for selected profile ID
+    const [selectedProfileId, setSelectedProfileId] = useState<number >(0); // State for selected profile ID
     const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomInfo| null>(null);
     const navigate = useNavigate();
 
@@ -82,7 +82,7 @@ const NewProfileViewer: React.FC = () => {
 
     useEffect(() => {
         if (profiles.length > 0) {
-            setSelectedProfileId(profiles[currentProfileIndex]?.userId || null);
+            setSelectedProfileId(profiles[currentProfileIndex]?.userId);
         }
     }, [currentProfileIndex, profiles]);
 

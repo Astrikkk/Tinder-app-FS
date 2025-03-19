@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {ProfileItemDTO} from "../components/profile/types";
 
 const API_URL = `${process.env.REACT_APP_API}/Profile`;
 
@@ -46,7 +47,7 @@ export interface Profile {
         return response.data;
     },
 
-    getProfileById: async (id: string): Promise<Profile> => {
+    getProfileById: async (id: string): Promise<ProfileItemDTO> => {
         const response = await axios.get(`${API_URL}/${id}`);
         return response.data;
     },

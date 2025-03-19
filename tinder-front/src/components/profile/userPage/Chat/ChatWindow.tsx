@@ -12,6 +12,8 @@ import OutlineLink from "./img/icon-park-outline_link.svg";
 import Fluent from "./img/fluent_gif-16-regular.svg";
 import { HubConnection } from "@microsoft/signalr";
 import {ChatService, MessageInfo} from "../../../../services/chat.service";
+import {ProfileService} from "../../../../services/profile.service";
+import ShowProfile from "./ShowProfile/ShowProfile";
 
 interface ChatDTO {
     chatRoom: string;
@@ -24,6 +26,7 @@ interface ChatWindowProps {
     sendMessage: (message: string) => void;
     connection: HubConnection | null;
     messages?: MessageInfo[]; // Отримуємо масив повідомлень з пропсів
+
 }
 
 
@@ -31,6 +34,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
     const [message, setMessage] = useState("");
     const [localMessages, setLocalMessages] = useState<MessageInfo[]>(messages || []);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [selectedProfile, setSelectedProfile] = useState<ProfileItemDTO | null>(null);
+
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
@@ -137,6 +144,15 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
         }
     };
 
+    const openProfile = async () => {
+        try {
+
+            setIsProfileOpen(true);
+        } catch (error) {
+            console.error("Помилка завантаження профілю:", error);
+        }
+    };
+
     return (
         <div className="chat-window">
             <div className="chat-header">
@@ -145,11 +161,16 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
                     <div className="header-status">♡ Offline</div>
                 </div>
                 <div className="header-settings">
-                    <button><img src={Img1} alt="settings" /></button>
+                    <button onClick={openProfile}><img src={Img1} alt="settings" /></button>
                     <button onClick={toggleModal}><img src={Img2} alt="options" /></button>
                     <button onClick={onClose}><img src={Img3} alt="close" /></button>
                 </div>
             </div>
+            {isProfileOpen && chat.profile && (
+                <ShowProfile profile={chat.profile} onClose={() => setIsProfileOpen(false)} />
+            )}
+
+
             {isModalOpen && (
                 <div className="More-Select">
                     <div className="More-chat-item">

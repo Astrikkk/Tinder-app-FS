@@ -173,3 +173,26 @@
     font-family: 'Akatab', sans-serif;
     font-weight: 400;
 }
+
+.photo-indicators {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    width: 90%;
+    gap: 4px;
+    z-index: 10; /* Додаємо, щоб індикатор був поверх фото */
+}
+
+.photo-indicator {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.5); /* Напівпрозорий білий */
+    transition: background 0.3s ease-in-out;
+}
+
+.photo-indicator.active {
+    background: white;
+}
+

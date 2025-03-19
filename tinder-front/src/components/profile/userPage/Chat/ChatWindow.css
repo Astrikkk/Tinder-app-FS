@@ -1,16 +1,18 @@
+
+
 /* Для WebKit-браузерів (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
-    width: 8px; /* Тонший скролбар */
+    width: 0px;
+    height: 0px;
+    display: none;
 }
 
-::-webkit-scrollbar-thumb {
-    background-color: #551111; /* Темний колір скролу */
-    border-radius: 10px;
+/* Для Firefox */
+* {
+    scrollbar-width: none;
 }
 
-::-webkit-scrollbar-track {
-    background-color: #200000; /* Темний фон треку */
-}
+
 
 
 

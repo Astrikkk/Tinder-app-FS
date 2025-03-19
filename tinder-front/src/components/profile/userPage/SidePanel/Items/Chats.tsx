@@ -28,7 +28,7 @@ const Chats: React.FC<ChatsProps> = ({ userChats, activeChat, openChat }) => {
                             >
                                 <img
                                     className="Prifile-Image"
-                                    src={`http://localhost:7034${chat.profile.imagePath}`}
+                                    src={`http://localhost:7034${chat.profile.photos[0]}`}
                                     alt="Chat Avatar"
                                 />
                                 <div className="Name-Messages">
