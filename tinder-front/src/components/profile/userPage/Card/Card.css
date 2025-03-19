@@ -146,8 +146,14 @@
     gap: 4px;
 }
 
-.card-status {
+.card-status-online {
     color: #86efac;
+    font-size: 18px;
+    font-family: 'Akatab', sans-serif;
+    font-weight: 400;
+}
+.card-status-offline {
+    color: #B1A4A4;
     font-size: 18px;
     font-family: 'Akatab', sans-serif;
     font-weight: 400;

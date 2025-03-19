@@ -5,10 +5,10 @@ import Group from "./img/Group.svg";
 import Dislike from "./img/icon_dislike.svg";
 import Star from "./img/icon_star-super-like.svg";
 import Message from "./img/icon_message.svg";
-import { ProfileItemDTO } from "../../types";
+import {Profile} from "../../../../services/profile.service";
 
 interface CardProps {
-    profile: ProfileItemDTO;
+    profile: Profile;
     onDislike: () => void;
     onLike: () => void;
     onInfoClick: (profileId: number) => void;
@@ -38,6 +38,7 @@ const Card: React.FC<CardProps> = ({ profile, onDislike, onLike, onInfoClick }) 
 
     useEffect(() => {
         setPhotoIndex(0);
+        console.log("is Online",profile)
     }, [profile]);
 
     useEffect(() => {
@@ -105,7 +106,9 @@ const Card: React.FC<CardProps> = ({ profile, onDislike, onLike, onInfoClick }) 
             </button>
 
             <div className="card-name-status">
-                <div className="card-status">♡ Online</div>
+                <div className={profile.isOnline ? "card-status-online" : "card-status-offline"}>
+                    {profile.isOnline ? "♡ Online" : "♡ Offline"}
+                </div>
                 <div className="card-name-age">
                     <div className="card-name">{profile.name}</div>
                     <div className="card-age">{calculateAge(profile.birthDay)}</div>

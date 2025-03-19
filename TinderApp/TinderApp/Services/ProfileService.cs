@@ -273,7 +273,15 @@ namespace TinderApp.Services
             }
 
             // Отримуємо профілі без фільтрації за віком
-            var profiles = await query.ToListAsync();
+            var profiles = await query
+                .Include(p => p.Gender)
+                .Include(p => p.LookingFor)
+                .Include(p => p.InterestedIn)
+                .Include(p => p.SexualOrientation)
+                .Include(p => p.ProfilePhotos)
+                .Include(p => p.Interests)
+                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
             // Фільтрація за віком на стороні C#
             var filteredProfiles = profiles

@@ -1,5 +1,6 @@
 import React from "react";
-import Heart from "../../img/♡.svg";
+import GreenHeart from "../../img/GreenHeart.svg";
+import GreyHeart from "../../img/GreyHeart.svg";
 import "../../ProfileViewer.css";
 import {ChatDTO} from "../../NewProfileViewer";
 
@@ -34,7 +35,10 @@ const Chats: React.FC<ChatsProps> = ({ userChats, activeChat, openChat }) => {
                                 <div className="Name-Messages">
                                     <div className="Name-Status">
                                         <div className="Profile-Text">{chat.profile.name}</div>
-                                        <img src={Heart} />
+                                        <img
+                                            src={chat.profile.isOnline ? GreenHeart : GreyHeart}
+                                            alt="Status Heart"
+                                        />
                                     </div>
                                     <div className="Friend-Message">Tap to start chatting...</div>
                                 </div>

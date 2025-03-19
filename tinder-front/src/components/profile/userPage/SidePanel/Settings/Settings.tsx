@@ -7,6 +7,7 @@ import {ProfileService} from "../../../../../services/profile.service";
 import {JwtService} from "../../../../../services/jwt.service";
 import {logout} from "../../../../../services/auth.service";
 
+
 export interface SettingsProfile {
     location?: {
         id: number;
@@ -46,7 +47,7 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
     const handleToggle = () => setIsToggled(!isToggled);
 
     const handleLogout = () => {
-
+        logout();
         navigate("/auth");
     };
 

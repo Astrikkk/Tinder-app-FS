@@ -34,6 +34,7 @@ export interface ProfileItemDTO {
     minAge?: number;
     maxAge?: number;
     showMe?: boolean;
+    isOnline: boolean;
 }
 
 export interface ProfileCreateDTO {

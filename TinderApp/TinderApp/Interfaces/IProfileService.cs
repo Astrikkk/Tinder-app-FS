@@ -13,7 +13,7 @@ namespace TinderApp.Interfaces
         Task<List<ChatDTO>> GetUserChats(int userId);
         Task<List<ProfileItemDTO>> GetAllReportedProfiles();
         Task<bool> ReportProfile(int profileId);
-        Task<List<ProfileItemDTO>> GetFilteredProfiles(int profileId);
+        Task<List<ProfileItemDTO>> GetFilteredProfiles(int userId);
         Task<List<ProfileDetailsDTO>> GetUserMatchesAsync(int userId);
         Task<bool> UpdateSettings(int userId, ProfileSettingsRequest request);
     }

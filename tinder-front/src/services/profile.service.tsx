@@ -39,6 +39,7 @@ export interface Profile {
     minAge?: number;
     maxAge?: number;
     showMe?: boolean;
+    isOnline: boolean;
 }
 
     export const ProfileService = {

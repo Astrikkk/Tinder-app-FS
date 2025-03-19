@@ -69,13 +69,16 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("offline-status")]
-    public async Task<IActionResult> OfflineStatus(string email)
+    public async Task<IActionResult> OfflineStatus([FromBody] EmailRequest request)
     {
         try
         {
+            if (request == null || string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest(new { Error = "Email is required." }); // Handle missing email
+            }
 
-            await _userStatusService.SetOffline(email); 
-
+            await _userStatusService.SetOffline(request.Email);
             return Ok(new { Message = "Offline status successfully" });
         }
         catch (Exception ex)
@@ -83,6 +86,13 @@ public class AuthController : ControllerBase
             return BadRequest(new { Error = ex.Message });
         }
     }
+
+
+    public class EmailRequest
+    {
+        public string Email { get; set; }
+    }
+
 
 
 

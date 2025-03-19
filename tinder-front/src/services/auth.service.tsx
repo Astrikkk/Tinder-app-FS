@@ -1,3 +1,5 @@
+import {JwtService} from "./jwt.service";
+
 const API_BASE_URL = process.env.REACT_APP_API + "/Auth";
 
 export interface LoginResponse {
@@ -46,24 +48,38 @@ export const register = async (email: string, password: string): Promise<Registe
     return await parseJSON(response);
 };
 
-export const logout = async (email: string) => {
+export const logout = async () => {
     try {
         const token = localStorage.getItem("token");
+        const email = JwtService.getEmailFromToken(token);
 
-        if (token) {
-            await fetch(`${API_BASE_URL}/offline-status`, {
+        console.log("Extracted email:", email); // Debugging log
+
+        if (token && email) {
+            const requestBody = JSON.stringify({ email });
+            console.log("Request body:", requestBody); // Debugging log
+
+            const response = await fetch(`${API_BASE_URL}/offline-status`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
+                    "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify({ email }), // Передаємо email у тілі запиту
+                body: requestBody, // Send JSON body
             });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                console.error("Server error response:", errorResponse);
+            }
         }
 
-        localStorage.removeItem("token"); // Видаляємо токен
+        localStorage.removeItem("token"); // Remove token
+    } catch (error) {
         console.error("Logout failed:", error);
     }
 };
+
+
 
 
