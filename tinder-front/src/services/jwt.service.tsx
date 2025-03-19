@@ -6,7 +6,7 @@ export const JwtService = {
 
         try {
             const decoded: any = jwtDecode(token);
-            console.log("Decoded token:", decoded);
+            //console.log("Decoded token:", decoded);
 
             return decoded.nameid || null; // Спробуйте використати 'sub'
         } catch (error) {
@@ -20,7 +20,7 @@ export const JwtService = {
 
         try {
             const decoded: any = jwtDecode(token);
-            console.log("Decoded token:", decoded);
+            //console.log("Decoded token:", decoded);
 
             return decoded.email || null; // Спробуйте використати 'sub'
         } catch (error) {
@@ -33,7 +33,7 @@ export const JwtService = {
 
         try {
             const decoded: any = jwtDecode(token);
-            console.log("Decoded token:", decoded);
+            //console.log("Decoded token:", decoded);
 
             return decoded.name || null; // Спробуйте використати 'sub'
         } catch (error) {

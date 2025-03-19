@@ -14,6 +14,7 @@ import { HubConnection } from "@microsoft/signalr";
 import {ChatService, MessageInfo} from "../../../../services/chat.service";
 import {ProfileService} from "../../../../services/profile.service";
 import ShowProfile from "./ShowProfile/ShowProfile";
+import {JwtService} from "../../../../services/jwt.service";
 
 interface ChatDTO {
     chatRoom: string;
@@ -135,6 +136,26 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
         setIsModalOpen(false);
     };
 
+    const blockUser = async ()=>{
+        try {
+            const token = localStorage.getItem("token");
+            const myUserId = JwtService.getUserIdFromToken(token);
+            if(myUserId)
+            {
+                await ProfileService.blockUser(myUserId ,chat.profile.userId.toString());
+            }
+            onClose();
+
+            console.log("BlockUser:", chat.profile.userId);
+        }
+        catch (error) {
+            console.error("Помилка блоку юзера:", error);
+        }
+        setIsModalOpen(false);
+    }
+
+
+
     const handleSendMessage = async () => {
         if (message.trim() !== "") {
             await sendMessage(message);
@@ -182,7 +203,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
                         <div onClick={deleteChat} className="More-chat-item-text red"><img src={Delete}/>Delete chat</div>
                     </div>
                     <div className="More-chat-item">
-                        <div className="More-chat-item-text red"><img src={Block}/>Block user</div>
+                        <div onClick={blockUser} className="More-chat-item-text red"><img src={Block}/>Block user</div>
                     </div>
                 </div>
             )}

@@ -134,8 +134,22 @@ export interface Profile {
                 throw new Error("An unexpected error occurred while updating settings.");
             }
         }
-    }
+    },
 
+    blockUser: async (ourUserId: string, toBlockUserId: string): Promise<void> => {
+        try {
+            const response = await axios.put(`${API_URL}/block/${ourUserId}/${toBlockUserId}`);
+            console.log("User blocked successfully:", response.data);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error("Axios error response:", error.response?.data);
+                throw new Error(error.response?.data?.message || `Error: ${error.response?.statusText || "Unknown error"}`);
+            } else {
+                console.error("Unexpected error:", error);
+                throw new Error("An unexpected error occurred while blocking the user.");
+            }
+        }
+    },
 
 
     };

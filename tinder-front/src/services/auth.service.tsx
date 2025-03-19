@@ -54,7 +54,6 @@ export const setOffline = async () =>{
         const email = JwtService.getEmailFromToken(token);
         if (token && email) {
             const requestBody = JSON.stringify({ email });
-            console.log("Request body:", requestBody); // Debugging log
 
             const response = await fetch(`${API_BASE_URL}/offline-status`, {
                 method: "POST",
@@ -83,7 +82,6 @@ export const setOnline = async () =>{
         const email = JwtService.getEmailFromToken(token);
         if (token && email) {
             const requestBody = JSON.stringify({ email });
-            console.log("Request body:", requestBody);
 
             const response = await fetch(`${API_BASE_URL}/online-status`, {
                 method: "POST",

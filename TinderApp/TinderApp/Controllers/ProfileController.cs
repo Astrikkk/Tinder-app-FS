@@ -118,7 +118,7 @@ public class ProfileController : ControllerBase
         return updated ? Ok("Settings updated successfully.") : NotFound("User profile not found.");
     }
 
-    [HttpPut("/block/{ourUserId}/{ToBlockUser}")]
+    [HttpPut("block/{ourUserId}/{ToBlockUser}")]
     public async Task<IActionResult> BlockUser(int ourUserId, int ToBlockUser)
     {
         try
