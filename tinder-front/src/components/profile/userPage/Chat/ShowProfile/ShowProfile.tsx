@@ -105,7 +105,9 @@ const ShowProfile: React.FC<ShowProfileProps> = ({ profile, onClose }) => {
                         <div className="BG-color-Gradient"></div>
                         <div className="Full-Info">
                             <div className="Name-status">
-                                <div className="online-status">♡ Online</div>
+                                <div className={profile.isOnline ? "card-status-online" : "card-status-offline"}>
+                                    {profile.isOnline ? "♡ Online" : "♡ Offline"}
+                                </div>
                                 <div className="Name-age">
                                     <div className="Card-name">{profile.name}</div>
                                     <div className="Card-age">{calculateAge(profile.birthDay)}</div>

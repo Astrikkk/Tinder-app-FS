@@ -75,7 +75,7 @@ public class AuthController : ControllerBase
         {
             if (request == null || string.IsNullOrEmpty(request.Email))
             {
-                return BadRequest(new { Error = "Email is required." }); // Handle missing email
+                return BadRequest(new { Error = "Email is required." });
             }
 
             await _userStatusService.SetOffline(request.Email);

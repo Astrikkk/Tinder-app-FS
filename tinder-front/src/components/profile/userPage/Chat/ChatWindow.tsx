@@ -139,7 +139,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
             await sendMessage(message);
             setMessage("");
 
-            // Після надсилання повідомлення оновлюємо список повідомлень
             await fetchChatInfo();
         }
     };
@@ -158,7 +157,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
             <div className="chat-header">
                 <div className="header-info">
                     <div className="header-name">{chat.profile.name}</div>
-                    <div className="header-status">♡ Offline</div>
+                    <div className={chat.profile.isOnline ? "card-status-online" : "card-status-offline"}>
+                        {chat.profile.isOnline ? "♡ Online" : "♡ Offline"}
+                    </div>
                 </div>
                 <div className="header-settings">
                     <button onClick={openProfile}><img src={Img1} alt="settings" /></button>
