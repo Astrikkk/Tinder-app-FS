@@ -48,6 +48,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
         try {
             const data = await ChatService.getChatInfoByKey(chat.chatRoom);
             setLocalMessages(data.messages);
+            console.log(localMessages);
         } catch (error) {
             console.error("Error fetching chat info:", error);
         }
@@ -195,7 +196,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
             ) : (
                 <div className="chat-messages">
                     {localMessages.map((msg, index) => (
-                        <div key={index} className={`message ${msg.sender.id === chat.profile.id ? "mine" : "theirs"}`}>
+                        <div key={index} className={`message ${msg.sender.id === chat.profile.userId ? "mine" : "theirs"}`}>
                             {msg.content}
                         </div>
                     ))}

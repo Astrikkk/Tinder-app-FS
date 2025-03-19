@@ -120,9 +120,6 @@ const NewProfileViewer: React.FC = () => {
         }
     };
 
-
-
-
     const handleDislike = () => {
         console.log("Dislike triggered");
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
@@ -165,7 +162,6 @@ const NewProfileViewer: React.FC = () => {
         setSelectedProfileId(profileId);
         setIsInfoModalVisible(true);
     };
-
 
     const SetChats = async (userId: string) => {
         try {
@@ -239,7 +235,6 @@ const NewProfileViewer: React.FC = () => {
         setSelectedButton(buttonName);
     };
 
-
     const renderContent = () => {
         switch (selectedButton) {
             case "Matches":
@@ -252,7 +247,6 @@ const NewProfileViewer: React.FC = () => {
                 return null;
         }
     };
-
 
     return (
         <div className="custom-container">

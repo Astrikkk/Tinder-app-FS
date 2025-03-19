@@ -13,8 +13,6 @@ interface ShowProfileProps {
 const ShowProfile: React.FC<ShowProfileProps> = ({ profile, onClose }) => {
     const [photoIndex, setPhotoIndex] = useState(0);
 
-
-
     useEffect(() => {
         setPhotoIndex(0);
     }, [profile]);
