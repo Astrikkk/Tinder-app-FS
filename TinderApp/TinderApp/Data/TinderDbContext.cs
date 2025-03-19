@@ -160,6 +160,28 @@ namespace TinderApp.Data
                         j.ToTable("UserProfileLikes");
                     });
 
+            modelBuilder.Entity<UserProfile>()
+                .HasMany(p => p.BlockedUsers)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "UserProfileBlocks",
+                    j => j
+                        .HasOne<UserProfile>()
+                        .WithMany()
+                        .HasForeignKey("BlockedUserId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    j => j
+                        .HasOne<UserProfile>()
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    j =>
+                    {
+                        j.HasKey("UserProfileId", "BlockedUserId");
+                        j.ToTable("UserProfileBlocks");
+                    });
+
+
 
             modelBuilder.Entity<UserEntity>()
                 .HasMany(u => u.CreatedChats)

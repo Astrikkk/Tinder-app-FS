@@ -61,4 +61,6 @@ public class UserProfile
     public int? MaxAge { get; set; }
 
     public bool? ShowMe { get; set; } = true;
+
+    public virtual ICollection<UserProfile> BlockedUsers { get; set; } = new List<UserProfile>();
 }

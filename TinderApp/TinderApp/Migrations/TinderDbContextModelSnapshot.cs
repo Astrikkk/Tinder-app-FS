@@ -614,6 +614,21 @@ namespace TinderApp.Migrations
                     b.ToTable("Profiles");
                 });
 
+            modelBuilder.Entity("UserProfileBlocks", b =>
+                {
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("BlockedUserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserProfileId", "BlockedUserId");
+
+                    b.HasIndex("BlockedUserId");
+
+                    b.ToTable("UserProfileBlocks", (string)null);
+                });
+
             modelBuilder.Entity("UserProfileLikes", b =>
                 {
                     b.Property<int>("UserProfileId")
@@ -814,6 +829,21 @@ namespace TinderApp.Migrations
                     b.Navigation("SexualOrientation");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("UserProfileBlocks", b =>
+                {
+                    b.HasOne("UserProfile", null)
+                        .WithMany()
+                        .HasForeignKey("BlockedUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("UserProfile", null)
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("UserProfileLikes", b =>

@@ -54,7 +54,7 @@ export interface Profile {
     },
 
     getFilteredProfilesById: async (id: string): Promise<Profile[]> => {
-        const response = await axios.get(`${API_URL}/${id}/profiles`);
+        const response = await axios.get(`${API_URL}/${id}/FliteredProfiles`);
         return response.data;
     },
 

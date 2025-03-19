@@ -16,5 +16,6 @@ namespace TinderApp.Interfaces
         Task<List<ProfileItemDTO>> GetFilteredProfiles(int userId);
         Task<List<ProfileDetailsDTO>> GetUserMatchesAsync(int userId);
         Task<bool> UpdateSettings(int userId, ProfileSettingsRequest request);
+        Task<bool> BlockUser(int ourProfileId, int profileId);
     }
 }

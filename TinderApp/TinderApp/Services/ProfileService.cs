@@ -241,9 +241,27 @@ namespace TinderApp.Services
             return true;
         }
 
+        public async Task<bool> BlockUser(int ourProfileId ,int profileId)
+        {
+            var profile = await _dbContext.Profiles.FindAsync(profileId);
+            if (profile == null)
+                return false;
+
+            var ourProfile = await _dbContext.Profiles.FindAsync(ourProfileId);
+            if (ourProfile == null)
+                return false;
+
+
+            ourProfile.BlockedUsers.Add(profile);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<List<ProfileItemDTO>> GetFilteredProfiles(int userId)
         {
+            // Fetch current user's profile with BlockedUsers
             var profile = await _dbContext.Profiles
+                .Include(p => p.BlockedUsers)
                 .FirstOrDefaultAsync(p => p.UserId == userId);
 
             if (profile == null)
@@ -251,12 +269,20 @@ namespace TinderApp.Services
                 return new List<ProfileItemDTO>();
             }
 
+            // Get IDs of users blocked by the current user
+            var blockedUserIds = profile.BlockedUsers.Select(b => b.UserId).ToList();
+
             IQueryable<UserProfile> query = _dbContext.Profiles
                 .Include(p => p.Interests)
                 .Include(p => p.ProfilePhotos)
-                .Where(p => p.UserId != userId && p.ShowMe == true);
+                .Where(p =>
+                    p.UserId != userId
+                    && p.ShowMe == true
+                    && !blockedUserIds.Contains(p.UserId) // Check against in-memory list
+                    && !p.BlockedUsers.Any(b => b.UserId == profile.UserId) // Subquery
+                );
 
-            // Фільтр за статтю
+            // Gender filter
             if (profile.InterestedInId == 1)
             {
                 query = query.Where(p => p.GenderId == 1);
@@ -266,13 +292,13 @@ namespace TinderApp.Services
                 query = query.Where(p => p.GenderId == 2);
             }
 
-            // Фільтр за локацією
+            // Location filter
             if (profile.LocationId.HasValue)
             {
                 query = query.Where(p => p.LocationId == profile.LocationId);
             }
 
-            // Отримуємо профілі без фільтрації за віком
+            // Retrieve profiles and map to DTO
             var profiles = await query
                 .Include(p => p.Gender)
                 .Include(p => p.LookingFor)
@@ -283,13 +309,13 @@ namespace TinderApp.Services
                 .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            // Фільтрація за віком на стороні C#
+            // Age filtering in-memory
             var filteredProfiles = profiles
                 .Where(p => (!profile.MinAge.HasValue || CalculateAge(p.BirthDay.ToDateTime(TimeOnly.MinValue)) >= profile.MinAge)
                          && (!profile.MaxAge.HasValue || CalculateAge(p.BirthDay.ToDateTime(TimeOnly.MinValue)) <= profile.MaxAge))
                 .ToList();
 
-            return _mapper.Map<List<ProfileItemDTO>>(filteredProfiles);
+            return filteredProfiles;
         }
 
         // Функція підрахунку віку
@@ -300,9 +326,6 @@ namespace TinderApp.Services
             if (birthDate.Date > today.AddYears(-age)) age--;
             return age;
         }
-
-
-
 
         public async Task<List<ProfileDetailsDTO>> GetUserMatchesAsync(int userId)
         {
@@ -361,8 +384,5 @@ namespace TinderApp.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
-
-
-
     }
 }

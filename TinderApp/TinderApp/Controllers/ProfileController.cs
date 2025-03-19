@@ -85,7 +85,7 @@ public class ProfileController : ControllerBase
         }
     }
 
-    [HttpGet("{id}/profiles")]
+    [HttpGet("{id}/FliteredProfiles")]
     public async Task<IActionResult> GetFilteredProfiles(int id)
     {
         var profiles = await _profileService.GetFilteredProfiles(id);
@@ -118,5 +118,18 @@ public class ProfileController : ControllerBase
         return updated ? Ok("Settings updated successfully.") : NotFound("User profile not found.");
     }
 
+    [HttpPut("/block/{ourUserId}/{ToBlockUser}")]
+    public async Task<IActionResult> BlockUser(int ourUserId, int ToBlockUser)
+    {
+        try
+        {
+            var chats = await _profileService.BlockUser(ourUserId, ToBlockUser);
+            return Ok(chats);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred while reporting the profile.", Details = ex.Message });
+        }
+    }
 }
 
