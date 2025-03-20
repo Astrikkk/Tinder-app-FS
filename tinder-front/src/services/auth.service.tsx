@@ -30,6 +30,8 @@ export const login = async (email: string, password: string): Promise<LoginRespo
         throw new Error(error.Error || "Login failed.");
     }
 
+    setOnline();
+
     return await parseJSON(response);
 };
 
@@ -44,6 +46,7 @@ export const register = async (email: string, password: string): Promise<Registe
         const error = await parseJSON(response);
         throw new Error(error.Error || "Registration failed.");
     }
+    setOnline();
 
     return await parseJSON(response);
 };

@@ -40,6 +40,9 @@ const NewProfileViewer: React.FC = () => {
     const [selectedProfileId, setSelectedProfileId] = useState<number >(0); // State for selected profile ID
     const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomInfo| null>(null);
     const navigate = useNavigate();
+    const [isMatch, setIsMatch] = useState(false);
+    const [isMatchHiding, setIsMatchHiding] = useState(false);
+
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isSecurityOpen, setIsSecurityOpen] = useState(false);
@@ -144,17 +147,30 @@ const NewProfileViewer: React.FC = () => {
             if (!myProfile || myProfile.id === 0) {
                 throw new Error("Logged-in user profile not found or invalid ID");
             }
-            console.log("id",myProfile.userId, currentProfile.userId);
 
-            await ProfileService.likeUser(currentProfile.userId, myProfile.userId);
+            console.log("id", myProfile.userId, currentProfile.userId);
+            const response = await ProfileService.likeUser(currentProfile.userId, myProfile.userId);
             console.log(`You liked ${currentProfile.name}`);
+            console.log("message", response.isMatch);
             message.success(`You liked ${currentProfile.name}`);
+
+            if (response.isMatch) {
+                setIsMatch(true);
+                setTimeout(() => {
+                    setIsMatchHiding(true);
+                    setTimeout(() => {
+                        setIsMatch(false);
+                        setIsMatchHiding(false);
+                    }, 500); // Час повинен відповідати анімації `match-hide`
+                }, 3000); // Час відображення перед зникненням
+            }
+
         } catch (error) {
             console.error("Error liking profile:", error);
             message.error("Failed to like the profile");
         }
-        SetChats(userId);
 
+        SetChats(userId);
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
 
@@ -345,6 +361,30 @@ const NewProfileViewer: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            {isMatch && (
+                <div className={`is-match ${isMatchHiding ? "hide" : ""}`}>
+                    <img
+                        className="Prifile-Image"
+                        src={`http://localhost:7034${myProfile?.photos[0]}`}
+                        alt="My Profile"
+                    />
+                    <div className="is-match-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" viewBox="0 0 23 24" fill="none">
+                            <path d="M7.18783 3.85416C4.27689 3.85416 1.91699 6.21406 1.91699 9.125C1.91699 14.3958 8.14616 19.1875 11.5003 20.302C14.8545 19.1875 21.0837 14.3958 21.0837 9.125C21.0837 6.21406 18.7238 3.85416 15.8128 3.85416C14.0303 3.85416 12.4539 4.73919 11.5003 6.09379C11.0142 5.40158 10.3685 4.83665 9.61785 4.44681C8.86719 4.05697 8.03368 3.85369 7.18783 3.85416Z" stroke="#FF4F4F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div className="is-match-text">It's a Match!</div>
+                    </div>
+                    <img
+                        className="Prifile-Image"
+                        src={`http://localhost:7034${profiles[currentProfileIndex]?.photos[0] || ""}`}
+                        alt="Liked Profile"
+                    />
+                </div>
+            )}
+
+
+
 
 
 

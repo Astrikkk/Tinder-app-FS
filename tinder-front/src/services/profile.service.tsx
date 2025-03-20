@@ -92,7 +92,7 @@ export interface Profile {
                 likedByUserId: likedByProfileId
             });
     
-            console.log("Like response:", response.data);
+            console.log("Like response:", response.data.isMatch);
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {

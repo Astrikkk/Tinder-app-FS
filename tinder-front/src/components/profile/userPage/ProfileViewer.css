@@ -343,3 +343,78 @@
     height: 94px;
     background: linear-gradient(90deg, #100607 44.1%, #BF0B2C 100%);
 }
+
+@keyframes match-show {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes match-hide {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+}
+
+.is-match{
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+    display: flex;
+    width: 389px;
+    height: 141px;
+    padding: 32px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+
+    border-radius: 12px;
+    border-top: 2px solid #FF4F4F;
+    border-bottom: 2px solid #FF4F4F;
+    background: #751123;
+
+    animation: match-show 0.5s ease-out;
+}
+
+.is-match.hide {
+    animation: match-hide 0.5s ease-out forwards;
+}
+
+.is-match-block{
+    display: flex;
+    width: 150px;
+    height: 77px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.is-match-text{
+    color: #FFF;
+    text-align: center;
+
+    /* Akatab-Bold-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: capitalize;
+    align-self: stretch;
+}

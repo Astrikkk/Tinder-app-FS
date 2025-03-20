@@ -315,3 +315,20 @@
 }
 
 
+
+.chat-star-img {
+    background-image: url("./img/Chat-star.svg");
+    background-size: 40%;
+    background-repeat: no-repeat;
+    background-position: top 330px right 25%;
+}
+
+.chat-rose-img {
+    background-image: url("./img/Chat-rose.svg");
+    background-size: 25%;
+    background-repeat: no-repeat;
+    background-position: top 130px right 50%;
+}
+
+
+

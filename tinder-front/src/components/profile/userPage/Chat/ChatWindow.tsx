@@ -4,6 +4,8 @@ import { ProfileItemDTO } from "../../types";
 import Img1 from "./img/Group.svg";
 import Img2 from "./img/Group (1).svg";
 import Img3 from "./img/Group (2).svg";
+import ChatStar from "./img/Chat-star.svg";
+import ChatRose from "./img/Chat-rose.svg";
 
 import Clear from "./img/Clear.svg";
 import Delete from "./img/Delete.svg";
@@ -173,9 +175,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
             console.error("Помилка завантаження профілю:", error);
         }
     };
-
+    const backgroundClass = localMessages.length === 0 ? "chat-star-img" : "chat-rose-img";
     return (
-        <div className="chat-window">
+        <div className={`chat-window ${backgroundClass}`}>
             <div className="chat-header">
                 <div className="header-info">
                     <div className="header-name">{chat.profile.name}</div>
@@ -215,7 +217,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
                     <img className="friend-photo" src={`http://localhost:7034${chat.profile.imagePath}`} alt="profile" />
                 </div>
             ) : (
-                <div className="chat-messages">
+                <div
+                    className="chat-messages"
+
+                >
                     {localMessages.map((msg, index) => (
                         <div key={index} className={`message ${msg.sender.id === chat.profile.userId ? "mine" : "theirs"}`}>
                             {msg.content}
