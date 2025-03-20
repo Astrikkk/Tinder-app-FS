@@ -99,6 +99,13 @@ public class ProfileController : ControllerBase
         return profiles != null ? Ok(profiles) : NotFound();
     }
 
+    [HttpGet("{id}/ProfilesByLookingFor")]
+    public async Task<IActionResult> GetProfilesByLookingFor(int id)
+    {
+        var profiles = await _profileService.GetProfilesByLookingFor(id);
+        return profiles != null ? Ok(profiles) : NotFound();
+    }
+
 
     [HttpGet("{userId}/matches")]
     public async Task<IActionResult> GetUserMatches(int userId)
@@ -124,10 +131,7 @@ public class ProfileController : ControllerBase
         try
         {
             var likes = await _profileService.GetUserLikesAsync(userId);
-            if (!likes.Any())
-            {
-                return NotFound(new { Message = $"No matches found for user with ID {userId}." });
-            }
+            
             return Ok(likes);
         }
         catch (Exception ex)
@@ -142,10 +146,7 @@ public class ProfileController : ControllerBase
         try
         {
             var likes = await _profileService.GetUserSuperLikesAsync(userId);
-            if (!likes.Any())
-            {
-                return NotFound(new { Message = $"No matches found for user with ID {userId}." });
-            }
+          
             return Ok(likes);
         }
         catch (Exception ex)

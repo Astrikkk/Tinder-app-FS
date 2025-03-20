@@ -4,8 +4,8 @@
     width: 414px;
     height: 803px;
     position: relative;
+    margin-left: -390px; /* Зміщення ліворуч */
 }
-
 .card-background {
     width: 414px;
     height: 803px;

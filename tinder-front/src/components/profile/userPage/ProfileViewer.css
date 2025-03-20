@@ -7,7 +7,6 @@
     height: 100vh;
     background: #100607;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 
@@ -102,6 +101,7 @@
 
     position: absolute;
     bottom: 3%;
+    left:35%;
 }
 .key{
     display: flex;
@@ -132,15 +132,18 @@
 }
 
 .bg-left{
-    width: 671px;
+
+    width: 671px; /* Ширина лівої панелі */
     height: 880px;
     flex-shrink: 0;
-    position: absolute;
-    left: 0;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     top: 38px;
+
+
+
 
 }
 
@@ -426,3 +429,12 @@
     left: 650px;
     z-index: 100;
 }
+.info-block {
+    flex-grow: 1; /* Займає доступний простір */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-left: 20px; /* Додає відступ для уникнення наїзду */
+}
+

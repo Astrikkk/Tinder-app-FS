@@ -345,6 +345,36 @@ namespace TinderApp.Services
             return filteredProfiles;
         }
 
+        private static readonly Dictionary<int, List<int>> lookingForMapping = new()
+        {
+            { 1, new List<int> { 1, 2, 3 } },
+            { 2, new List<int> { 2, 5 } },
+            { 3, new List<int> { 4, 5 } },
+            { 4, new List<int> { 5, 6 } }
+        };
+
+
+
+        public async Task<List<ProfileItemDTO>> GetProfilesByLookingFor(int id)
+        {
+            if (!lookingForMapping.ContainsKey(id))
+            {
+                return new List<ProfileItemDTO>(); // Якщо id не знайдено, повертаємо пустий список
+            }
+
+            var lookingForIds = lookingForMapping[id];
+
+            var profiles = await _dbContext.Profiles
+                .Where(p => lookingForIds.Contains(p.LookingFor.Id)) // Фільтрація профілів за `lookingFor.Id`
+                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return profiles;
+        }
+
+
+
+
         // Функція підрахунку віку
         private int CalculateAge(DateTime birthDate)
         {

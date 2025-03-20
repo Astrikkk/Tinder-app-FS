@@ -55,6 +55,8 @@ const NewProfileViewer: React.FC = () => {
 
     const [viewingMatches, setViewingMatches] = useState(false);
 
+    const [viewingCategoryProfiles, setViewingCategoryProfiles] = useState(false);
+
     useEffect(() => {
         const initialize = async () => {
             await fetchProfiles();
@@ -266,7 +268,7 @@ const NewProfileViewer: React.FC = () => {
             case "Chats":
                 return <Chats userChats={userChats} activeChat={activeChat} openChat={openChat} />;
             case "Explore":
-                return <Explore />;
+                return <Explore setProfiles={setProfiles} setCurrentProfileIndex={setCurrentProfileIndex} setViewingCategoryProfiles={setViewingCategoryProfiles} />;
             default:
                 return null;
         }
@@ -308,77 +310,79 @@ const NewProfileViewer: React.FC = () => {
                 <div className="gradient-right"></div>
             </div>
 
-            {loading ? (
-                <Spin size="large" />
-            ) : activeChat ? (
-                <ChatWindow
-                    chat={activeChat}
-                    onClose={() => setActiveChat(null)}
-                    sendMessage={sendMessage}
-                    connection={conn}
-                    messages={chatRoomInfo?.messages || []}
-                />
-            ) : profiles.length > 0 ? (
-                <>
-                    {viewingMatches && (
-                        <button onClick={handleBackToMainProfiles} className="back-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                                <path d="M4.34961 18H31.3496M4.34961 18L13.3496 27M4.34961 18L13.3496 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    )}
-                    <Card
-                        profile={profiles[currentProfileIndex]}
-                        onDislike={handleDislike}
-                        onLike={handleLike}
-                        onInfoClick={showInfoModal}
+            <div className="info-block">
+                {loading ? (
+                    <Spin size="large" />
+                ) : activeChat ? (
+                    <ChatWindow
+                        chat={activeChat}
+                        onClose={() => setActiveChat(null)}
+                        sendMessage={sendMessage}
+                        connection={conn}
+                        messages={chatRoomInfo?.messages || []}
                     />
-                </>
-            ) : (
-                <p>No profiles available</p>
-            )}
+                ) : profiles.length > 0 ? (
+                    <>
+                        {viewingMatches || viewingCategoryProfiles ? (
+                            <button onClick={handleBackToMainProfiles} className="back-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                                    <path d="M4.34961 18H31.3496M4.34961 18L13.3496 27M4.34961 18L13.3496 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        ):null}
+                        <Card
+                            profile={profiles[currentProfileIndex]}
+                            onDislike={handleDislike}
+                            onLike={handleLike}
+                            onInfoClick={showInfoModal}
+                        />
+                    </>
+                ) : (
+                    <p>No profiles available</p>
+                )}
+                {!activeChat && (
+                    <div className="keys">
+                        <div className="key">
+                            <div className="key-box">
+                                <img src={Nope} />
+                            </div>
+                            <span className="key-text">nope</span>
+                        </div>
+                        <div className="key">
+                            <div className="key-box">
+                                <img src={Like} />
+                            </div>
+                            <span className="key-text">super like</span>
+                        </div>
+                        <div className="key">
+                            <div className="key-box">
+                                <img src={Open} />
+                            </div>
+                            <span className="key-text">open profile</span>
+                        </div>
+                        <div className="key">
+                            <div className="key-box">
+                                <img src={Close} />
+                            </div>
+                            <span className="key-text">close profile</span>
+                        </div>
+                        <div className="key">
+                            <div className="key-box">
+                                <img src={SuperLike} />
+                            </div>
+                            <span className="key-text">super like</span>
+                        </div>
+                        <div className="key">
+                            <div className="key-box">
+                                <img src={NextPh} />
+                            </div>
+                            <span className="key-text">next photo</span>
+                        </div>
+                    </div>
+                )}
+            </div>
 
 
-            {!activeChat && (
-                <div className="keys">
-                    <div className="key">
-                        <div className="key-box">
-                            <img src={Nope} />
-                        </div>
-                        <span className="key-text">nope</span>
-                    </div>
-                    <div className="key">
-                        <div className="key-box">
-                            <img src={Like} />
-                        </div>
-                        <span className="key-text">super like</span>
-                    </div>
-                    <div className="key">
-                        <div className="key-box">
-                            <img src={Open} />
-                        </div>
-                        <span className="key-text">open profile</span>
-                    </div>
-                    <div className="key">
-                        <div className="key-box">
-                            <img src={Close} />
-                        </div>
-                        <span className="key-text">close profile</span>
-                    </div>
-                    <div className="key">
-                        <div className="key-box">
-                            <img src={SuperLike} />
-                        </div>
-                        <span className="key-text">super like</span>
-                    </div>
-                    <div className="key">
-                        <div className="key-box">
-                            <img src={NextPh} />
-                        </div>
-                        <span className="key-text">next photo</span>
-                    </div>
-                </div>
-            )}
 
             {isMatch && (
                 <div className={`is-match ${isMatchHiding ? "hide" : ""}`}>

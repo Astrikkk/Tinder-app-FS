@@ -1,0 +1,52 @@
+.Explore-Container{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.Explore-Title{
+    text-align: center;
+}
+.For-you-text{
+    color: #FFCC7E;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    align-self: stretch;
+}
+
+.Description-text{
+    color: #E1DFDF;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.Looking-For-Block {
+    padding: 15px;
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap; /* Дозволяє елементам переноситися на новий рядок */
+    justify-content: center; /* Вирівнює елементи по центру */
+    gap: 20px; /* Відступи між елементами (можеш змінити значення за потреби) */
+    width: 100%;
+}
+
+.Looking-For-Block > * {
+    cursor: pointer; /* Вказівник миші як у кнопки */
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.Looking-For-Block > *:hover {
+    transform: scale(1.05); /* Невелике збільшення */
+}
+
+
+
