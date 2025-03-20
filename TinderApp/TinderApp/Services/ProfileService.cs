@@ -248,21 +248,41 @@ namespace TinderApp.Services
             return true;
         }
 
-        public async Task<bool> BlockUser(int ourProfileId ,int profileId)
+        public async Task<bool> BlockUser(int ourUserId, int userIdToBlock)
         {
-            var profile = await _dbContext.Profiles.FindAsync(profileId);
-            if (profile == null)
+            var ourProfile = await _dbContext.Profiles
+                .Include(p => p.BlockedUsers)
+                .FirstOrDefaultAsync(p => p.UserId == ourUserId);
+
+            var profileToBlock = await _dbContext.Profiles
+                .FirstOrDefaultAsync(p => p.UserId == userIdToBlock);
+
+            if (ourProfile == null || profileToBlock == null)
                 return false;
 
-            var ourProfile = await _dbContext.Profiles.FindAsync(ourProfileId);
-            if (ourProfile == null)
-                return false;
+            var chatKey = await _dbContext.ChatKeys
+                .FirstOrDefaultAsync(c => (c.CreatorId == ourUserId && c.ParticipantId == userIdToBlock) ||
+                                          (c.CreatorId == userIdToBlock && c.ParticipantId == ourUserId));
 
+            if (chatKey != null)
+            {
+                var messages = await _dbContext.ChatMessages
+                    .Where(m => m.ChatKey.ChatRoom == chatKey.ChatRoom)
+                    .ToListAsync();
 
-            ourProfile.BlockedUsers.Add(profile);
+                _dbContext.ChatMessages.RemoveRange(messages);
+
+                _dbContext.ChatKeys.Remove(chatKey);
+            }
+            if (!ourProfile.BlockedUsers.Contains(profileToBlock))
+            {
+                ourProfile.BlockedUsers.Add(profileToBlock);
+            }
+
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
 
         public async Task<List<ProfileItemDTO>> GetFilteredProfiles(int userId)
         {
@@ -382,11 +402,35 @@ namespace TinderApp.Services
 
 
 
-        ///////////////////////////////////////////////////////////////Зробить///////////////////////////////////////////////////////////////////////////
         public async Task<List<ProfileItemDTO>> GetUserSuperLikesAsync(int userId)
         {
-            return null;
+            var profile = await _dbContext.Profiles
+                .Include(p => p.SuperLikedBy)
+                .ThenInclude(m => m.Gender)
+                .Include(p => p.SuperLikedBy)
+                .ThenInclude(m => m.InterestedIn)
+                .Include(p => p.SuperLikedBy)
+                .ThenInclude(m => m.LookingFor)
+                .Include(p => p.SuperLikedBy)
+                .ThenInclude(m => m.SexualOrientation)
+                .Include(p => p.SuperLikedBy)
+                .ThenInclude(m => m.Interests)
+                .Include(p => p.SuperLikedBy)
+                .ThenInclude(m => m.ProfilePhotos)
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (profile == null)
+            {
+                return new List<ProfileItemDTO>();
+            }
+
+            var superLikedByQuery = _dbContext.Profiles
+                .Where(p => profile.SuperLikedBy.Select(m => m.UserId).Contains(p.UserId))
+                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider);
+
+            return await superLikedByQuery.ToListAsync();
         }
+
 
         public async Task<bool> UpdateSettings(int userId, ProfileSettingsRequest request)
         {

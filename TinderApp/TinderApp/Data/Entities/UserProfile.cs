@@ -51,6 +51,7 @@ public class UserProfile
 
     public virtual ICollection<UserProfile> Matches { get; set; } = new List<UserProfile>();
     public virtual ICollection<UserProfile> LikedBy { get; set; } = new List<UserProfile>();
+    public virtual ICollection<UserProfile> SuperLikedBy { get; set; } = new List<UserProfile>();
 
 
     public int? LocationId { get; set; }
