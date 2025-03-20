@@ -177,6 +177,13 @@ namespace TinderApp.Services
         }
 
 
+        ///////////////////////////////////////////////////////////////Зробить///////////////////////////////////////////////////////////////////////////
+        public async Task<bool> SuperLikeProfile(LikeProfileRequest request)
+        {
+            return true;
+        }
+
+
         public async Task<bool> DeleteProfile(int id)
         {
             var entity = await _dbContext.Profiles
@@ -370,6 +377,56 @@ namespace TinderApp.Services
             }).ToList();
         }
 
+
+        public async Task<List<ProfileDetailsDTO>> GetUserLikesAsync(int userId)
+        {
+            var userProfile = await _dbContext.Profiles
+               .Include(p => p.LikedBy)
+                   .ThenInclude(m => m.Gender)
+               .Include(p => p.LikedBy)
+                   .ThenInclude(m => m.InterestedIn)
+               .Include(p => p.LikedBy)
+                   .ThenInclude(m => m.LookingFor)
+               .Include(p => p.LikedBy)
+                   .ThenInclude(m => m.SexualOrientation)
+               .Include(p => p.LikedBy)
+                   .ThenInclude(m => m.Interests)
+               .Include(p => p.LikedBy)
+                   .ThenInclude(m => m.ProfilePhotos)
+               .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (userProfile == null)
+            {
+                return new List<ProfileDetailsDTO>(); // Порожній список, якщо користувач не знайдений
+            }
+
+            return userProfile.LikedBy.Select(match => new ProfileDetailsDTO
+            {
+                Id = match.Id,
+                Name = match.Name,
+                BirthDay = match.BirthDay,
+                GenderId = match.Gender?.Id ?? 0,
+                GenderName = match.Gender?.Name,
+                InterestedInId = match.InterestedIn?.Id ?? 0,
+                InterestedInName = match.InterestedIn?.Name,
+                LookingForId = match.LookingFor?.Id ?? 0,
+                LookingForName = match.LookingFor?.Name,
+                SexualOrientationId = match.SexualOrientation?.Id ?? 0,
+                SexualOrientationName = match.SexualOrientation?.Name,
+                Interests = match.Interests.Select(i => i.Name).ToList(),
+                ProfilePhotoPaths = match.ProfilePhotos.Select(p => p.Path).ToList(),
+                IsReported = false,
+                LikedByUserIds = new List<int>(), // Додай, якщо є логіка обробки
+                MatchedUserIds = new List<int>()  // Додай, якщо є логіка обробки
+            }).ToList();
+        }
+
+
+        ///////////////////////////////////////////////////////////////Зробить///////////////////////////////////////////////////////////////////////////
+        public async Task<List<ProfileDetailsDTO>> GetUserSuperLikesAsync(int userId)
+        {
+            return null;
+        }
 
         public async Task<bool> UpdateSettings(int userId, ProfileSettingsRequest request)
         {

@@ -151,5 +151,14 @@ export interface Profile {
         }
     },
 
+    getUserLikes: async (userId: string): Promise<void> => {
+        const response = await axios.get(`${API_URL}/${userId}/likes`);
+        return response.data;
+    },
+    getUserSuperLikes: async (userId: string): Promise<void> => {
+        const response = await axios.get(`${API_URL}/${userId}/super-likes`);
+        return response.data;
+    }
+
 
     };

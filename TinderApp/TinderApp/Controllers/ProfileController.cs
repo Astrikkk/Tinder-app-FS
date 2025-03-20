@@ -46,6 +46,13 @@ public class ProfileController : ControllerBase
     public async Task<IActionResult> LikeProfile([FromBody] LikeProfileRequest request) =>
         Ok(new { IsMatch = await _profileService.LikeProfile(request) });
 
+
+    [HttpPut("super-like")]
+    public async Task<IActionResult> SuperLikeProfile([FromBody] LikeProfileRequest request)
+    {
+        return Ok();
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProfile(int id) =>
          Ok(await _profileService.DeleteProfile(id) ? "Profile deleted." : "Profile not found.");
@@ -104,6 +111,42 @@ public class ProfileController : ControllerBase
                 return NotFound(new { Message = $"No matches found for user with ID {userId}." });
             }
             return Ok(matches);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred while fetching user matches.", Details = ex.Message });
+        }
+    }
+
+    [HttpGet("{userId}/likes")]
+    public async Task<IActionResult> GetUserLikes(int userId)
+    {
+        try
+        {
+            var likes = await _profileService.GetUserLikesAsync(userId);
+            if (!likes.Any())
+            {
+                return NotFound(new { Message = $"No matches found for user with ID {userId}." });
+            }
+            return Ok(likes);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred while fetching user matches.", Details = ex.Message });
+        }
+    }
+
+    [HttpGet("{userId}/super-likes")]
+    public async Task<IActionResult> GetUserSuperLikes(int userId)
+    {
+        try
+        {
+            var likes = await _profileService.GetUserSuperLikesAsync(userId);
+            if (!likes.Any())
+            {
+                return NotFound(new { Message = $"No matches found for user with ID {userId}." });
+            }
+            return Ok(likes);
         }
         catch (Exception ex)
         {

@@ -38,7 +38,7 @@ html, body, #root {
     top: 45%;
 }
 
-.bow {
+.login-bow {
     position: absolute;
     right: 5%; /* Використовуємо відсотки для адаптивності */
     top: 13%;

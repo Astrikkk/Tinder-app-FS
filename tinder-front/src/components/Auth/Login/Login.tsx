@@ -57,7 +57,7 @@ const Login: React.FC = () => {
                 <div className="stars">
                     <img src={Stars} alt="stars"/>
                 </div>
-                <div className="bow">
+                <div className="login-bow">
                     <img src={Bow} alt="bow"/>
                 </div>
                 <div className="gradient-bar"/>
