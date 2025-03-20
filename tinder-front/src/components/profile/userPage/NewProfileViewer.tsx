@@ -53,6 +53,8 @@ const NewProfileViewer: React.FC = () => {
     const showSecurityModal = () => setIsSecurityOpen(true);
     const closeSecurityModal = () => setIsSecurityOpen(false);
 
+    const [viewingMatches, setViewingMatches] = useState(false);
+
     useEffect(() => {
         const initialize = async () => {
             await fetchProfiles();
@@ -109,6 +111,12 @@ const NewProfileViewer: React.FC = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleBackToMainProfiles = async () => {
+        setViewingMatches(false);
+        await fetchProfiles(); // Завантажуємо звичайні профілі
+        setCurrentProfileIndex(0);
     };
 
     const UpdateProfiles = async (userId:string)=>{
@@ -254,7 +262,7 @@ const NewProfileViewer: React.FC = () => {
     const renderContent = () => {
         switch (selectedButton) {
             case "Matches":
-                return <Matches />;
+                return <Matches setProfiles={setProfiles} setCurrentProfileIndex={setCurrentProfileIndex} setViewingMatches={setViewingMatches} />;
             case "Chats":
                 return <Chats userChats={userChats} activeChat={activeChat} openChat={openChat} />;
             case "Explore":
@@ -311,15 +319,25 @@ const NewProfileViewer: React.FC = () => {
                     messages={chatRoomInfo?.messages || []}
                 />
             ) : profiles.length > 0 ? (
-                <Card
-                    profile={profiles[currentProfileIndex]}
-                    onDislike={handleDislike}
-                    onLike={handleLike}
-                    onInfoClick={showInfoModal}
-                />
+                <>
+                    {viewingMatches && (
+                        <button onClick={handleBackToMainProfiles} className="back-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                                <path d="M4.34961 18H31.3496M4.34961 18L13.3496 27M4.34961 18L13.3496 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    )}
+                    <Card
+                        profile={profiles[currentProfileIndex]}
+                        onDislike={handleDislike}
+                        onLike={handleLike}
+                        onInfoClick={showInfoModal}
+                    />
+                </>
             ) : (
                 <p>No profiles available</p>
             )}
+
 
             {!activeChat && (
                 <div className="keys">

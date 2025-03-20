@@ -334,96 +334,56 @@ namespace TinderApp.Services
             return age;
         }
 
-        public async Task<List<ProfileDetailsDTO>> GetUserMatchesAsync(int userId)
+        public async Task<List<ProfileItemDTO>> GetUserMatchesAsync(int userId)
         {
-            var userProfile = await _dbContext.Profiles
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.Gender)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.InterestedIn)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.LookingFor)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.SexualOrientation)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.Interests)
-                .Include(p => p.Matches)
-                    .ThenInclude(m => m.ProfilePhotos)
+            var profile = await _dbContext.Profiles
                 .FirstOrDefaultAsync(p => p.UserId == userId);
 
-            if (userProfile == null)
+            if (profile == null)
             {
-                return new List<ProfileDetailsDTO>(); // Порожній список, якщо користувач не знайдений
+                return new List<ProfileItemDTO>();
             }
 
-            return userProfile.Matches.Select(match => new ProfileDetailsDTO
-            {
-                Id = match.Id,
-                Name = match.Name,
-                BirthDay = match.BirthDay,
-                GenderId = match.Gender?.Id ?? 0,
-                GenderName = match.Gender?.Name,
-                InterestedInId = match.InterestedIn?.Id ?? 0,
-                InterestedInName = match.InterestedIn?.Name,
-                LookingForId = match.LookingFor?.Id ?? 0,
-                LookingForName = match.LookingFor?.Name,
-                SexualOrientationId = match.SexualOrientation?.Id ?? 0,
-                SexualOrientationName = match.SexualOrientation?.Name,
-                Interests = match.Interests.Select(i => i.Name).ToList(),
-                ProfilePhotoPaths = match.ProfilePhotos.Select(p => p.Path).ToList(),
-                IsReported = false,
-                LikedByUserIds = new List<int>(), // Додай, якщо є логіка обробки
-                MatchedUserIds = new List<int>()  // Додай, якщо є логіка обробки
-            }).ToList();
+            var matchesQuery = _dbContext.Profiles
+                .Where(p => profile.Matches.Select(m => m.UserId).Contains(p.UserId))
+                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider);
+
+            return await matchesQuery.ToListAsync();
         }
 
-
-        public async Task<List<ProfileDetailsDTO>> GetUserLikesAsync(int userId)
+        public async Task<List<ProfileItemDTO>> GetUserLikesAsync(int userId)
         {
-            var userProfile = await _dbContext.Profiles
-               .Include(p => p.LikedBy)
-                   .ThenInclude(m => m.Gender)
-               .Include(p => p.LikedBy)
-                   .ThenInclude(m => m.InterestedIn)
-               .Include(p => p.LikedBy)
-                   .ThenInclude(m => m.LookingFor)
-               .Include(p => p.LikedBy)
-                   .ThenInclude(m => m.SexualOrientation)
-               .Include(p => p.LikedBy)
-                   .ThenInclude(m => m.Interests)
-               .Include(p => p.LikedBy)
-                   .ThenInclude(m => m.ProfilePhotos)
-               .FirstOrDefaultAsync(p => p.UserId == userId);
+            var profile = await _dbContext.Profiles
+                .Include(p => p.LikedBy)
+                .ThenInclude(m => m.Gender)
+                .Include(p => p.LikedBy)
+                .ThenInclude(m => m.InterestedIn)
+                .Include(p => p.LikedBy)
+                .ThenInclude(m => m.LookingFor)
+                .Include(p => p.LikedBy)
+                .ThenInclude(m => m.SexualOrientation)
+                .Include(p => p.LikedBy)
+                .ThenInclude(m => m.Interests)
+                .Include(p => p.LikedBy)
+                .ThenInclude(m => m.ProfilePhotos)
+                .FirstOrDefaultAsync(p => p.UserId == userId);
 
-            if (userProfile == null)
+            if (profile == null)
             {
-                return new List<ProfileDetailsDTO>(); // Порожній список, якщо користувач не знайдений
+                return new List<ProfileItemDTO>();
             }
 
-            return userProfile.LikedBy.Select(match => new ProfileDetailsDTO
-            {
-                Id = match.Id,
-                Name = match.Name,
-                BirthDay = match.BirthDay,
-                GenderId = match.Gender?.Id ?? 0,
-                GenderName = match.Gender?.Name,
-                InterestedInId = match.InterestedIn?.Id ?? 0,
-                InterestedInName = match.InterestedIn?.Name,
-                LookingForId = match.LookingFor?.Id ?? 0,
-                LookingForName = match.LookingFor?.Name,
-                SexualOrientationId = match.SexualOrientation?.Id ?? 0,
-                SexualOrientationName = match.SexualOrientation?.Name,
-                Interests = match.Interests.Select(i => i.Name).ToList(),
-                ProfilePhotoPaths = match.ProfilePhotos.Select(p => p.Path).ToList(),
-                IsReported = false,
-                LikedByUserIds = new List<int>(), // Додай, якщо є логіка обробки
-                MatchedUserIds = new List<int>()  // Додай, якщо є логіка обробки
-            }).ToList();
+            var likedByQuery = _dbContext.Profiles
+                .Where(p => profile.LikedBy.Select(m => m.UserId).Contains(p.UserId))
+                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider);
+
+            return await likedByQuery.ToListAsync();
         }
+
 
 
         ///////////////////////////////////////////////////////////////Зробить///////////////////////////////////////////////////////////////////////////
-        public async Task<List<ProfileDetailsDTO>> GetUserSuperLikesAsync(int userId)
+        public async Task<List<ProfileItemDTO>> GetUserSuperLikesAsync(int userId)
         {
             return null;
         }

@@ -13,7 +13,7 @@
     z-index: 1000; /* Переконайтеся, що модальне вікно поверх інших елементів */
 }
 
-.custom-modal-content {
+    .custom-modal-content {
     border-radius: 12px;
     background-color: #320000; /* Темний колір для контенту */
     width: auto; /* Ширина модального вікна */

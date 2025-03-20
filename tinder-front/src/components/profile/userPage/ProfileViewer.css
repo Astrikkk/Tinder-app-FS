@@ -169,8 +169,8 @@
     flex-grow: 1; /* Другий елемент займає весь вільний простір */
     display: flex; /* Якщо всередині потрібне центрування */
 
-    justify-content: center;
-    align-items: center;
+    /*justify-content: center;*/
+    /*align-items: center;*/
 }
 
 .Chat-Conatiner {
@@ -417,4 +417,12 @@
     line-height: normal;
     text-transform: capitalize;
     align-self: stretch;
+}
+
+
+.back-button{
+    position: absolute;
+    top:70px;
+    left: 650px;
+    z-index: 100;
 }

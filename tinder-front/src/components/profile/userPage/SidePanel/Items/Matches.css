@@ -1,0 +1,50 @@
+.Match-Cards-Mini{
+    display: inline-flex;
+    gap: 16px;
+    padding: 20px;
+}
+
+.Match-Border {
+    width: 112px;
+    height: 137px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Match-Avatar {
+    width: 100px;
+    height: 120px;
+    border-radius: 12px;
+    object-fit: cover; /* Щоб зображення рівномірно займало всю область */
+    position: absolute;
+}
+
+.red-heart{
+    position: absolute;
+    top: 289px;
+}
+
+.Match-Text{
+
+    display: flex;
+    width: 85.806px;
+    height: 14.431px;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+
+
+    color: #FFF;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: capitalize;
+
+
+    position: absolute;
+    top: 185px;
+}

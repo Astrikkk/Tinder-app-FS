@@ -23,10 +23,7 @@ namespace TinderApp.Data
         public DbSet<Interest> Interests { get; set; }
         public DbSet<ChatKey> ChatKeys { get; set; }
         public DbSet<Country> Countries { get; set; }
-
         public DbSet<ChatMessage> ChatMessages { get; set; }
-
-
         public DbSet<ChatConnection> ChatConnections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,11 +52,6 @@ namespace TinderApp.Data
                 new Gender { Id = 2, Name = "Female" },
                 new Gender { Id = 3, Name = "Other" }
             );
-          //  modelBuilder.Entity<InterestedIn>().HasData(
-          //    new InterestedIn { Id = 1, Name = "Male" },
-          //    new InterestedIn { Id = 2, Name = "Female" },
-          //    new InterestedIn { Id = 3, Name = "Both" }
-          //);
 
             modelBuilder.Entity<InterestedIn>().HasData(
                 new Gender { Id = 1, Name = "Male" },
