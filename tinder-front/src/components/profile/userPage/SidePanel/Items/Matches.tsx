@@ -40,7 +40,7 @@ const Matches: React.FC<MatchesProps> = ({ setProfiles, setCurrentProfileIndex, 
         if(userId)
         {
             const data = await ProfileService.getUserSuperLikes(userId);
-            setSuperLikedBy(data || []);
+            setSuperLikedBy(data);
 
         }
     }

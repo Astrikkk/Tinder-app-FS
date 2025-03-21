@@ -164,10 +164,8 @@ export interface Profile {
         return response.data;
     },
     getUserSuperLikes: async (userId: string): Promise<Profile[]> => {
-        // const response = await axios.get(`${API_URL}/${userId}/super-likes`);
-        // return response.data;
-        return [];
+        const response = await axios.get(`${API_URL}/${userId}/super-likes`);
+        return response.data;
     }
-
 
     };
