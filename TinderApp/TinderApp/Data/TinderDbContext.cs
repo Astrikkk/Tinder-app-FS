@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 using TinderApp.Data.Entities;
@@ -17,6 +18,7 @@ namespace TinderApp.Data
         public DbSet<UserProfile> Profiles { get; set; }
         public DbSet<ProfilePhoto> ProfilePhotos { get; set; }
         public DbSet<Gender> Genders { get; set; }
+        public DbSet<JobPosition> JobPosition { get; set; }
         public DbSet<InterestedIn> InterestedInOptions { get; set; }
         public DbSet<LookingFor> LookingForOptions { get; set; }
         public DbSet<SexualOrientation> SexualOrientations { get; set; }
@@ -213,6 +215,12 @@ namespace TinderApp.Data
             modelBuilder.Entity<ChatKey>()
                 .HasIndex(c => new { c.CreatorId, c.ParticipantId })
                 .IsUnique();
+
+            modelBuilder.Entity<UserProfile>()
+                    .HasOne(p => p.JobPosition)
+                    .WithMany(j => j.UserProfiles)
+                    .HasForeignKey(p => p.JobPositionId);
+
 
 
         }

@@ -446,6 +446,23 @@ namespace TinderApp.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TinderApp.Data.Entities.ProfileProp.JobPosition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobPosition");
+                });
+
             modelBuilder.Entity("TinderApp.Data.Entities.ProfileProp.LookingFor", b =>
                 {
                     b.Property<int>("Id")
@@ -570,6 +587,9 @@ namespace TinderApp.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<int?>("JobPositionId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("LocationId")
                         .HasColumnType("integer");
 
@@ -587,6 +607,10 @@ namespace TinderApp.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<string>("ProfileDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.Property<int>("SexualOrientationId")
                         .HasColumnType("integer");
 
@@ -601,6 +625,8 @@ namespace TinderApp.Migrations
                     b.HasIndex("GenderId");
 
                     b.HasIndex("InterestedInId");
+
+                    b.HasIndex("JobPositionId");
 
                     b.HasIndex("LocationId");
 
@@ -812,6 +838,10 @@ namespace TinderApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TinderApp.Data.Entities.ProfileProp.JobPosition", "JobPosition")
+                        .WithMany("UserProfiles")
+                        .HasForeignKey("JobPositionId");
+
                     b.HasOne("TinderApp.Data.Entities.ProfileProp.Country", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId");
@@ -836,6 +866,8 @@ namespace TinderApp.Migrations
                     b.Navigation("Gender");
 
                     b.Navigation("InterestedIn");
+
+                    b.Navigation("JobPosition");
 
                     b.Navigation("Location");
 
@@ -946,6 +978,11 @@ namespace TinderApp.Migrations
                     b.Navigation("Profile");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("TinderApp.Data.Entities.ProfileProp.JobPosition", b =>
+                {
+                    b.Navigation("UserProfiles");
                 });
 
             modelBuilder.Entity("UserProfile", b =>

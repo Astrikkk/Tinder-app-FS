@@ -16,6 +16,7 @@ namespace TinderApp.DTOs
         public string Name { get; set; }
         public string ImagePath { get; set; } = string.Empty;
         public Gender Gender { get; set; }
+        public JobPosition JobPosition { get; set; }
         public LookingFor LookingFor{ get; set; }
         public InterestedIn InterestedIn{ get; set; }
         public SexualOrientation SexualOrientation { get; set; }
@@ -37,5 +38,7 @@ namespace TinderApp.DTOs
         public int? MaxAge { get; set; }
         public bool ShowMe { get; set; } = true;
         public bool isOnline { get; set; } = false;
+        public string ProfileDescription { get; set; }
+
     }
 }
