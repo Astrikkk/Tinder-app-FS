@@ -355,8 +355,45 @@ namespace TinderApp.Services
 
 
 
-        public async Task<List<ProfileItemDTO>> GetProfilesByLookingFor(int id)
+        public async Task<List<ProfileItemDTO>> GetProfilesByLookingFor(int id, int userId)
         {
+
+            var profile = await _dbContext.Profiles
+                .Include(p => p.BlockedUsers)
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            var blockedUserIds = profile.BlockedUsers.Select(b => b.UserId).ToList();
+
+            IQueryable<UserProfile> query = _dbContext.Profiles
+                .Include(p => p.Interests)
+                .Include(p => p.ProfilePhotos)
+                .Where(p =>
+                    p.UserId != userId
+                    && p.ShowMe == true
+                    && !blockedUserIds.Contains(p.UserId) // Check against in-memory list
+                    && !p.BlockedUsers.Any(b => b.UserId == profile.UserId) // Subquery
+                );
+
+            if (profile.InterestedInId == 1)
+            {
+                query = query.Where(p => p.GenderId == 1);
+            }
+            else if (profile.InterestedInId == 2)
+            {
+                query = query.Where(p => p.GenderId == 2);
+            }
+
+            var profiles = await query
+                .Include(p => p.Gender)
+                .Include(p => p.LookingFor)
+                .Include(p => p.InterestedIn)
+                .Include(p => p.SexualOrientation)
+                .Include(p => p.ProfilePhotos)
+                .Include(p => p.Interests)
+                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+
             if (!lookingForMapping.ContainsKey(id))
             {
                 return new List<ProfileItemDTO>(); // Якщо id не знайдено, повертаємо пустий список
@@ -364,12 +401,11 @@ namespace TinderApp.Services
 
             var lookingForIds = lookingForMapping[id];
 
-            var profiles = await _dbContext.Profiles
-                .Where(p => lookingForIds.Contains(p.LookingFor.Id)) // Фільтрація профілів за `lookingFor.Id`
-                .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var filteredProfiles = profiles
+                .Where(p => lookingForIds.Contains(p.LookingFor.Id)) 
+                .ToList();
 
-            return profiles;
+            return filteredProfiles;
         }
 
 

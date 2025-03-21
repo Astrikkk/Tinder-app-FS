@@ -99,10 +99,10 @@ public class ProfileController : ControllerBase
         return profiles != null ? Ok(profiles) : NotFound();
     }
 
-    [HttpGet("{id}/ProfilesByLookingFor")]
-    public async Task<IActionResult> GetProfilesByLookingFor(int id)
+    [HttpGet("{id}/{userId}/ProfilesByLookingFor")]
+    public async Task<IActionResult> GetProfilesByLookingFor(int id, int userId)
     {
-        var profiles = await _profileService.GetProfilesByLookingFor(id);
+        var profiles = await _profileService.GetProfilesByLookingFor(id, userId);
         return profiles != null ? Ok(profiles) : NotFound();
     }
 

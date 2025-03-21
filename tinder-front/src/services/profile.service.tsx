@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {ProfileItemDTO} from "../components/profile/types";
+import {JwtService} from "./jwt.service";
 
 const API_URL = `${process.env.REACT_APP_API}/Profile`;
 
@@ -59,7 +60,9 @@ export interface Profile {
     },
 
     getProfilesByLookingFor: async (id: string): Promise<Profile[]> => {
-        const response = await axios.get(`${API_URL}/${id}/ProfilesByLookingFor`);
+        const token = localStorage.getItem("token");
+        const userId = JwtService.getUserIdFromToken(token);
+        const response = await axios.get(`${API_URL}/${id}/${userId}/ProfilesByLookingFor`);
         return response.data;
     },
 
