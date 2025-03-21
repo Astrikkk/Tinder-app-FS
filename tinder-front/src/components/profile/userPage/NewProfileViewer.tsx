@@ -13,6 +13,7 @@ import SuperLike from "./img/keys/super-like.svg";
 import Open from "./img/keys/open.svg";
 import NextPh from "./img/keys/next.svg";
 import Sparkii from "./img/Sparkii.svg";
+import IsMatchImg from "./img/IsMatchImg.svg";
 import { JwtService } from "../../../services/jwt.service";
 import { useNavigate } from "react-router-dom";
 import {ChatRoomInfo, ChatService} from "../../../services/chat.service";
@@ -20,6 +21,7 @@ import Matches from "./SidePanel/Items/Matches";
 import Chats from "./SidePanel/Items/Chats";
 import Explore from "./SidePanel/Items/Explore";
 import LeftHeader from "./SidePanel/LeftHeader";
+
 
 export interface ChatDTO {
     chatRoom: string;
@@ -56,6 +58,9 @@ const NewProfileViewer: React.FC = () => {
     const [viewingMatches, setViewingMatches] = useState(false);
 
     const [viewingCategoryProfiles, setViewingCategoryProfiles] = useState(false);
+
+    const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | "">("");
+
 
     useEffect(() => {
         const initialize = async () => {
@@ -133,9 +138,14 @@ const NewProfileViewer: React.FC = () => {
         }
     };
 
+
     const handleDislike = () => {
         console.log("Dislike triggered");
-        setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
+        setSwipeDirection("left"); // Анімація вліво
+        setTimeout(() => {
+            setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
+            setSwipeDirection(""); // Скидання після анімації
+        }, 300); // Час відповідає CSS-анімації
     };
 
     const handleLike = async () => {
@@ -171,6 +181,57 @@ const NewProfileViewer: React.FC = () => {
                     setTimeout(() => {
                         setIsMatch(false);
                         setIsMatchHiding(false);
+                    }, 500);
+                }, 3000);
+            }
+
+        } catch (error) {
+            console.error("Error liking profile:", error);
+            message.error("Failed to like the profile");
+        }
+
+        SetChats(userId);
+        setSwipeDirection("right"); // Анімація вправо
+        setTimeout(() => {
+            setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
+            setSwipeDirection(""); // Скидання після анімації
+        }, 300);
+    };
+
+
+    const handleSuperLike = async () => {
+        const currentProfile = profiles[currentProfileIndex];
+        if (!currentProfile || currentProfile.id === 0) {
+            console.error("Invalid target profile:", currentProfile);
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+        let userId = JwtService.getUserIdFromToken(token);
+        if (!userId) {
+            console.error("User ID not found from token");
+            return;
+        }
+
+        try {
+            const myProfile = await ProfileService.getProfileById(userId);
+            if (!myProfile || myProfile.id === 0) {
+                throw new Error("Logged-in user profile not found or invalid ID");
+            }
+
+            console.log("id", myProfile.userId, currentProfile.userId);
+            const response = await ProfileService.superLikeUser(currentProfile.userId, myProfile.userId);
+            console.log(`You liked ${currentProfile.name}`);
+            console.log("message", response.isMatch);
+            message.success(`You super liked ${currentProfile.name}`);
+
+            if (response.isMatch) {
+                setIsMatch(true);
+                setTimeout(() => {
+                    setIsMatchHiding(true);
+                    setTimeout(() => {
+                        setIsMatch(false);
+                        setIsMatchHiding(false);
                     }, 500); // Час повинен відповідати анімації `match-hide`
                 }, 3000); // Час відображення перед зникненням
             }
@@ -183,6 +244,13 @@ const NewProfileViewer: React.FC = () => {
         SetChats(userId);
         setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
+
+    const handleReturn = () => {
+        setCurrentProfileIndex((prevIndex) =>
+            prevIndex > 0 ? prevIndex - 1 : prevIndex
+        );
+    };
+
 
     const showInfoModal = (profileId: number) => {
         setSelectedProfileId(profileId);
@@ -330,12 +398,18 @@ const NewProfileViewer: React.FC = () => {
                                 </svg>
                             </button>
                         ):null}
+                        <div className={swipeDirection === "left" ? "swipe-left" : swipeDirection === "right" ? "swipe-right" : ""}>
+
                         <Card
                             profile={profiles[currentProfileIndex]}
+                            onReturn={handleReturn}
                             onDislike={handleDislike}
                             onLike={handleLike}
+                            onSuperLike={handleSuperLike}
                             onInfoClick={showInfoModal}
-                        />
+                            />
+                        </div>
+
                     </>
                 ) : (
                     <p>No profiles available</p>
@@ -352,23 +426,18 @@ const NewProfileViewer: React.FC = () => {
                             <div className="key-box">
                                 <img src={Like} />
                             </div>
-                            <span className="key-text">super like</span>
+                            <span className="key-text">like</span>
                         </div>
-                        <div className="key">
-                            <div className="key-box">
-                                <img src={Open} />
-                            </div>
-                            <span className="key-text">open profile</span>
-                        </div>
+
                         <div className="key">
                             <div className="key-box">
                                 <img src={Close} />
                             </div>
-                            <span className="key-text">close profile</span>
+                            <span className="key-text">return</span>
                         </div>
                         <div className="key">
                             <div className="key-box">
-                                <img src={SuperLike} />
+                                <img src={Open} />
                             </div>
                             <span className="key-text">super like</span>
                         </div>
@@ -392,9 +461,7 @@ const NewProfileViewer: React.FC = () => {
                         alt="My Profile"
                     />
                     <div className="is-match-block">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" viewBox="0 0 23 24" fill="none">
-                            <path d="M7.18783 3.85416C4.27689 3.85416 1.91699 6.21406 1.91699 9.125C1.91699 14.3958 8.14616 19.1875 11.5003 20.302C14.8545 19.1875 21.0837 14.3958 21.0837 9.125C21.0837 6.21406 18.7238 3.85416 15.8128 3.85416C14.0303 3.85416 12.4539 4.73919 11.5003 6.09379C11.0142 5.40158 10.3685 4.83665 9.61785 4.44681C8.86719 4.05697 8.03368 3.85369 7.18783 3.85416Z" stroke="#FF4F4F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <img src={IsMatchImg}/>
                         <div className="is-match-text">It's a Match!</div>
                     </div>
                     <img

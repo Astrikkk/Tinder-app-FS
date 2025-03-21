@@ -113,6 +113,32 @@ export interface Profile {
         }
     },
 
+    superLikeUser: async (likedProfileId: number, likedByProfileId: number): Promise<{ message: string; isMatch: boolean }> => {
+        console.log("Sending like request with IDs:", { likedProfileId, likedByProfileId });
+
+        if (!likedProfileId || !likedByProfileId) {
+            throw new Error("Both likedProfileId and likedByProfileId are required.");
+        }
+
+        try {
+            const response = await axios.put(`${API_URL}/super-like`, {
+                likedUserId: likedProfileId,
+                likedByUserId: likedByProfileId
+            });
+
+            console.log("Like response:", response.data.isMatch);
+            return response.data;
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error("Axios error response:", error.response?.data);
+                throw new Error(error.response?.data?.message || `Error: ${error.response?.statusText || "Unknown error"}`);
+            } else {
+                console.error("Unexpected error:", error);
+                throw new Error("An unexpected error occurred while liking the user.");
+            }
+        }
+    },
+
     reportProfile: async (profileId: number): Promise<void> => {
         console.log("Reporting profile with ID:", profileId); // Debugging log
         await axios.post(`${API_URL}/${profileId}/report`);

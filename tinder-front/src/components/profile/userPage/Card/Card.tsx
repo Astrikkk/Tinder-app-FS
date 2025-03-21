@@ -4,13 +4,16 @@ import "./Card.css";
 import Group from "./img/Group.svg";
 import Dislike from "./img/icon_dislike.svg";
 import Star from "./img/icon_star-super-like.svg";
-import Message from "./img/icon_message.svg";
+import Like from "./img/icon_like.svg";
+import Return from "./img/Return.svg";
 import {Profile} from "../../../../services/profile.service";
 
 interface CardProps {
     profile: Profile;
+    onReturn: () => void;
     onDislike: () => void;
     onLike: () => void;
+    onSuperLike: () => void;
     onInfoClick: (profileId: number) => void;
 }
 
@@ -27,7 +30,7 @@ export const calculateAge = (birthDate: Date): number => {
     return age;
 };
 
-const Card: React.FC<CardProps> = ({ profile, onDislike, onLike, onInfoClick }) => {
+const Card: React.FC<CardProps> = ({ profile, onReturn, onDislike, onLike, onSuperLike, onInfoClick }) => {
     const [photoIndex, setPhotoIndex] = useState(0);
 
     const handleNextPhoto = () => {
@@ -43,9 +46,25 @@ const Card: React.FC<CardProps> = ({ profile, onDislike, onLike, onInfoClick }) 
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.code === "Space") {
-                event.preventDefault();
-                handleNextPhoto();
+            event.preventDefault();
+            switch (event.code) {
+                case "ArrowRight":
+                    onLike();
+                    break;
+                case "ArrowLeft":
+                    onDislike();
+                    break;
+                case "ArrowDown":
+                    onReturn();
+                    break;
+                case "ArrowUp":
+                    onSuperLike();
+                    break;
+                case "Space":
+                    handleNextPhoto();
+                    break;
+                default:
+                    break;
             }
         };
 
@@ -53,7 +72,9 @@ const Card: React.FC<CardProps> = ({ profile, onDislike, onLike, onInfoClick }) 
         return () => {
             window.removeEventListener("keydown", handleKeyPress);
         };
-    }, [profile.photos.length]);
+    }, [onLike, onDislike, onReturn, onSuperLike, profile.photos.length]);
+
+
 
     return (
         <div className="card">
@@ -80,16 +101,19 @@ const Card: React.FC<CardProps> = ({ profile, onDislike, onLike, onInfoClick }) 
             </div>
 
             <div className="card-buttons">
+                <button className="star-like" onClick={onReturn}>
+                    <img src={Return} alt="Return" />
+                </button>
                 <button className="dislike" onClick={onDislike}>
                     <img src={Dislike} alt="Dislike" />
                 </button>
 
-                <button className="star-like" onClick={onLike}>
-                    <img src={Star} alt="Super Like" />
+                <button className="star-like" >
+                    <img src={Star} alt="Super Like" onClick={onSuperLike}/>
                 </button>
 
-                <button className="message-button">
-                    <img src={Message} alt="Message" />
+                <button className="message-button" onClick={onLike}>
+                    <img src={Like} alt="Like" />
                 </button>
             </div>
 
