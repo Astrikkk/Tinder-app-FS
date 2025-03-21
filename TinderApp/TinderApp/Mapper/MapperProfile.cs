@@ -14,6 +14,7 @@ namespace TinderApp.Mapper
                         ? $"/images/profiles/{profile.ProfilePhotos.First(photo => photo.IsPrimary).Path}"
                         : "/images/profiles/noimage.jpg"))
                 .ForMember(dto => dto.Gender, opt => opt.MapFrom(profile => profile.Gender))
+                .ForMember(dest => dest.JobPosition, opt => opt.MapFrom(src => src.JobPosition))
                 .ForMember(dto => dto.LookingFor, opt => opt.MapFrom(profile => profile.LookingFor))
                 .ForMember(dto => dto.InterestedIn, opt => opt.MapFrom(profile => profile.InterestedIn))
                .ForMember(dto => dto.Interests, opt => opt.MapFrom(profile => profile.Interests
@@ -46,6 +47,7 @@ namespace TinderApp.Mapper
 
             CreateMap<UserProfile, ProfileDetailsDTO>()
                 .ForMember(dest => dest.GenderName, opt => opt.MapFrom(src => src.Gender.Name))
+                .ForMember(dest => dest.JobPositionName, opt => opt.MapFrom(src => src.JobPosition.Name))
                 .ForMember(dest => dest.ProfilePhotoPaths, opt => opt.MapFrom(src => src.ProfilePhotos.Select(p => $"/images/{p.Path}")));
         }
     }

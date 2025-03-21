@@ -9,7 +9,7 @@ namespace TinderApp.Interfaces
         Task<ProfileItemDTO?> GetProfile(int id);
         Task<int> CreateProfile(ProfileCreateRequest model);
         Task<bool> LikeProfile(LikeProfileRequest request);
-        Task<bool> SuperLikeProfile(LikeProfileRequest request); //Зробить
+        Task<bool> SuperLikeProfile(LikeProfileRequest request);
         Task<bool> DeleteProfile(int id);
         Task<List<ChatDTO>> GetUserChats(int userId);
         Task<List<ProfileItemDTO>> GetAllReportedProfiles();

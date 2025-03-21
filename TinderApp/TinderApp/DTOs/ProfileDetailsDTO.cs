@@ -4,8 +4,11 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string ProfileDescription { get; set; }
         public DateOnly? BirthDay { get; set; }
         public int GenderId { get; set; }
+        public int JobPositionId { get; set; }
+        public int JobPositionName { get; set; }
         public string GenderName { get; set; }
         public int InterestedInId { get; set; }
         public string InterestedInName { get; set; }

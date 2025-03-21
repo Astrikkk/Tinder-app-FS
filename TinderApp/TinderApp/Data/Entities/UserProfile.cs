@@ -64,4 +64,11 @@ public class UserProfile
     public bool? ShowMe { get; set; } = true;
 
     public virtual ICollection<UserProfile> BlockedUsers { get; set; } = new List<UserProfile>();
+
+
+    [ForeignKey(nameof(JobPosition))]
+    public int? JobPositionId { get; set; }
+    public virtual JobPosition? JobPosition { get; set; }
+    [MaxLength(500)]
+    public string? ProfileDescription { get; set; }
 }

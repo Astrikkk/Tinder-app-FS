@@ -50,8 +50,9 @@ public class ProfileController : ControllerBase
     [HttpPut("super-like")]
     public async Task<IActionResult> SuperLikeProfile([FromBody] LikeProfileRequest request)
     {
-        return Ok();
+        return Ok(new { IsMatch = await _profileService.SuperLikeProfile(request) });
     }
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProfile(int id) =>

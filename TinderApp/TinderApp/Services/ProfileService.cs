@@ -106,33 +106,26 @@ namespace TinderApp.Services
         {
             var likedUser = await _dbContext.Profiles
                 .Include(p => p.LikedBy)
+                .Include(p => p.SuperLikedBy)
                 .Include(p => p.Matches)
                 .FirstOrDefaultAsync(p => p.UserId == request.LikedUserId);
 
             var likedByUser = await _dbContext.Profiles
                 .Include(p => p.LikedBy)
+                .Include(p => p.SuperLikedBy)
                 .Include(p => p.Matches)
                 .FirstOrDefaultAsync(p => p.UserId == request.LikedByUserId);
 
             if (likedUser == null || likedByUser == null)
                 return false;
 
-             if (likedUser.LikedBy == null)
-            {
-                likedUser.LikedBy = new List<UserProfile>();
-            }
-            if (likedByUser.LikedBy == null)
-            {
-                likedByUser.LikedBy = new List<UserProfile>();
-            }
-            if (likedUser.Matches == null)
-            {
-                likedUser.Matches = new List<UserProfile>();
-            }
-            if (likedByUser.Matches == null)
-            {
-                likedByUser.Matches = new List<UserProfile>();
-            }
+            likedUser.LikedBy ??= new List<UserProfile>();
+            likedUser.SuperLikedBy ??= new List<UserProfile>();
+            likedUser.Matches ??= new List<UserProfile>();
+
+            likedByUser.LikedBy ??= new List<UserProfile>();
+            likedByUser.SuperLikedBy ??= new List<UserProfile>();
+            likedByUser.Matches ??= new List<UserProfile>();
 
             bool alreadyLiked = likedUser.LikedBy.Any(u => u.Id == request.LikedByUserId);
             if (!alreadyLiked)
@@ -140,19 +133,23 @@ namespace TinderApp.Services
                 likedUser.LikedBy.Add(likedByUser);
             }
 
-            bool isMatch = likedByUser.LikedBy.Any(u => u.UserId == request.LikedUserId);
+            bool isMatch = likedByUser.LikedBy.Any(u => u.UserId == request.LikedUserId)
+                        || likedByUser.SuperLikedBy.Any(u => u.UserId == request.LikedUserId);
+
             if (isMatch)
             {
                 likedUser.Matches.Add(likedByUser);
                 likedByUser.Matches.Add(likedUser);
+
                 likedUser.LikedBy.Remove(likedByUser);
                 likedByUser.LikedBy.Remove(likedUser);
+                likedUser.SuperLikedBy.Remove(likedByUser);
+                likedByUser.SuperLikedBy.Remove(likedUser);
 
                 _dbContext.Attach(likedUser);
                 _dbContext.Attach(likedByUser);
                 await _dbContext.SaveChangesAsync();
 
-                // Створюємо приватний чат для нового матчу
                 var chatRoomId = Guid.NewGuid();
                 var newChat = new ChatKey
                 {
@@ -164,7 +161,6 @@ namespace TinderApp.Services
                 _dbContext.ChatKeys.Add(newChat);
                 await _dbContext.SaveChangesAsync();
 
-                // Повідомляємо користувачів про створення нового чату через SignalR
                 await _chatHub.Clients.User(request.LikedByUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
                 await _chatHub.Clients.User(request.LikedUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
             }
@@ -176,12 +172,76 @@ namespace TinderApp.Services
             return isMatch;
         }
 
-
-        ///////////////////////////////////////////////////////////////Зробить///////////////////////////////////////////////////////////////////////////
         public async Task<bool> SuperLikeProfile(LikeProfileRequest request)
         {
-            return true;
+            var likedUser = await _dbContext.Profiles
+                .Include(p => p.LikedBy)
+                .Include(p => p.SuperLikedBy)
+                .Include(p => p.Matches)
+                .FirstOrDefaultAsync(p => p.UserId == request.LikedUserId);
+
+            var likedByUser = await _dbContext.Profiles
+                .Include(p => p.LikedBy)
+                .Include(p => p.SuperLikedBy)
+                .Include(p => p.Matches)
+                .FirstOrDefaultAsync(p => p.UserId == request.LikedByUserId);
+
+            if (likedUser == null || likedByUser == null)
+                return false;
+
+            likedUser.LikedBy ??= new List<UserProfile>();
+            likedUser.SuperLikedBy ??= new List<UserProfile>();
+            likedUser.Matches ??= new List<UserProfile>();
+
+            likedByUser.LikedBy ??= new List<UserProfile>();
+            likedByUser.SuperLikedBy ??= new List<UserProfile>();
+            likedByUser.Matches ??= new List<UserProfile>();
+
+            bool alreadySuperLiked = likedUser.SuperLikedBy.Any(u => u.Id == request.LikedByUserId);
+            if (!alreadySuperLiked)
+            {
+                likedUser.SuperLikedBy.Add(likedByUser);
+            }
+
+            bool isMatch = likedByUser.LikedBy.Any(u => u.UserId == request.LikedUserId)
+                        || likedByUser.SuperLikedBy.Any(u => u.UserId == request.LikedUserId);
+
+            if (isMatch)
+            {
+                likedUser.Matches.Add(likedByUser);
+                likedByUser.Matches.Add(likedUser);
+
+                likedUser.LikedBy.Remove(likedByUser);
+                likedByUser.LikedBy.Remove(likedUser);
+                likedUser.SuperLikedBy.Remove(likedByUser);
+                likedByUser.SuperLikedBy.Remove(likedUser);
+
+                _dbContext.Attach(likedUser);
+                _dbContext.Attach(likedByUser);
+                await _dbContext.SaveChangesAsync();
+
+                var chatRoomId = Guid.NewGuid();
+                var newChat = new ChatKey
+                {
+                    ChatRoom = chatRoomId,
+                    CreatorId = request.LikedByUserId,
+                    ParticipantId = request.LikedUserId
+                };
+
+                _dbContext.ChatKeys.Add(newChat);
+                await _dbContext.SaveChangesAsync();
+
+                await _chatHub.Clients.User(request.LikedByUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
+                await _chatHub.Clients.User(request.LikedUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
+            }
+
+            _dbContext.Attach(likedUser);
+            _dbContext.Attach(likedByUser);
+            await _dbContext.SaveChangesAsync();
+
+            return isMatch;
         }
+
 
 
         public async Task<bool> DeleteProfile(int id)
