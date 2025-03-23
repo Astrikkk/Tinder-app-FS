@@ -70,21 +70,27 @@
 }
 
 .Choose {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #320000; /* Видаляє фон кнопки */
-    border: none; /* Видаляє рамку кнопки */
-    padding: 0; /* Видаляє внутрішні відступи */
-    margin: 0; /* Видаляє зовнішні відступи */
-    cursor: pointer; /* Додає курсор-покажчик при наведенні */
-    text-align: left; /* Вирівнює текст по лівому краю */
-    font-family: inherit; /* Використовує шрифт батьківського елемента */
-    font-size: inherit; /* Використовує розмір шрифту батьківського елемента */
-    color: inherit; /* Використовує колір тексту батьківського елемента */
     position: relative;
-    z-index: 10;
+    width: 100%;
+}
 
+.Choose > div {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: #551E28;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: Akatab;
+    transition: background 0.3s ease;
+}
+
+.Choose > div:hover {
+    background: #BF0B2C;
 }
 
 .Choose-text {
@@ -263,7 +269,7 @@
 
 .dropdown {
     position: absolute;
-    top: 100%;
+    top: 110%;
     left: 0;
     width: 100%;
     max-height: 200px;
@@ -272,17 +278,29 @@
     border: 1px solid #FFCC7E;
     border-radius: 8px;
     z-index: 100;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.2s ease-in-out;
 }
 
 .dropdown-item {
-    padding: 10px 16px;
+    padding: 12px;
     cursor: pointer;
     color: #FFF;
     font-family: Akatab;
     font-size: 18px;
+    transition: background 0.3s ease;
 }
 
 .dropdown-item:hover {
     background: #551E28;
 }
-
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

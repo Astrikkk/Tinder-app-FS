@@ -21,6 +21,8 @@ const Register: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
+
+
     const handleRegister = async () => {
         if (password !== repeatPassword) {
             setErrorMessage("Passwords do not match.");

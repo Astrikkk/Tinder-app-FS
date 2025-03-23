@@ -314,25 +314,27 @@ const CreateForm: React.FC = () => {
 
             <div className="form-2-container absolute w-[400px] left-[367px] top-[1099px] flex flex-col gap-6">
                 {[
-                    {id: "relationship", label: "I'm looking for", placeholder: "+ Add a relationship goal"},
-                    {id: "interests", label: "Interests", placeholder: "+ Add interests"},
-                    {id: "orientation", label: "Sexual orientation", placeholder: "+ Add Sexual orientation"},
+                    { id: "relationship", label: "I'm looking for", placeholder: "+ Add a relationship goal", selected: selectedRelationship },
+                    { id: "interests", label: "Interests", placeholder: "+ Add interests", selected: selectedInterests.length > 0 },
+                    { id: "orientation", label: "Sexual orientation", placeholder: "+ Add Sexual orientation", selected: selectedSexualOrientation },
                 ].map((item) => (
                     <label key={item.id} className="form-label">
                         {item.label}
-                        <button className="btn-placeholder-form2" onClick={() => handleOpenModal(item.id)}>
-                            <span>{item.placeholder}</span>
+                        <button
+                            className={`btn-placeholder-form2 ${item.selected ? "bg-[#4A0000]" : ""}`}
+                            onClick={() => handleOpenModal(item.id)}
+                        >
+                            <span>{item.selected ? "✓ Selected" : item.placeholder}</span>
                         </button>
                     </label>
                 ))}
 
                 {/* Відображення модальних вікон */}
-                {openModal === "relationship" && <LookingFor onClose={handleRelationshipSelect}/>}
-
-                {openModal === "interests" && <Interests onClose={handleInterestsSelect}/> }
-
-                {openModal === "orientation" &&<SexualOrientation onClose={handleOrientationSelect}/>}
+                {openModal === "relationship" && <LookingFor onClose={handleRelationshipSelect} />}
+                {openModal === "interests" && <Interests onClose={handleInterestsSelect} />}
+                {openModal === "orientation" && <SexualOrientation onClose={handleOrientationSelect} />}
             </div>
+
 
             {/* Submit Button */}
             <button className="find-love-btn" onClick={handleSubmit}>

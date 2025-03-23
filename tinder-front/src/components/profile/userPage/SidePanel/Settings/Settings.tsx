@@ -3,20 +3,11 @@ import { useNavigate } from "react-router-dom";
 import Separator from "./img/Sepatator.svg";
 import "./Settings.css";
 import {ProfileInfoService} from "../../../../../services/profile.info.service";
-import {ProfileService} from "../../../../../services/profile.service";
+import {Profile, ProfileService} from "../../../../../services/profile.service";
 import {JwtService} from "../../../../../services/jwt.service";
 import {logout} from "../../../../../services/auth.service";
 
 
-export interface SettingsProfile {
-    location?: {
-        id: number;
-        name: string;
-    };
-    minAge?: number;
-    maxAge?: number;
-    showMe?: boolean;
-}
 
 interface SettingsProps {
     closeSettings: () => void;
@@ -30,11 +21,14 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
     const maxLimit = 60;
     const navigate = useNavigate();
 
+    const [profile, setProfile] = useState<Profile | null>(null);
+
     const [isOpen, setIsOpen] = useState(false);
     const [locations, setLocations] = useState<{ id: number; name: string }[]>([]);
     const [selectedLocation, setSelectedLocation] = useState<string>("My Current Location");
 
     useEffect(() => {
+        handleProfile();
         ProfileInfoService.getCountries()
             .then((countries) => {
                 setLocations(countries); // Використовуємо повернуті дані напряму
@@ -42,7 +36,41 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
             .catch((error) => {
                 console.error("Error fetching locations:", error);
             });
+
+
     }, []);
+
+    useEffect(() => {
+        if (profile) {
+            setSettings();
+        }
+    }, [profile]);
+
+    const handleProfile=async ()=>{
+        const token = localStorage.getItem("token");
+        const userId = JwtService.getUserIdFromToken(token);
+        if(userId)
+        {
+            const data = await ProfileService.getProfileById(userId);
+            setProfile(data);
+        }
+    }
+
+    const setSettings = () => {
+        if (profile?.location) {
+            setSelectedLocation(profile.location.name);
+        }
+        if (profile?.minAge != null) {
+            setMinAge(profile.minAge);
+        }
+        if (profile?.maxAge != null) {
+            setMaxAge(profile.maxAge);
+        }
+        if (profile?.showMe !== undefined) {
+            setIsToggled(profile.showMe); // Виправлено: тепер коректно оновлюється значення
+        }
+    };
+
 
     const handleToggle = () => setIsToggled(!isToggled);
 
@@ -85,25 +113,25 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
                 <div className="Settings-block">
                     <div className="Settings-text">Location</div>
                     <div className="Choose">
-                        <div className="bg-gray-200 p-3 rounded-lg cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
-                            <div className="flex justify-between items-center">
-                                <span>{selectedLocation}</span>
-                                <span className="text-lg">{isOpen ? "▲" : "▼"}</span>
-                            </div>
+                        <div onClick={() => setIsOpen(!isOpen)}>
+                            <span>{selectedLocation}</span>
+                            <span className="text-lg">{isOpen ? "▲" : "▼"}</span>
                         </div>
                         {isOpen && (
-                            <ul className="absolute w-full bg-white border rounded-lg mt-1 shadow-md">
+                            <ul className="dropdown">
                                 {locations.map((location) => (
-                                    <li key={location.id} className="p-2 hover:bg-gray-100 cursor-pointer" onClick={() => {
-                                        setSelectedLocation(location.name);
-                                        setIsOpen(false);
-                                    }}>
+                                    <li key={location.id} className="dropdown-item"
+                                        onClick={() => {
+                                            setSelectedLocation(location.name);
+                                            setIsOpen(false);
+                                        }}>
                                         {location.name}
                                     </li>
                                 ))}
                             </ul>
                         )}
                     </div>
+
                 </div>
             </div>
             <img src={Separator} alt="Separator" />
