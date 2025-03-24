@@ -11,6 +11,7 @@ using TinderApp.Data.Entities.ProfileProp;
 using TinderApp.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using TinderApp.Data.Entities.Chat;
+using System.Linq;
 
 namespace TinderApp.Services
 {
@@ -131,6 +132,7 @@ namespace TinderApp.Services
             if (!alreadyLiked)
             {
                 likedUser.LikedBy.Add(likedByUser);
+                likedByUser.LikedUsers.Add(likedUser);
             }
 
             bool isMatch = likedByUser.LikedBy.Any(u => u.UserId == request.LikedUserId)
@@ -145,6 +147,8 @@ namespace TinderApp.Services
                 likedByUser.LikedBy.Remove(likedUser);
                 likedUser.SuperLikedBy.Remove(likedByUser);
                 likedByUser.SuperLikedBy.Remove(likedUser);
+                likedUser.LikedUsers.Remove(likedByUser);
+                likedByUser.LikedUsers.Remove(likedUser);
 
                 _dbContext.Attach(likedUser);
                 _dbContext.Attach(likedByUser);
@@ -200,6 +204,7 @@ namespace TinderApp.Services
             bool alreadySuperLiked = likedUser.SuperLikedBy.Any(u => u.Id == request.LikedByUserId);
             if (!alreadySuperLiked)
             {
+                likedByUser.LikedUsers.Add(likedUser);
                 likedUser.SuperLikedBy.Add(likedByUser);
             }
 
@@ -215,6 +220,8 @@ namespace TinderApp.Services
                 likedByUser.LikedBy.Remove(likedUser);
                 likedUser.SuperLikedBy.Remove(likedByUser);
                 likedByUser.SuperLikedBy.Remove(likedUser);
+                likedUser.LikedUsers.Remove(likedByUser);
+                likedByUser.LikedUsers.Remove(likedUser);
 
                 _dbContext.Attach(likedUser);
                 _dbContext.Attach(likedByUser);
@@ -346,9 +353,10 @@ namespace TinderApp.Services
 
         public async Task<List<ProfileItemDTO>> GetFilteredProfiles(int userId)
         {
-            // Fetch current user's profile with BlockedUsers
             var profile = await _dbContext.Profiles
                 .Include(p => p.BlockedUsers)
+                .Include(p => p.LikedUsers)
+                .Include(p => p.Matches)
                 .FirstOrDefaultAsync(p => p.UserId == userId);
 
             if (profile == null)
@@ -356,8 +364,12 @@ namespace TinderApp.Services
                 return new List<ProfileItemDTO>();
             }
 
-            // Get IDs of users blocked by the current user
             var blockedUserIds = profile.BlockedUsers.Select(b => b.UserId).ToList();
+            var likedUserIds = profile.LikedUsers.Select(l => l.UserId).ToList();
+            var matchedUserIds = profile.Matches.Select(m => m.UserId).ToList();
+
+            // Get the current user object
+            var currentUserProfile = await _dbContext.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
 
             IQueryable<UserProfile> query = _dbContext.Profiles
                 .Include(p => p.Interests)
@@ -365,27 +377,26 @@ namespace TinderApp.Services
                 .Where(p =>
                     p.UserId != userId
                     && p.ShowMe == true
-                    && !blockedUserIds.Contains(p.UserId) // Check against in-memory list
-                    && !p.BlockedUsers.Any(b => b.UserId == profile.UserId) // Subquery
+                    && !blockedUserIds.Contains(p.UserId)
+                    && (currentUserProfile == null || !p.LikedUsers.Contains(currentUserProfile))
+                    && !matchedUserIds.Contains(p.UserId)
+                    && !p.BlockedUsers.Any(b => b.UserId == profile.UserId)
                 );
 
-            // Gender filter
             if (profile.InterestedInId == 1)
             {
-                query = query.Where(p => p.GenderId == 1);
+                query = query.Where(p => p.GenderId == 1); // Male
             }
             else if (profile.InterestedInId == 2)
             {
-                query = query.Where(p => p.GenderId == 2);
+                query = query.Where(p => p.GenderId == 2); // Female
             }
 
-            // Location filter
             if (profile.LocationId.HasValue)
             {
                 query = query.Where(p => p.LocationId == profile.LocationId);
             }
 
-            // Retrieve profiles and map to DTO
             var profiles = await query
                 .Include(p => p.Gender)
                 .Include(p => p.LookingFor)
@@ -396,14 +407,18 @@ namespace TinderApp.Services
                 .ProjectTo<ProfileItemDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            // Age filtering in-memory
+            // Filter profiles based on the minimum and maximum age
             var filteredProfiles = profiles
                 .Where(p => (!profile.MinAge.HasValue || CalculateAge(p.BirthDay.ToDateTime(TimeOnly.MinValue)) >= profile.MinAge)
-                         && (!profile.MaxAge.HasValue || CalculateAge(p.BirthDay.ToDateTime(TimeOnly.MinValue)) <= profile.MaxAge))
+                          && (!profile.MaxAge.HasValue || CalculateAge(p.BirthDay.ToDateTime(TimeOnly.MinValue)) <= profile.MaxAge))
                 .ToList();
 
+            Console.WriteLine($"Our profile id - {profile.Id} | User id - {profile.UserId}");
             return filteredProfiles;
         }
+
+
+
 
         private static readonly Dictionary<int, List<int>> lookingForMapping = new()
         {
@@ -431,7 +446,8 @@ namespace TinderApp.Services
                     p.UserId != userId
                     && p.ShowMe == true
                     && !blockedUserIds.Contains(p.UserId) // Check against in-memory list
-                    && !p.BlockedUsers.Any(b => b.UserId == profile.UserId) // Subquery
+                    && !p.BlockedUsers.Any(b => b.UserId == profile.UserId)
+                    && !p.LikedBy.Any(l => l.UserId == userId)
                 );
 
             if (profile.InterestedInId == 1)

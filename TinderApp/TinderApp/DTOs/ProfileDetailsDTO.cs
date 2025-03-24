@@ -19,6 +19,7 @@
         public ICollection<string> Interests { get; set; }
         public ICollection<string> ProfilePhotoPaths { get; set; }
         public bool IsReported { get; set; }
+        public List<int> LikedUsersIds { get; set; } = new List<int>();
         public List<int> LikedByUserIds { get; set; } = new List<int>();
         public List<int> SuperLikedByUserIds { get; set; } = new List<int>();
         public List<int> MatchedUserIds { get; set; } = new List<int>();
