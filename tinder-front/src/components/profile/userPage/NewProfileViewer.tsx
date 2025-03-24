@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {  message, Spin } from "antd";
 import { ProfileService, Profile } from "../../../services/profile.service";
 import Card from "./Card/Card";
@@ -69,6 +69,7 @@ const NewProfileViewer: React.FC = () => {
                 try {
                     const connection = await ChatService.initChatConnection();
                     setConnection(connection);
+
                     connection.onclose(async () => {
                         console.warn("SignalR підключення закрилося. Перепідключення...");
                         try {
@@ -83,14 +84,17 @@ const NewProfileViewer: React.FC = () => {
                 }
             }
         };
+
         initialize();
+
         return () => {
             if (conn) {
                 conn.off("ReceiveMessage");
                 conn.stop();
             }
         };
-    }, []);
+    }, [conn]);
+
 
     useEffect(() => {
         if (profiles.length > 0) {
@@ -149,31 +153,20 @@ const NewProfileViewer: React.FC = () => {
         }, 300); // Час відповідає CSS-анімації
     };
 
-    const handleLike = async () => {
-        if (profiles.length <= 1) return; // Запобігаємо свайпу, якщо один профіль
+    const handleLike = useCallback(async () => {
+        if (profiles.length <= 1) return;
         const currentProfile = profiles[currentProfileIndex];
-        if (!currentProfile || currentProfile.id === 0) {
-            console.error("Invalid target profile:", currentProfile);
-            return;
-        }
+        if (!currentProfile || currentProfile.id === 0) return;
 
         const token = localStorage.getItem("token");
         let userId = JwtService.getUserIdFromToken(token);
-        if (!userId) {
-            console.error("User ID not found from token");
-            return;
-        }
+        if (!userId) return;
 
         try {
             const myProfile = await ProfileService.getProfileById(userId);
-            if (!myProfile || myProfile.id === 0) {
-                throw new Error("Logged-in user profile not found or invalid ID");
-            }
+            if (!myProfile || myProfile.id === 0) return;
 
-            console.log("id", myProfile.userId, currentProfile.userId);
             const response = await ProfileService.likeUser(currentProfile.userId, myProfile.userId);
-            console.log(`You liked ${currentProfile.name}`);
-            console.log("message", response.isMatch);
             message.success(`You liked ${currentProfile.name}`);
 
             if (response.isMatch) {
@@ -188,17 +181,17 @@ const NewProfileViewer: React.FC = () => {
             }
 
         } catch (error) {
-            console.error("Error liking profile:", error);
             message.error("Failed to like the profile");
         }
 
         SetChats(userId);
-        setSwipeDirection("right"); // Анімація вправо
+        setSwipeDirection("right");
         setTimeout(() => {
             setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
-            setSwipeDirection(""); // Скидання після анімації
+            setSwipeDirection("");
         }, 300);
-    };
+    }, [profiles, currentProfileIndex]);
+
 
     const handleSuperLike = async () => {
         const currentProfile = profiles[currentProfileIndex];
@@ -343,6 +336,8 @@ const NewProfileViewer: React.FC = () => {
                 return null;
         }
     };
+
+
 
     return (
         <div className="custom-container">
