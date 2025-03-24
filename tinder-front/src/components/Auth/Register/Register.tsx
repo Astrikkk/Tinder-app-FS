@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { register } from "../../../services/auth.service";
 import { GoogleOutlined } from "@ant-design/icons";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import GoogleLoginButton from "../GoogleLoginButton";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState("");
@@ -73,7 +73,19 @@ const Register: React.FC = () => {
         }
     };
 
-    const CLIENT_ID = '799604217377-hjdjqa368b4tlt2p40gpvmmf5boq4615.apps.googleusercontent.com';
+    // const onLoginGoogleResult = async (tokenGoogle:string) => {
+    //     try {
+    //         console.log("Register user", tokenGoogle);
+    //         // const response = await googleLoginUser({token: tokenGoogle}).unwrap();
+    //         // console.log("Користувача успішно зайшов через google", response);
+    //         // navigate("..");
+    //     } catch (error) {
+    //         console.error("Поилка при реєстрації", error);
+    //     }
+    // }
+
+
+    const CLIENT_ID = '592015176748-cmdok807okrq0bftv327p7n28hqv4aqv.apps.googleusercontent.com';
 
     return (
         <GoogleOAuthProvider clientId={CLIENT_ID}>
@@ -150,9 +162,8 @@ const Register: React.FC = () => {
                     <div className="form-actions">
                         <div className="sign-up-but">
                             <button className="login-button" onClick={handleRegister}>Sign Up</button>
-                            <button className="google-login-button">
-                                <GoogleLoginButton icon={<GoogleOutlined />} title="Увійти з Google" onLogin={onLoginGoogleResult} />
-                            </button>
+
+                            <GoogleLoginButton icon={<GoogleOutlined />} title='Увійти Google' onLogin={onLoginGoogleResult} />
                         </div>
                         <div className="sign-up-link">
                             Already have an account? <a href="/login">Login</a>

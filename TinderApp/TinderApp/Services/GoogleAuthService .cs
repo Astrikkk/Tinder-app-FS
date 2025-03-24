@@ -1,5 +1,9 @@
-﻿using Google.Apis.Auth;
+﻿using Azure.Core;
+using System.Net.Http.Headers;
+using Google.Apis.Auth;
+using TinderApp.Data.Entities.Identity;
 using TinderApp.Interfaces;
+using Newtonsoft.Json;
 
 namespace TinderApp.Services
 {
@@ -16,12 +20,30 @@ namespace TinderApp.Services
         {
             try
             {
-                var payload = await GoogleJsonWebSignature.ValidateAsync(token);
+                HttpClient httpClient = new HttpClient();
+                const string GoogleUserInfoUrl = "https://www.googleapis.com/oauth2/v3/userinfo";
+                using var request = new HttpRequestMessage(HttpMethod.Get, GoogleUserInfoUrl);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var userInfo = JsonConvert.DeserializeObject<GoogleUserInfoApp>(jsonResponse);
+
+                if (userInfo == null)
+                {
+                    return null;
+                }
+
                 return new GoogleUserInfo
                 {
-                    Email = payload.Email,
-                    Name = payload.Name,
-                    Picture = payload.Picture
+                    Email = userInfo.Email,
+                    Name = userInfo.GivenName,
+                    Picture = userInfo.Picture
                 };
             }
             catch (Exception)
@@ -38,4 +60,14 @@ namespace TinderApp.Services
         public string Picture { get; set; }
     }
 
+    public class GoogleUserInfoApp
+    {
+        public string Sub { get; set; }
+        public string Name { get; set; }
+        public string GivenName { get; set; }
+        public string FamilyName { get; set; }
+        public string Picture { get; set; }
+        public string Email { get; set; }
+        public bool EmailVerified { get; set; }
+    }
 }
