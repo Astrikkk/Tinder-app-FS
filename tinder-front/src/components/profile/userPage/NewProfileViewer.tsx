@@ -140,6 +140,7 @@ const NewProfileViewer: React.FC = () => {
 
 
     const handleDislike = () => {
+        if (profiles.length <= 1) return; // Запобігаємо свайпу, якщо один профіль
         console.log("Dislike triggered");
         setSwipeDirection("left"); // Анімація вліво
         setTimeout(() => {
@@ -149,6 +150,7 @@ const NewProfileViewer: React.FC = () => {
     };
 
     const handleLike = async () => {
+        if (profiles.length <= 1) return; // Запобігаємо свайпу, якщо один профіль
         const currentProfile = profiles[currentProfileIndex];
         if (!currentProfile || currentProfile.id === 0) {
             console.error("Invalid target profile:", currentProfile);
@@ -197,7 +199,6 @@ const NewProfileViewer: React.FC = () => {
             setSwipeDirection(""); // Скидання після анімації
         }, 300);
     };
-
 
     const handleSuperLike = async () => {
         const currentProfile = profiles[currentProfileIndex];
@@ -256,6 +257,7 @@ const NewProfileViewer: React.FC = () => {
         setSelectedProfileId(profileId);
         setIsInfoModalVisible(true);
     };
+
 
     const SetChats = async (userId: string) => {
         try {

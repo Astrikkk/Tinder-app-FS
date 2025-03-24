@@ -441,20 +441,23 @@
 
 @keyframes swipe-left {
     0% { transform: translateX(0) rotate(0); opacity: 1; }
-    100% { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
+    70% { transform: translateX(-20vw) rotate(-10deg); opacity: 1; }
+    100% { transform: translateX(-30vw) rotate(-15deg); opacity: 0; }
 }
 
 @keyframes swipe-right {
     0% { transform: translateX(0) rotate(0); opacity: 1; }
-    100% { transform: translateX(100vw) rotate(20deg); opacity: 0; }
+    70% { transform: translateX(20vw) rotate(10deg); opacity: 1; }
+    100% { transform: translateX(30vw) rotate(15deg); opacity: 0; }
 }
 
 .swipe-left {
-    animation: swipe-left 0.3s ease-out forwards;
+    animation: swipe-left 0.4s ease-out forwards;
 }
 
 .swipe-right {
-    animation: swipe-right 0.3s ease-out forwards;
+    animation: swipe-right 0.4s ease-out forwards;
 }
+
 
 
