@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Smile1 from "../../img/Smile1.svg";
 import Smile2 from "../../img/Smile2.svg";
 import Smile3 from "../../img/Smile3.svg";
@@ -16,6 +16,7 @@ interface RelationshipOption {
 
 interface LookingForProps {
     onClose: (selectedId: number | null) => void;
+    initialSelected: number | null;
 }
 
 const relationshipOptions: RelationshipOption[] = [
@@ -27,8 +28,13 @@ const relationshipOptions: RelationshipOption[] = [
     { id: 6, name: "unsure", imgSrc: Smile6, text: "I'm not sure yet" },
 ];
 
-const LookingFor: React.FC<LookingForProps> = ({ onClose }) => {
+const LookingFor: React.FC<LookingForProps> = ({ onClose , initialSelected}) => {
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
+
+
+    useEffect(() => {
+        setSelectedOption(initialSelected); // Оновлюємо при відкритті
+    }, [initialSelected]);
 
     const handleSelect = (id: number) => {
         setSelectedOption(id);

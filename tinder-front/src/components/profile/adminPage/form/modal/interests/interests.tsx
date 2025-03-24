@@ -9,13 +9,14 @@ interface Interest {
 
 interface InterestsProps {
     onClose: (selectedIds: number[]) => void;
+    initialSelected: number[];
 }
 
-const Interests: React.FC<InterestsProps> = ({ onClose }) => {
+const Interests: React.FC<InterestsProps> = ({ onClose, initialSelected}) => {
     const [interests, setInterests] = useState<Interest[]>([]);
-    const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
+    const [selectedOptions, setSelectedOptions] = useState<number[]>(initialSelected);
 
     useEffect(() => {
         const fetchInterests = async () => {
@@ -30,6 +31,11 @@ const Interests: React.FC<InterestsProps> = ({ onClose }) => {
         };
         fetchInterests();
     }, []);
+
+    useEffect(() => {
+        setSelectedOptions(initialSelected); // Оновлюємо вибір при відкритті
+    }, [initialSelected]);
+
 
     const handleSelect = (id: number) => {
         setSelectedOptions((prevSelected) => {

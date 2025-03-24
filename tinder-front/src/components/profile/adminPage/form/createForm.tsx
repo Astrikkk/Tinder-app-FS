@@ -50,6 +50,8 @@ const CreateForm: React.FC = () => {
     const [gender, setGender] = useState<number | null>(null);
     const [interestedIn, setInterestedIn] = useState<number | null>(null);
 
+
+
     const [name, setName] = useState<string>("");
     const [dob, setDob] = useState<Date | null>(null);
 
@@ -74,6 +76,14 @@ const CreateForm: React.FC = () => {
                 return newImages;
             });
         }
+    };
+
+    const handleImageRemove = (index: number) => {
+        setImages((prevImages) => {
+            const newImages = [...prevImages];
+            newImages[index] = null; // Видаляємо фото
+            return newImages;
+        });
     };
 
     const handleRelationshipSelect = (selectedId: number | null) => {
@@ -189,27 +199,31 @@ const CreateForm: React.FC = () => {
             {/* Profile Picture Upload */}
             <div className="profile-pic w-[456px] absolute left-[367px] top-[273px] flex flex-col gap-4">
                 <h2 className="text-white text-xl font-medium">Add Profile Pictures</h2>
+
                 <div className="grid grid-cols-2 gap-4">
                     {images.map((image, i) => (
                         <div key={i} className="relative w-[216px] h-[268px]">
-                            {/* Рамка */}
-                            <div
-                                className="w-full h-full border-2 border-red-900 rounded-xl flex items-center justify-center overflow-hidden">
+                            <div className="w-full h-full border-2 border-red-900 rounded-xl flex items-center justify-center overflow-hidden">
                                 {image ? (
-                                    <img
-                                        src={image instanceof File ? URL.createObjectURL(image) : image || ""}
-                                        alt={`Uploaded ${i}`}
-                                        className="w-full h-full object-cover rounded-xl"
-                                    />
-
+                                    <>
+                                        <img
+                                            src={image instanceof File ? URL.createObjectURL(image) : image || ""}
+                                            alt={`Uploaded ${i}`}
+                                            className="w-full h-full object-cover rounded-xl"
+                                        />
+                                        <button
+                                            className="absolute w-[46px] h-[46px] left-[178px] top-[230px] bg-red-600 text-white rounded-[15px] p-2 text-lg"
+                                            onClick={() => handleImageRemove(i)}
+                                        >
+                                            -
+                                        </button>
+                                    </>
                                 ) : (
                                     <label htmlFor={`file-upload-${i}`} className="cursor-pointer">
                                         <img src={IconAdd} alt="Add" className="absolute left-[178px] top-[230px]"/>
                                     </label>
                                 )}
                             </div>
-
-                            {/* Поле вибору файлу (приховане) */}
                             <input
                                 id={`file-upload-${i}`}
                                 type="file"
@@ -220,6 +234,7 @@ const CreateForm: React.FC = () => {
                         </div>
                     ))}
                 </div>
+
             </div>
 
             {/* Form Container */}
@@ -314,7 +329,7 @@ const CreateForm: React.FC = () => {
 
             <div className="form-2-container absolute w-[400px] left-[367px] top-[1099px] flex flex-col gap-6">
                 {[
-                    { id: "relationship", label: "I'm looking for", placeholder: "+ Add a relationship goal", selected: selectedRelationship },
+                    { id: "lookingFor", label: "I'm looking for", placeholder: "+ Add a relationship goal", selected: selectedRelationship },
                     { id: "interests", label: "Interests", placeholder: "+ Add interests", selected: selectedInterests.length > 0 },
                     { id: "orientation", label: "Sexual orientation", placeholder: "+ Add Sexual orientation", selected: selectedSexualOrientation },
                 ].map((item) => (
@@ -330,9 +345,24 @@ const CreateForm: React.FC = () => {
                 ))}
 
                 {/* Відображення модальних вікон */}
-                {openModal === "relationship" && <LookingFor onClose={handleRelationshipSelect} />}
-                {openModal === "interests" && <Interests onClose={handleInterestsSelect} />}
-                {openModal === "orientation" && <SexualOrientation onClose={handleOrientationSelect} />}
+                {openModal === "lookingFor" && (
+                    <LookingFor
+                        onClose={handleRelationshipSelect}
+                        initialSelected={selectedRelationship} // Передаємо вибір
+                    />
+                )}
+                {openModal === "interests" && (
+                    <Interests
+                        onClose={handleInterestsSelect}
+                        initialSelected={selectedInterests} // Передаємо вибрані інтереси
+                    />
+                )}
+                {openModal === "orientation" && (
+                    <SexualOrientation
+                        onClose={handleOrientationSelect}
+                        initialSelected={selectedSexualOrientation}
+                    />
+                )}
             </div>
 
 

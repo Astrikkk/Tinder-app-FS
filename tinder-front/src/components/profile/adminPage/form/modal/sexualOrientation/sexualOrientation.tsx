@@ -9,27 +9,32 @@ interface Orientation {
 
 interface SexualOrientationProps {
     onClose: (selectedId: number | null) => void;
+    initialSelected: number | null;
 }
 
 
-const SexualOrientation: React.FC<SexualOrientationProps> = ({ onClose }) => {
+const SexualOrientation: React.FC<SexualOrientationProps> = ({ onClose, initialSelected }) => {
     const [sexualOrientations, setSexualOrientations] = useState<Orientation[]>([]);
-    const [selectedOption, setSelectedOption] = useState<number | null>(null);
+    const [selectedOption, setSelectedOption] = useState<number | null>(initialSelected);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const fetchInterests = async () => {
+        const fetchOrientations = async () => {
             try {
-                const data = await ProfileInfoService.getSexualOrientation()
+                const data = await ProfileInfoService.getSexualOrientation();
                 setSexualOrientations(data);
             } catch (error) {
-                console.error("Error fetching interests:", error);
+                console.error("Error fetching orientations:", error);
             } finally {
                 setLoading(false);
             }
         };
-        fetchInterests();
+        fetchOrientations();
     }, []);
+
+    useEffect(() => {
+        setSelectedOption(initialSelected); // Оновлюємо при відкритті
+    }, [initialSelected]);
 
     const handleSelect = (id: number) => {
         setSelectedOption(id);
@@ -54,7 +59,6 @@ const SexualOrientation: React.FC<SexualOrientationProps> = ({ onClose }) => {
                             onClick={() => handleSelect(option.id)}
                         >
                             <p className="orientation-text">{option.name}</p>
-
                         </button>
                     ))}
                 </div>
@@ -64,6 +68,7 @@ const SexualOrientation: React.FC<SexualOrientationProps> = ({ onClose }) => {
             </div>
         </div>
     );
+
 };
 
 export default SexualOrientation;
