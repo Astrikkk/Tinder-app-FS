@@ -30,6 +30,9 @@ import Page404 from "./components/pages/404Page";
 import SubscriptionTiers from "./components/default/SubscriptionTiersComponent";
 import ReportedList from "./components/profileInfo/reported/Content";
 import {setOffline, setOnline} from "./services/auth.service";
+import { ForgotPassword } from "./components/default/ResetPassword";
+import { ResetPassword } from "./components/default/ResetPassword";
+import { ResetPasswordConfirmation } from "./components/default/ResetPassword";
 
 
 const App: React.FC = () => {
@@ -103,6 +106,9 @@ const App: React.FC = () => {
                         <Route path="/HowItWorks" element={<HowItWorks />}/>
                         <Route path="/SubscriptionTiers" element={<SubscriptionTiers />} />
                         <Route path="/404" element={<Page404 />} />
+                        <Route path="/ForgotPassword" element={<ForgotPassword />}/>
+                        <Route path="/ResetPassword" element={<ResetPassword />}/>
+                        <Route path="/ResetPasswordConfirmation" element={<ResetPasswordConfirmation />}/>
                         {/* Публічні маршрути (доступні лише для неавтентифікованих користувачів) */}
                         <Route element={<PublicRoute isAuthenticated={isAuthenticated} />}>
                             <Route path="/login" element={<Login />} />

@@ -176,5 +176,22 @@ public class ProfileController : ControllerBase
             return StatusCode(500, new { Message = "An error occurred while reporting the profile.", Details = ex.Message });
         }
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateProfile(int id, [FromForm] ProfileUpdateRequest model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = await _profileService.UpdateProfileAsync(id, model);
+
+        if (result.ProfileNotFound)
+            return NotFound(new { Message = $"Profile with ID {id} not found." });
+
+        if (!result.Success)
+            return BadRequest(new { Message = result.Message });
+
+        return Ok(new { Message = "Profile updated successfully." });
+    }
 }
 

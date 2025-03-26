@@ -1,5 +1,6 @@
 ﻿using TinderApp.DTOs;
 using TinderApp.Data.Entities;
+using TinderApp.Services;
 
 namespace TinderApp.Interfaces
 {
@@ -21,5 +22,6 @@ namespace TinderApp.Interfaces
         Task<List<ProfileItemDTO>> GetUserSuperLikesAsync(int userId); //Зробить
         Task<bool> UpdateSettings(int userId, ProfileSettingsRequest request);
         Task<bool> BlockUser(int ourProfileId, int profileId);
+        Task<ProfileUpdateResult> UpdateProfileAsync(int id, ProfileUpdateRequest model);
     }
 }

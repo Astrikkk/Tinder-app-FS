@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TinderApp.Data.Entities.Identity;
+using TinderApp.DTOs;
+using TinderApp.Services;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TinderApp.Controllers
 {
@@ -75,5 +78,48 @@ namespace TinderApp.Controllers
             var email = await _userManager.GetEmailAsync(user);
             return Ok(email);
         }
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+            {
+                // To prevent email enumeration attacks, return the same response
+                return Ok(new { message = "If the email is registered, a reset link will be sent." });
+            }
+
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callbackUrl = $"{Request.Scheme}://{Request.Host}/reset-password?userId={user.Id}&code={code}";
+
+            var emailService = new EmailService();
+            await emailService.SendEmailAsync(model.Email, "Reset Password",
+                $"Click the link to reset your password: <a href='{callbackUrl}'>Reset Password</a>");
+
+            return Ok(new { message = "If the email is registered, a reset link will be sent." });
+        }
+
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return BadRequest(new { message = "Invalid reset request." });
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok(new { message = "Password has been reset successfully." });
+        }
+
     }
 }

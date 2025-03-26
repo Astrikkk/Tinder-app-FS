@@ -587,5 +587,77 @@ namespace TinderApp.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
+        
+
+        public async Task<ProfileUpdateResult> UpdateProfileAsync(int id, ProfileUpdateRequest model)
+        {
+            var entity = await _dbContext.Profiles
+                .Include(p => p.ProfilePhotos)
+                .Include(p => p.Interests)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (entity == null)
+                return new ProfileUpdateResult { ProfileNotFound = true };
+
+            try
+            {
+                _mapper.Map(model, entity);
+
+                // Update interests
+                if (model.InterestIds != null)
+                {
+                    var interests = await _dbContext.Interests
+                        .Where(i => model.InterestIds.Contains(i.Id))
+                        .ToListAsync();
+                    entity.Interests = interests;
+                }
+
+                // Handle images
+                if (model.Images != null && model.Images.Count > 0)
+                {
+                    var dir = _configuration["ImageDir"];
+                    var imageDirectory = Path.Combine(Directory.GetCurrentDirectory(), dir);
+
+                    if (!Directory.Exists(imageDirectory))
+                        Directory.CreateDirectory(imageDirectory);
+
+                    // Reset existing primary photo
+                    var existingPrimary = entity.ProfilePhotos.FirstOrDefault(p => p.IsPrimary);
+                    if (existingPrimary != null)
+                        existingPrimary.IsPrimary = false;
+
+                    // Process new images
+                    for (int i = 0; i < model.Images.Count; i++)
+                    {
+                        var image = model.Images[i];
+                        string imageName = $"{Guid.NewGuid()}.jpg";
+                        var filePath = Path.Combine(imageDirectory, imageName);
+
+                        await using var stream = new FileStream(filePath, FileMode.Create);
+                        await image.CopyToAsync(stream);
+
+                        entity.ProfilePhotos.Add(new ProfilePhoto
+                        {
+                            Path = imageName,
+                            IsPrimary = i == 0, // First image is primary
+                            ProfileId = entity.Id
+                        });
+                    }
+                }
+
+                await _dbContext.SaveChangesAsync();
+                return new ProfileUpdateResult { Success = true };
+            }
+            catch (Exception ex)
+            {
+                // Log error here
+                return new ProfileUpdateResult
+                {
+                    Success = false,
+                    Message = $"Error updating profile: {ex.Message}"
+                };
+            }
+        }
     }
 }
