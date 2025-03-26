@@ -44,7 +44,7 @@ const SexualOrientationForm: React.FC<SexualOrientationFormProps> = ({ sexualOri
 
     return (
         <div style={{ maxWidth: "500px", margin: "auto", padding: "20px", background: "#fff", borderRadius: "8px" }}>
-            <h2>{sexualOrientation ? "Edit Sexual Orientation" : "Create Sexual Orientation"}</h2>
+            <h2>{sexualOrientation ? "MyProfile Sexual Orientation" : "Create Sexual Orientation"}</h2>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <Form.Item name="name" label="Name" rules={[{ required: true, message: "Please enter a name" }]}>
                     <Input />

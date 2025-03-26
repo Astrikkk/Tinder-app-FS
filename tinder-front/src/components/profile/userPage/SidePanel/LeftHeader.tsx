@@ -17,6 +17,7 @@ interface LeftHeaderProps {
     showSecurityModal: () => void;
     closeSettingsModal: () => void;
     closeSecurityModal: () => void;
+    onEditProfile: () => void;
 }
 
 const LeftHeader: React.FC<LeftHeaderProps> = ({
@@ -28,12 +29,13 @@ const LeftHeader: React.FC<LeftHeaderProps> = ({
                                                    showSecurityModal,
                                                    closeSettingsModal,
                                                    closeSecurityModal,
+                                                   onEditProfile,
                                                }) => {
     return (
         <div className="left-header">
             <div className="bg-left-3"></div>
             <div className="section-1">
-                <div className="account">
+                <div className="account" onClick={onEditProfile}>
                     <img
                         className="your-avatar"
                         src={`http://localhost:7034${myProfile?.imagePath}`}

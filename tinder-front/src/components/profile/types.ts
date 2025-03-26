@@ -6,6 +6,10 @@ export interface ProfileItemDTO {
         id: number;
         name: string;
     };
+    jobPosition?:{
+        id: number;
+        name: string;
+    }
     lookingFor: {
         id: number;
         name: string;
@@ -35,6 +39,7 @@ export interface ProfileItemDTO {
     maxAge?: number;
     showMe?: boolean;
     isOnline: boolean;
+    profileDescription?: string;
 }
 
 export interface ProfileCreateDTO {

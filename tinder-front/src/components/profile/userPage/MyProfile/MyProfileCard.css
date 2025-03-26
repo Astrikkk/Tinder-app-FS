@@ -1,0 +1,27 @@
+.Bnt-profile-edit{
+    display: inline-flex;
+    padding: 18px 52px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    border-radius: 12px;
+    background:  #751123;
+
+    position: absolute;
+    left:27%;
+    bottom: 10px;
+}
+
+.Bnt-profile-edit-text{
+    color: #FFCC7E;
+    text-align: center;
+
+    /* Akatab-Bold-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: capitalize;
+}

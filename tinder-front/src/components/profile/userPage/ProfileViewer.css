@@ -1,6 +1,8 @@
 
 
-
+body{
+    background: #100607;
+}
 
 .custom-container {
     width: 100vw;
@@ -199,6 +201,8 @@
     justify-content: center;
     align-items: center;
     gap: 24px;
+
+    cursor: pointer;
 }
 
 .security-settings{
@@ -335,7 +339,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    position: absolute;
+    position: fixed;
     top: 38px;
     right: 0;
 

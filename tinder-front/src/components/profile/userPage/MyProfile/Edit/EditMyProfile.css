@@ -1,0 +1,279 @@
+.Edit-Profile-Bg{
+    width: 484px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #240000;
+    padding: 40px;
+
+    position: absolute;
+    top: 10%;
+    left: 50%;
+}
+
+.Edit-Profile-Container{
+
+    display: flex;
+    width: 404px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+
+}
+
+.Edit-Profile-Element{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    align-self: stretch;
+}
+
+.Edit-Profile-Title{
+    align-self: stretch;
+    color: #FFF;
+    text-align: center;
+
+    /* Akatab-Regular-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+}
+
+.Edit-Profile-Upload-Block{
+    display: flex;
+    width: 360px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.Edit-Profile-Upload-Item {
+    width: 174px;
+    height: 216px;
+    flex-shrink: 0;
+    position: relative; /* Додаємо позиціонування */
+}
+
+.Edit-Profile-Upload-Item-Img {
+    width: 167.556px;
+    height: 211.164px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    border: 2px solid #751123;
+    background: lightgray 50% / cover no-repeat;
+}
+
+.Edit-Profile-Upload-Item-Btn-Delete {
+    width: 46px;
+    height: 48px;
+    color: #ffcc7e;
+    background-color: #bf0b2c;
+    border-radius: 15px;
+    padding: 0.5rem;
+    font-size: 2rem;
+
+
+    position: absolute; /* Фіксуємо кнопку відносно батьківського контейнера */
+    bottom: -10px; /* Опускаємо трохи нижче */
+    right: -10px; /* Зсуваємо вправо */
+
+    cursor: pointer;
+}
+.Edit-Profile-Upload-Item-Btn-Add {
+
+
+
+    position: absolute; /* Фіксуємо кнопку відносно батьківського контейнера */
+    bottom: -10px; /* Опускаємо трохи нижче */
+    right: -10px; /* Зсуваємо вправо */
+
+    cursor: pointer;
+}
+
+.Edit-Profile-Upload-Item-Border{
+    width: 167.556px;
+    height: 211.164px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    border: 2px solid #751123;
+}
+
+
+
+.Edit-Profile-Description-Block {
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 12px;
+    background: #320000;
+    position: relative;
+}
+
+.Edit-Profile-Description-Text {
+    color: #B1A4A4;
+    font-family: Akatab;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: normal;
+    width: 100%;
+    min-height: 80px;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 10px;
+}
+
+.Edit-Profile-Description-Grey-Text {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    color: #B1A4A4;
+    font-family: Akatab;
+    font-size: 16px;
+}
+
+
+
+
+.Edit-Profile-Interests-Block{
+    display: flex;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 8px;
+    align-self: stretch;
+    flex-wrap: wrap;
+}
+
+.Edit-Profile-Interests-Block-Item{
+    display: flex;
+    padding: 4px 28px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    border-radius: 12px;
+    border: 2px solid #B1A4A4;
+    background: #320000;
+}
+
+.Edit-Profile-Interests-Block-Item-Text{
+    color: #E1DFDF;
+    text-align: center;
+
+    /* Akatab-Regular-18 */
+    font-family: Akatab;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.Edit-Profile-Job-Item{
+    display: flex;
+    padding: 4px 28px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    border-radius: 12px;
+    border: 2px solid #B1A4A4;
+    background: #651111;
+}
+
+/* Orientation Dropdown Styles */
+.orientation-dropdown-container {
+    position: relative;
+    width: 100%;
+}
+
+.orientation-dropdown-list {
+    position: absolute;
+    top: 43px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 0 0 12px 12px;
+    background: #320000;
+    border: 2px solid #FFCC7E;
+    border-top: none;
+    margin-top: -2px;
+}
+
+.orientation-dropdown-item {
+    padding: 12px 20px;
+    color: #E1DFDF;
+    font-family: Akatab;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.orientation-dropdown-item:hover {
+    background-color: #420000;
+}
+
+.orientation-dropdown-item.selected {
+    background-color: #751123;
+    color: #FFCC7E;
+}
+
+.Edit-Profile-Orientation-Block {
+    cursor: pointer;
+    position: relative;
+
+    display: flex;
+    padding: 12px 78px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 12px;
+    border: 2px solid #FFCC7E;
+    background: #320000;
+}
+
+.Edit-Profile-Btns{
+    width: 100%;
+    display: inline-flex;
+    padding: 20px 28px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    border-radius: 12px;
+    background: rgba(36, 0, 0, 0.60);
+}
+
+.Edit-Profile-Btn{
+    display: flex;
+    padding: 18px 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    border-radius: 12px;
+    background: #751123;
+}
+
+.Edit-Profile-Btn-Text{
+    color:  #FFCC7E;
+    text-align: center;
+
+    /* Akatab-Bold-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: capitalize;
+}

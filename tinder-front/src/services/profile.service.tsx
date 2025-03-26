@@ -12,6 +12,10 @@ export interface Profile {
         id: number;
         name: string;
     };
+    jobPosition?:{
+        id: number;
+        name: string;
+    }
     lookingFor: {
         id: number;
         name: string;
@@ -41,6 +45,8 @@ export interface Profile {
     maxAge?: number;
     showMe?: boolean;
     isOnline: boolean;
+
+    profileDescription?: string;
 }
 
     export const ProfileService = {

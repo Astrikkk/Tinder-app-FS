@@ -44,7 +44,7 @@ const LookingForForm: React.FC<LookingForFormProps> = ({ lookingFor, onSave }) =
 
     return (
         <div style={{ maxWidth: "500px", margin: "auto", padding: "20px", background: "#fff", borderRadius: "8px" }}>
-            <h2>{lookingFor ? "Edit Looking For" : "Create Looking For"}</h2>
+            <h2>{lookingFor ? "MyProfile Looking For" : "Create Looking For"}</h2>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <Form.Item name="name" label="Name" rules={[{ required: true, message: "Please enter a name" }]}>
                     <Input />

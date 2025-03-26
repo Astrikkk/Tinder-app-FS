@@ -44,7 +44,7 @@ const InterestsForm: React.FC<InterestsFormProps> = ({ interests, onSave }) => {
 
     return (
         <div style={{ maxWidth: "500px", margin: "auto", padding: "20px", background: "#fff", borderRadius: "8px" }}>
-            <h2>{interests ? "Edit Interests" : "Create Interests"}</h2>
+            <h2>{interests ? "MyProfile Interests" : "Create Interests"}</h2>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <Form.Item name="name" label="Name" rules={[{ required: true, message: "Please enter a name" }]}>
                     <Input />

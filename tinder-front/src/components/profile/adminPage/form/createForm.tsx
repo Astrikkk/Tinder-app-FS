@@ -13,7 +13,7 @@ import IconAdd from "./img/IconAdd.svg";
 import './createForm.css';
 import LookingFor from "./modal/lookingFor/lookingFor";
 import Interests from "./modal/interests/interests";
-import SexualOrientation from "./modal/sexualOrientation/sexualOrientation";
+import SexualOrientation, {Orientation} from "./modal/sexualOrientation/sexualOrientation";
 import {jwtDecode} from "jwt-decode";
 import {Form, message} from "antd";
 import {ProfileService} from "../../../../services/profile.service";
@@ -46,7 +46,7 @@ const CreateForm: React.FC = () => {
     const [openModal, setOpenModal] = useState<string | null>(null);
     const [selectedRelationship, setSelectedRelationship] = useState<number | null>(null);
     const [selectedInterests, setSelectedInterests] = useState<number[]>([]);
-    const [selectedSexualOrientation, setSelectedSexualOrientation] = useState<number | null>(null);
+    const [selectedSexualOrientation, setSelectedSexualOrientation] = useState<number | Orientation | null>(null);
     const [gender, setGender] = useState<number | null>(null);
     const [interestedIn, setInterestedIn] = useState<number | null>(null);
 
@@ -95,7 +95,7 @@ const CreateForm: React.FC = () => {
         setSelectedInterests(selectedIds);
         handleCloseModal();
     };
-    const handleOrientationSelect = (selectedId: number | null) => {
+    const handleOrientationSelect = (selectedId: number | Orientation | null) => {
         setSelectedSexualOrientation(selectedId);
         handleCloseModal();
     };
@@ -361,6 +361,7 @@ const CreateForm: React.FC = () => {
                     <SexualOrientation
                         onClose={handleOrientationSelect}
                         initialSelected={selectedSexualOrientation}
+                        isJobTitle={false}
                     />
                 )}
             </div>

@@ -104,4 +104,23 @@ export const ProfileInfoService = {
     deleteSexualOrientation: async (id: string): Promise<void> => {
         await axios.delete(`${API_URL}/sexualOrientation/${id}`);
     },
+
+    // Job Position
+    getJobPositions: async (): Promise<{ id: number; name: string }[]> => {
+        const response = await axios.get(`${API_URL}/JobPosition`);
+        return response.data;
+    },
+    createJobPosition: async (data: { name: string }): Promise<void> => {
+        await axios.post(`${API_URL}/JobPosition`, data, {
+            headers: { "Content-Type": "application/json" },
+        });
+    },
+    updateJobPosition: async (id: string, data: { name: string }): Promise<void> => {
+        await axios.put(`${API_URL}/JobPosition/${id}`, data, {
+            headers: { "Content-Type": "application/json" },
+        });
+    },
+    deleteJobPosition: async (id: string): Promise<void> => {
+        await axios.delete(`${API_URL}/JobPosition/${id}`);
+    },
 };

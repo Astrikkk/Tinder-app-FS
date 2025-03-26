@@ -6,21 +6,17 @@ import "./ProfileViewer.css";
 import { ProfileItemDTO } from "../types";
 import { HubConnection } from "@microsoft/signalr";
 import ChatWindow from "./Chat/ChatWindow";
-import Nope from "./img/keys/nope.svg";
-import Like from "./img/keys/like.svg";
-import Close from "./img/keys/close.svg";
-import SuperLike from "./img/keys/super-like.svg";
-import Open from "./img/keys/open.svg";
-import NextPh from "./img/keys/next.svg";
 import Sparkii from "./img/Sparkii.svg";
 import IsMatchImg from "./img/IsMatchImg.svg";
 import { JwtService } from "../../../services/jwt.service";
-import { useNavigate } from "react-router-dom";
 import {ChatRoomInfo, ChatService} from "../../../services/chat.service";
 import Matches from "./SidePanel/Items/Matches";
 import Chats from "./SidePanel/Items/Chats";
 import Explore from "./SidePanel/Items/Explore";
 import LeftHeader from "./SidePanel/LeftHeader";
+import classNames from "classnames";
+import MyProfileCard from "./MyProfile/MyProfileCard";
+import EditMyProfile from "./MyProfile/Edit/EditMyProfile";
 
 
 export interface ChatDTO {
@@ -37,29 +33,25 @@ const NewProfileViewer: React.FC = () => {
     const [conn, setConnection] = useState<HubConnection | null>(null);
     const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
     const [activeChat, setActiveChat] = useState<ChatDTO | null>(null);
-    const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
-    const [isInfoModalVisible, setIsInfoModalVisible] = useState(false); // State for Info modal
-    const [selectedProfileId, setSelectedProfileId] = useState<number >(0); // State for selected profile ID
+    const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
+    const [selectedProfileId, setSelectedProfileId] = useState<number >(0);
     const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomInfo| null>(null);
-    const navigate = useNavigate();
     const [isMatch, setIsMatch] = useState(false);
     const [isMatchHiding, setIsMatchHiding] = useState(false);
-
-
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isSecurityOpen, setIsSecurityOpen] = useState(false);
-
     const showSettingsModal = () => setIsSettingsOpen(true);
-
-
     const showSecurityModal = () => setIsSecurityOpen(true);
     const closeSecurityModal = () => setIsSecurityOpen(false);
-
     const [viewingMatches, setViewingMatches] = useState(false);
-
     const [viewingCategoryProfiles, setViewingCategoryProfiles] = useState(false);
-
     const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | "">("");
+
+    const [isMyProfileCard, setIsMyProfileCard] = useState(false);
+
+    const [isEditingProfile, setIsEditingProfile] = useState(false);
+
+
 
 
     useEffect(() => {
@@ -129,6 +121,24 @@ const NewProfileViewer: React.FC = () => {
         await fetchProfiles(); // Завантажуємо звичайні профілі
         setCurrentProfileIndex(0);
     };
+
+    const handleMyProfile = () => {
+        setIsMyProfileCard(true); // Активуємо режим редагування
+    };
+
+    const handleCloseMyProfile = () => {
+        setIsMyProfileCard(false); // Закриваємо редагування
+    };
+
+
+    const handleEditProfile = () => {
+        setIsEditingProfile(true);
+    };
+
+    const handleCloseEditProfile = () => {
+        setIsEditingProfile(false);
+    };
+
 
     const UpdateProfiles = async (userId:string)=>{
         const filteredProfiles = await ProfileService.getFilteredProfilesById(userId);
@@ -351,6 +361,7 @@ const NewProfileViewer: React.FC = () => {
                     showSecurityModal={showSecurityModal}
                     closeSettingsModal={closeSettingsModal}
                     closeSecurityModal={closeSecurityModal}
+                    onEditProfile={handleMyProfile}
                 />
                 <div className="bg-left-1">
                     <div className="section-2">
@@ -378,6 +389,12 @@ const NewProfileViewer: React.FC = () => {
             <div className="info-block">
                 {loading ? (
                     <Spin size="large" />
+                ) : isMyProfileCard ? (
+                    isEditingProfile ? (
+                        <EditMyProfile onClose={handleCloseEditProfile} />
+                    ) : (
+                        <MyProfileCard onEditProfile={handleEditProfile} />
+                    )
                 ) : activeChat ? (
                     <ChatWindow
                         chat={activeChat}
@@ -388,63 +405,33 @@ const NewProfileViewer: React.FC = () => {
                     />
                 ) : profiles.length > 0 ? (
                     <>
-                        {viewingMatches || viewingCategoryProfiles ? (
+                        {(viewingMatches || viewingCategoryProfiles) && (
                             <button onClick={handleBackToMainProfiles} className="back-button">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                                    <path d="M4.34961 18H31.3496M4.34961 18L13.3496 27M4.34961 18L13.3496 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path
+                                        d="M4.34961 18H31.3496M4.34961 18L13.3496 27M4.34961 18L13.3496 9"
+                                        stroke="white"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
                                 </svg>
                             </button>
-                        ):null}
-                        <div className={swipeDirection === "left" ? "swipe-left" : swipeDirection === "right" ? "swipe-right" : ""}>
+                        )}
 
-                        <Card
-                            profile={profiles[currentProfileIndex]}
-                            onReturn={handleReturn}
-                            onDislike={handleDislike}
-                            onLike={handleLike}
-                            onSuperLike={handleSuperLike}
-                            onInfoClick={showInfoModal}
+                        <div className={classNames({ "swipe-left": swipeDirection === "left", "swipe-right": swipeDirection === "right" })}>
+                            <Card
+                                profile={profiles[currentProfileIndex]}
+                                onReturn={handleReturn}
+                                onDislike={handleDislike}
+                                onLike={handleLike}
+                                onSuperLike={handleSuperLike}
+                                onInfoClick={showInfoModal}
                             />
                         </div>
-
                     </>
                 ) : (
                     <p>No profiles available</p>
-                )}
-                {!activeChat && (
-                    <div className="keys">
-                        <div className="key">
-                            <div className="key-box">
-                                <img src={Nope} />
-                            </div>
-                            <span className="key-text">nope</span>
-                        </div>
-                        <div className="key">
-                            <div className="key-box">
-                                <img src={Like} />
-                            </div>
-                            <span className="key-text">like</span>
-                        </div>
-
-                        <div className="key">
-                            <div className="key-box">
-                                <img src={Close} />
-                            </div>
-                            <span className="key-text">return</span>
-                        </div>
-                        <div className="key">
-                            <div className="key-box">
-                                <img src={Open} />
-                            </div>
-                            <span className="key-text">super like</span>
-                        </div>
-                        <div className="key">
-                            <div className="key-box">
-                                <img src={NextPh} />
-                            </div>
-                            <span className="key-text">next photo</span>
-                        </div>
-                    </div>
                 )}
             </div>
 
@@ -468,12 +455,6 @@ const NewProfileViewer: React.FC = () => {
                     />
                 </div>
             )}
-
-
-
-
-
-
         </div>
     );
 };
