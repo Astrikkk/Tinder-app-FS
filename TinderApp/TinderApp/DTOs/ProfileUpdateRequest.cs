@@ -4,11 +4,6 @@ namespace TinderApp.DTOs
 {
     public class ProfileUpdateRequest
     {
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public string BirthDay { get; set; } // Changed from DateOnly to string
 
         [Required]
         public int JobPositionId { get; set; }

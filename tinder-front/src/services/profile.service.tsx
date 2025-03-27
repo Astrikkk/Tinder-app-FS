@@ -203,9 +203,7 @@ export interface Profile {
         updateProfileWithData: async (
             profileId: number,
             updateData: {
-                name: string;
-                birthDay: Date;
-                jobPositionId: number; // Made required
+                jobPositionId: number;
                 genderId: number;
                 interestedInId: number;
                 lookingForId: number;
@@ -218,8 +216,6 @@ export interface Profile {
             const formData = new FormData();
 
             // Required fields
-            formData.append('Name', updateData.name);
-            formData.append('BirthDay', updateData.birthDay.toISOString().split('T')[0]);
             formData.append('JobPositionId', updateData.jobPositionId.toString());
             formData.append('GenderId', updateData.genderId.toString());
             formData.append('InterestedInId', updateData.interestedInId.toString());

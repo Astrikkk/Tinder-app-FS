@@ -7,6 +7,7 @@ import Interests from "../../../adminPage/form/modal/interests/interests";
 import {ProfileInfoService} from "../../../../../services/profile.info.service";
 import SexualOrientation, {Orientation} from "../../../adminPage/form/modal/sexualOrientation/sexualOrientation";
 import { AxiosError } from 'axios';
+import {logout} from "../../../../../services/auth.service";
 
 interface EditProps {
     onClose: () => void;
@@ -145,14 +146,12 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
     const handleSaveChanges = async () => {
         if (!profile) return;
 
+        console.log(selectedJobTitleId)
         try {
-            // Validate ALL required fields
+            // Validate required fields
             const missingFields = [];
-            if (!profile.name) missingFields.push('Name');
-            if (!profile.birthDay) missingFields.push('Birth Date');
             if (!profile.gender?.id) missingFields.push('Gender');
             if (!profile.interestedIn?.id) missingFields.push('Interested In');
-            if (selectedJobTitleId === null) missingFields.push('Job Title');
             if (selectedLookingFor === null) missingFields.push('Looking For');
             if (selectedOrientation === null) missingFields.push('Sexual Orientation');
 
@@ -160,39 +159,47 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
                 throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
             }
 
-            // At this point, TypeScript knows these values can't be null
-            const updateData = {
-                name: profile.name,
-                birthDay: new Date(profile.birthDay),
-                jobPositionId: selectedJobTitleId as number,
-                genderId: profile.gender.id,
-                interestedInId: profile.interestedIn.id,
-                lookingForId: selectedLookingFor!.id,
-                sexualOrientationId: selectedOrientation!.id,
-                images: images.filter((img): img is File => img instanceof File),
-                interestIds: selectedInterestIds,
-                profileDescription: description
-            };
+            // Перевіряємо чи selectedJobTitleId є числом
+            if (typeof selectedJobTitleId !== 'number') {
+                const updateData = {
+                    jobPositionId: selectedJobTitleId!.id,
+                    genderId: profile.gender.id,
+                    interestedInId: profile.interestedIn.id,
+                    lookingForId: selectedLookingFor!.id,
+                    sexualOrientationId: selectedOrientation!.id,
+                    images: images.filter((img): img is File => img instanceof File),
+                    interestIds: selectedInterestIds,
+                    profileDescription: description
+                };
 
-            await ProfileService.updateProfileWithData(profile.userId, updateData);
-            alert("Profile updated successfully!");
+                await ProfileService.updateProfileWithData(profile.userId, updateData);
+                alert("Profile updated successfully!");
+            } else {
+                const updateData = {
+                    jobPositionId: Number(selectedJobTitleId),
+                    genderId: profile.gender.id,
+                    interestedInId: profile.interestedIn.id,
+                    lookingForId: selectedLookingFor!.id,
+                    sexualOrientationId: selectedOrientation!.id,
+                    images: images.filter((img): img is File => img instanceof File),
+                    interestIds: selectedInterestIds,
+                    profileDescription: description
+                };
+                await ProfileService.updateProfileWithData(profile.userId, updateData);
+                alert("Profile updated successfully!");
+            }
         } catch (error) {
             let errorMessage = "Failed to update profile";
-
             if (error instanceof Error) {
                 errorMessage = error.message;
-
                 if ('response' in error) {
                     const axiosError = error as AxiosError<{message?: string}>;
                     errorMessage = axiosError.response?.data?.message || errorMessage;
-                    console.error("API Error Details:", axiosError.response?.data);
                 }
             }
-
             alert(errorMessage);
         }
     };
-
 
     if (!profile) {
         return <p>Loading profile...</p>;

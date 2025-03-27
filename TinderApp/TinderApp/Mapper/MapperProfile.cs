@@ -38,9 +38,8 @@ namespace TinderApp.Mapper
                 .ForMember(entity => entity.Interests, opt => opt.Ignore());
 
             CreateMap<ProfileUpdateRequest, UserProfile>()
-                .ForMember(dest => dest.BirthDay, opt => opt.MapFrom(src =>
-                    !string.IsNullOrEmpty(src.BirthDay) ? DateOnly.Parse(src.BirthDay) : default))
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+      // Інші поля будуть мапитись автоматично, якщо імена співпадають
+      .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
 
 

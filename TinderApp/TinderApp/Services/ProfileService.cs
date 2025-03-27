@@ -603,16 +603,20 @@ namespace TinderApp.Services
 
             try
             {
-                if (!string.IsNullOrEmpty(model.BirthDay))
+                // Оновлюємо тільки обов'язкові поля
+                entity.JobPositionId = model.JobPositionId;
+                entity.GenderId = model.GenderId;
+                entity.InterestedInId = model.InterestedInId;
+                entity.LookingForId = model.LookingForId;
+                entity.SexualOrientationId = model.SexualOrientationId;
+
+                // Оновлюємо опціональні поля, якщо вони передані
+                if (model.ProfileDescription != null)
                 {
-                    entity.BirthDay = DateOnly.Parse(model.BirthDay);
+                    entity.ProfileDescription = model.ProfileDescription;
                 }
-                _mapper.Map(model, entity);
 
-
-                _mapper.Map(model, entity);
-
-
+                // Обробка зображень
                 if (model.Images != null && model.Images.Count > 0)
                 {
                     var dir = _configuration["ImageDir"];
@@ -643,13 +647,25 @@ namespace TinderApp.Services
                     }
                 }
 
+                // Обробка інтересів
+                if (model.InterestIds != null)
+                {
+                    entity.Interests.Clear();
+                    var interests = await _dbContext.Interests
+                        .Where(i => model.InterestIds.Contains(i.Id))
+                        .ToListAsync();
+
+                    foreach (var interest in interests)
+                    {
+                        entity.Interests.Add(interest);
+                    }
+                }
 
                 await _dbContext.SaveChangesAsync();
                 return new ProfileUpdateResult { Success = true };
             }
             catch (Exception ex)
             {
-                // Include inner exception details
                 return new ProfileUpdateResult
                 {
                     Success = false,
