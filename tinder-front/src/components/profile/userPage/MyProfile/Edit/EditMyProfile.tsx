@@ -6,9 +6,14 @@ import IconAdd from "../../../adminPage/form/img/IconAdd.svg";
 import Interests from "../../../adminPage/form/modal/interests/interests";
 import {ProfileInfoService} from "../../../../../services/profile.info.service";
 import SexualOrientation, {Orientation} from "../../../adminPage/form/modal/sexualOrientation/sexualOrientation";
+import { AxiosError } from 'axios';
 
 interface EditProps {
     onClose: () => void;
+}
+
+interface ErrorResponse {
+    message?: string;
 }
 
 interface ProfileInterest {
@@ -136,6 +141,58 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
         setSelectedLookingFor(orientation);
         setShowLookingForDropdown(false);
     };
+
+    const handleSaveChanges = async () => {
+        if (!profile) return;
+
+        try {
+            // Validate ALL required fields
+            const missingFields = [];
+            if (!profile.name) missingFields.push('Name');
+            if (!profile.birthDay) missingFields.push('Birth Date');
+            if (!profile.gender?.id) missingFields.push('Gender');
+            if (!profile.interestedIn?.id) missingFields.push('Interested In');
+            if (selectedJobTitleId === null) missingFields.push('Job Title');
+            if (selectedLookingFor === null) missingFields.push('Looking For');
+            if (selectedOrientation === null) missingFields.push('Sexual Orientation');
+
+            if (missingFields.length > 0) {
+                throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+            }
+
+            // At this point, TypeScript knows these values can't be null
+            const updateData = {
+                name: profile.name,
+                birthDay: new Date(profile.birthDay),
+                jobPositionId: selectedJobTitleId as number,
+                genderId: profile.gender.id,
+                interestedInId: profile.interestedIn.id,
+                lookingForId: selectedLookingFor!.id,
+                sexualOrientationId: selectedOrientation!.id,
+                images: images.filter((img): img is File => img instanceof File),
+                interestIds: selectedInterestIds,
+                profileDescription: description
+            };
+
+            await ProfileService.updateProfileWithData(profile.userId, updateData);
+            alert("Profile updated successfully!");
+        } catch (error) {
+            let errorMessage = "Failed to update profile";
+
+            if (error instanceof Error) {
+                errorMessage = error.message;
+
+                if ('response' in error) {
+                    const axiosError = error as AxiosError<{message?: string}>;
+                    errorMessage = axiosError.response?.data?.message || errorMessage;
+                    console.error("API Error Details:", axiosError.response?.data);
+                }
+            }
+
+            alert(errorMessage);
+        }
+    };
+
 
     if (!profile) {
         return <p>Loading profile...</p>;
@@ -307,7 +364,7 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
                     </div>
                 </div>
                 <div className="Edit-Profile-Btns">
-                    <button className="Edit-Profile-Btn">
+                    <button className="Edit-Profile-Btn" onClick={handleSaveChanges}>
                         <div className="Edit-Profile-Btn-Text">Save changes</div>
                     </button>
                     <button className="Edit-Profile-Btn">

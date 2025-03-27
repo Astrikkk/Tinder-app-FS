@@ -184,7 +184,7 @@ public class ProfileController : ControllerBase
             return BadRequest(ModelState);
 
         var result = await _profileService.UpdateProfileAsync(id, model);
-
+            
         if (result.ProfileNotFound)
             return NotFound(new { Message = $"Profile with ID {id} not found." });
 

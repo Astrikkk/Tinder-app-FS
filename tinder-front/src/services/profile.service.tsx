@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import {ProfileItemDTO} from "../components/profile/types";
 import {JwtService} from "./jwt.service";
 
@@ -198,6 +198,67 @@ export interface Profile {
     getUserSuperLikes: async (userId: string): Promise<Profile[]> => {
         const response = await axios.get(`${API_URL}/${userId}/super-likes`);
         return response.data;
-    }
+    },
+
+        updateProfileWithData: async (
+            profileId: number,
+            updateData: {
+                name: string;
+                birthDay: Date;
+                jobPositionId: number; // Made required
+                genderId: number;
+                interestedInId: number;
+                lookingForId: number;
+                sexualOrientationId: number;
+                images?: File[];
+                interestIds?: number[];
+                profileDescription?: string;
+            }
+        ): Promise<void> => {
+            const formData = new FormData();
+
+            // Required fields
+            formData.append('Name', updateData.name);
+            formData.append('BirthDay', updateData.birthDay.toISOString().split('T')[0]);
+            formData.append('JobPositionId', updateData.jobPositionId.toString());
+            formData.append('GenderId', updateData.genderId.toString());
+            formData.append('InterestedInId', updateData.interestedInId.toString());
+            formData.append('LookingForId', updateData.lookingForId.toString());
+            formData.append('SexualOrientationId', updateData.sexualOrientationId.toString());
+
+            // Optional fields
+            if (updateData.profileDescription) {
+                formData.append('ProfileDescription', updateData.profileDescription);
+            }
+
+            // Handle images
+            if (updateData.images) {
+                updateData.images.forEach((file) => {
+                    formData.append('Images', file);
+                });
+            }
+
+            // Handle interests
+            if (updateData.interestIds) {
+                updateData.interestIds.forEach(id => {
+                    formData.append('InterestIds', id.toString());
+                });
+            }
+
+            try {
+                const response = await axios.put(`${API_URL}/${profileId}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                return response.data;
+            } catch (error) {
+                if (error instanceof AxiosError) {
+                    console.error('Full error:', error.response?.data);
+                    throw new Error(error.response?.data?.message || 'Profile update failed');
+                }
+                throw error;
+            }
+        },
 
     };
