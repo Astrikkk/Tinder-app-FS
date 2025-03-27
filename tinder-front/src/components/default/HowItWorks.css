@@ -330,3 +330,138 @@ html, body {
     text-decoration: none;
     font-size: 1em;
 }
+
+@media screen and (max-width: 1024px) {
+  .how-it-works-header {
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5em;
+    margin-left: 0;
+  }
+
+  .sparkii-logo {
+    margin-right: 0;
+    width: 6em;
+  }
+
+  .menubar {
+    flex-direction: column;
+    gap: 1em;
+    margin-top: 1em;
+  }
+
+  .top-section {
+    flex-direction: column;
+    text-align: center;
+    margin-top: 2em;
+  }
+
+  .image-container {
+    width: 20em;
+    height: 20em;
+  }
+
+  .steps-container {
+    grid-template-columns: 1fr;
+    width: 90%;
+  }
+
+  .step:last-child {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .how-it-works {
+    padding: 1em;
+  }
+
+  .how-it-works-header {
+    padding: 1em;
+    text-align: center;
+  }
+
+  .menubar {
+    display: none; 
+  }
+
+  .log-in-header {
+    width: 10em;
+    font-size: 1em;
+  }
+
+  .image-container {
+    width: 18em;
+    height: 18em;
+  }
+
+  .text-container {
+    max-width: 90%;
+  }
+
+  .main-title {
+    font-size: 1.5em;
+  }
+
+  .steps-container {
+    gap: 2em;
+  }
+
+  .step {
+    max-width: 100%;
+    width: 90%;
+  }
+
+  .how-it-works-footer {
+    padding: 2em;
+  }
+
+  .text-footer {
+    font-size: 0.9em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .sparkii-logo {
+    width: 5em;
+  }
+
+  .how-it-works-header {
+    padding: 1em;
+  }
+
+  .log-in-header {
+    width: 8em;
+    padding: 0.5em;
+    font-size: 0.9em;
+  }
+
+  .image-container {
+    width: 15em;
+    height: 15em;
+  }
+
+  .main-title {
+    font-size: 1.3em;
+  }
+
+  .join-button {
+    width: 8em;
+    font-size: 1em;
+    padding: 0.5em;
+  }
+
+  .steps-container {
+    width: 100%;
+    gap: 1.5em;
+  }
+
+  .step {
+    padding: 1em;
+  }
+
+  .site-navigation-elements-footer {
+    flex-direction: column;
+    gap: 1em;
+  }
+}

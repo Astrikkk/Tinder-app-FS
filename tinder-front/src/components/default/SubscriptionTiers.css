@@ -302,4 +302,114 @@ body, html {
     font-size: 1em;
 }
 
+@media screen and (max-width: 1024px) {
+   .subscription-tiers-header {
+     flex-direction: column;
+     align-items: center;
+     padding: 1.5em;
+     margin-left: 0;
+   }
+  
+   .sparkii-logo {
+     margin-right: 0;
+     width: 6em;
+   }
+  
+   .menubar {
+     flex-direction: column;
+     gap: 1em;
+     margin-top: 1em;
+   }
+  
+   .subscription-plans {
+     flex-direction: column;
+     align-items: center;
+     gap: 2em;
+   }
+  
+   .plan-card {
+     width: 90%;
+     height: auto;
+     padding: 1.5em;
+   }
+}
+  
+  @media screen and (max-width: 768px) {
+   .subscription-container {
+     padding: 1em;
+   }
+  
+   .subscription-tiers-header {
+     padding: 1em;
+     text-align: center;
+   }
+  
+   .menubar {
+     display: none; 
+   }
+  
+   .log-in-header {
+     width: 10em;
+     font-size: 1em;
+   }
+  
+   .subscription-title p {
+     font-size: 1.5em;
+   }
+  
+   .plan-card {
+     width: 95%;
+     padding: 1.5em;
+   }
+  
+   .plan-card li {
+     font-size: 1em;
+   }
+  
+   .subscription-tiers-footer {
+     padding: 2em;
+   }
+  
+   .text-footer {
+     font-size: 0.9em;
+   }
+}
+  
+  @media screen and (max-width: 480px) {
+   .sparkii-logo {
+     width: 5em;
+   }
+  
+   .subscription-tiers-header {
+     padding: 1em;
+   }
+  
+   .log-in-header {
+     width: 8em;
+     padding: 0.5em;
+     font-size: 0.9em;
+   }
+  
+   .subscription-title p {
+     font-size: 1.2em;
+   }
+  
+   .plan-card {
+     width: 100%;
+     padding: 1em;
+   }
+  
+   .plan-title1, .plan-title2, .plan-title3 {
+     font-size: 1.2em;
+   }
+  
+   .plan-price {
+     font-size: 1.5em;
+   }
+  
+   .site-navigation-elements-footer {
+     flex-direction: column;
+     gap: 1em;
+   }
+}
   
