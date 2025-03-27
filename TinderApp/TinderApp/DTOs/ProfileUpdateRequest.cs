@@ -6,7 +6,7 @@ namespace TinderApp.DTOs
     {
 
         [Required]
-        public int JobPositionId { get; set; }
+        public int? JobPositionId { get; set; }
 
         [Required]
         public int GenderId { get; set; }

@@ -616,7 +616,6 @@ namespace TinderApp.Services
                     entity.ProfileDescription = model.ProfileDescription;
                 }
 
-                // Обробка зображень
                 if (model.Images != null && model.Images.Count > 0)
                 {
                     var dir = _configuration["ImageDir"];
@@ -625,10 +624,19 @@ namespace TinderApp.Services
                     if (!Directory.Exists(imageDirectory))
                         Directory.CreateDirectory(imageDirectory);
 
-                    var existingPrimary = entity.ProfilePhotos.FirstOrDefault(p => p.IsPrimary);
-                    if (existingPrimary != null)
-                        existingPrimary.IsPrimary = false;
+                    // Видаляємо старі фото
+                    var existingPhotos = entity.ProfilePhotos.ToList();
+                    foreach (var photo in existingPhotos)
+                    {
+                        var filePath = Path.Combine(imageDirectory, photo.Path);
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+                        entity.ProfilePhotos.Remove(photo);
+                    }
 
+                    // Додаємо нові фото
                     for (int i = 0; i < model.Images.Count; i++)
                     {
                         var image = model.Images[i];
@@ -641,7 +649,7 @@ namespace TinderApp.Services
                         entity.ProfilePhotos.Add(new ProfilePhoto
                         {
                             Path = imageName,
-                            IsPrimary = i == 0, // First image is primary
+                            IsPrimary = i == 0, // Перше зображення основним
                             ProfileId = entity.Id
                         });
                     }
