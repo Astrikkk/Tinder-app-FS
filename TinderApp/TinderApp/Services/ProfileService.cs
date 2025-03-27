@@ -12,6 +12,7 @@ using TinderApp.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using TinderApp.Data.Entities.Chat;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TinderApp.Services
 {
@@ -602,19 +603,46 @@ namespace TinderApp.Services
 
             try
             {
-                // Convert string date to DateOnly
-                entity.BirthDay = DateOnly.Parse(model.BirthDay);
+                if (!string.IsNullOrEmpty(model.BirthDay))
+                {
+                    entity.BirthDay = DateOnly.Parse(model.BirthDay);
+                }
+                _mapper.Map(model, entity);
 
-                // Map other properties
-                entity.Name = model.Name;
-                entity.JobPositionId = model.JobPositionId;
-                entity.GenderId = model.GenderId;
-                entity.InterestedInId = model.InterestedInId;
-                entity.LookingForId = model.LookingForId;
-                entity.SexualOrientationId = model.SexualOrientationId;
-                entity.ProfileDescription = model.ProfileDescription;
 
-                // Rest of your existing code for interests and images...
+                _mapper.Map(model, entity);
+
+
+                if (model.Images != null && model.Images.Count > 0)
+                {
+                    var dir = _configuration["ImageDir"];
+                    var imageDirectory = Path.Combine(Directory.GetCurrentDirectory(), dir);
+
+                    if (!Directory.Exists(imageDirectory))
+                        Directory.CreateDirectory(imageDirectory);
+
+                    var existingPrimary = entity.ProfilePhotos.FirstOrDefault(p => p.IsPrimary);
+                    if (existingPrimary != null)
+                        existingPrimary.IsPrimary = false;
+
+                    for (int i = 0; i < model.Images.Count; i++)
+                    {
+                        var image = model.Images[i];
+                        string imageName = $"{Guid.NewGuid()}.jpg";
+                        var filePath = Path.Combine(imageDirectory, imageName);
+
+                        await using var stream = new FileStream(filePath, FileMode.Create);
+                        await image.CopyToAsync(stream);
+
+                        entity.ProfilePhotos.Add(new ProfilePhoto
+                        {
+                            Path = imageName,
+                            IsPrimary = i == 0, // First image is primary
+                            ProfileId = entity.Id
+                        });
+                    }
+                }
+
 
                 await _dbContext.SaveChangesAsync();
                 return new ProfileUpdateResult { Success = true };
@@ -629,5 +657,43 @@ namespace TinderApp.Services
                 };
             }
         }
+
+
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> UpdateProfile(int id, [FromForm] ProfileUpdateRequest model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+
+        //    var entity = await _dbContext.Profiles
+        //        .Include(p => p.ProfilePhotos)
+        //        .FirstOrDefaultAsync(p => p.Id == id);
+
+        //    if (entity == null)
+        //        return NotFound(new { Message = $"Profile with ID {id} not found." });
+
+        //    _mapper.Map(model, entity);
+
+        //    if (model.Image != null)
+        //    {
+        //        string imageName = $"{Guid.NewGuid()}.jpg";
+        //        var dir = _configuration["ImageDir"];
+        //        var fileSave = Path.Combine(Directory.GetCurrentDirectory(), dir, imageName);
+
+        //        await using var stream = new FileStream(fileSave, FileMode.Create);
+        //        await model.Image.CopyToAsync(stream);
+
+        //        var existingPrimaryPhoto = entity.ProfilePhotos.FirstOrDefault(p => p.IsPrimary);
+        //        if (existingPrimaryPhoto != null)
+        //            existingPrimaryPhoto.IsPrimary = false;
+
+        //        entity.ProfilePhotos.Add(new ProfilePhoto
+        //        {
+        //            Path = imageName,
+        //            IsPrimary = true,
+        //            ProfileId = entity.Id
+        //        });
+        //    }
+
     }
 }

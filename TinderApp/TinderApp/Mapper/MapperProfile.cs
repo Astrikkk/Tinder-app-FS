@@ -36,9 +36,13 @@ namespace TinderApp.Mapper
             CreateMap<ProfileCreateRequest, UserProfile>()
                 .ForMember(entity => entity.ProfilePhotos, opt => opt.Ignore())
                 .ForMember(entity => entity.Interests, opt => opt.Ignore());
-            
+
             CreateMap<ProfileUpdateRequest, UserProfile>()
+                .ForMember(dest => dest.BirthDay, opt => opt.MapFrom(src =>
+                    !string.IsNullOrEmpty(src.BirthDay) ? DateOnly.Parse(src.BirthDay) : default))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+
 
             CreateMap<UserProfile, ProfileResponse>()
                 .ForMember(dto => dto.Gender, opt => opt.MapFrom(profile => profile.Gender.Name))
