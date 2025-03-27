@@ -393,7 +393,10 @@ const NewProfileViewer: React.FC = () => {
                     isEditingProfile ? (
                         <EditMyProfile onClose={handleCloseEditProfile} />
                     ) : (
-                        <MyProfileCard onEditProfile={handleEditProfile} />
+                        <MyProfileCard
+                            onEditProfile={handleEditProfile}
+                            onClose={handleCloseMyProfile}
+                        />
                     )
                 ) : activeChat ? (
                     <ChatWindow

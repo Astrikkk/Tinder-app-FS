@@ -4,17 +4,18 @@ import "./MyProfileCard.css"
 import {Profile, ProfileService} from "../../../../services/profile.service";
 import {calculateAge} from "../Card/Card";
 import {JwtService} from "../../../../services/jwt.service";
+import ArrowLeft from "../Chat/img/Arrow-left.svg";
+import ArrowRight from "../Chat/img/Arrow-right.svg";
 
 interface EditProps {
     onEditProfile: () => void;
+    onClose: () => void;
 }
 
-
-
-const MyProfileCard: React.FC<EditProps> = ({  onEditProfile }) => {
+const MyProfileCard: React.FC<EditProps> = ({ onEditProfile, onClose }) => {
     const [photoIndex, setPhotoIndex] = useState(0);
     const [profile, setProfile] = useState<Profile | null>(null);
-
+    const cardRef = React.useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -36,18 +37,42 @@ const MyProfileCard: React.FC<EditProps> = ({  onEditProfile }) => {
 
     useEffect(() => {
         setPhotoIndex(0);
-        console.log("is Online",profile)
     }, [profile]);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+                onClose();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [onClose]);
+
+    const handleNextPhoto = () => {
+        if (profile!.photos.length > 1) {
+            setPhotoIndex((prevIndex) => (prevIndex + 1) % profile!.photos.length);
+        }
+    };
+
+    const handlePrevPhoto = () => {
+        setPhotoIndex((prevIndex) =>
+            prevIndex === 0 ? profile!.photos.length - 1 : prevIndex - 1
+        );
+    };
 
     if (!profile) {
         return <p>Loading profile...</p>;
     }
 
+    const hasMultiplePhotos = profile.photos?.length > 1;
 
     return (
-        <div className="card">
-            {profile.photos?.length > 1 && (
+        <div className="card" ref={cardRef}>
+            {hasMultiplePhotos && (
                 <div className="photo-indicators">
                     {profile.photos.map((_, index) => (
                         <div
@@ -66,8 +91,18 @@ const MyProfileCard: React.FC<EditProps> = ({  onEditProfile }) => {
                     alt={profile.name}
                 />
                 <div className="card-overlay" />
-            </div>
 
+                {hasMultiplePhotos && (
+                    <>
+                        <div className="my-profile-allow-left-btn" onClick={handlePrevPhoto}>
+                            <img src={ArrowLeft} alt="Previous" />
+                        </div>
+                        <div className="my-profile-allow-right-btn" onClick={handleNextPhoto}>
+                            <img src={ArrowRight} alt="Next" />
+                        </div>
+                    </>
+                )}
+            </div>
 
             {profile.interests?.length > 0 && (
                 <div className="card-interests">
@@ -79,10 +114,9 @@ const MyProfileCard: React.FC<EditProps> = ({  onEditProfile }) => {
                 </div>
             )}
 
-
             <div className="card-name-status">
-                <div className= "card-status-online" >
-                     ♡ Online
+                <div className="card-status-online">
+                    ♡ Online
                 </div>
                 <div className="card-name-age">
                     <div className="card-name">{profile.name}</div>
@@ -92,7 +126,6 @@ const MyProfileCard: React.FC<EditProps> = ({  onEditProfile }) => {
 
             <button className="Bnt-profile-edit">
                 <div className="Bnt-profile-edit-text" onClick={onEditProfile}>Edit info</div>
-
             </button>
         </div>
     );

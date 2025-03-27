@@ -10,7 +10,7 @@
 
     position: absolute;
     left:27%;
-    bottom: 10px;
+    bottom: -15px;
 }
 
 .Bnt-profile-edit-text{
@@ -24,4 +24,25 @@
     font-weight: 700;
     line-height: normal;
     text-transform: capitalize;
+}
+
+
+.my-profile-allow-left-btn{
+    position: absolute;
+    width: 89px;
+    height: 28px;
+    flex-shrink: 0;
+    top:220px;
+    left:20px;
+    cursor: pointer;
+}
+
+.my-profile-allow-right-btn{
+    position: absolute;
+    width: 89px;
+    height: 28px;
+    flex-shrink: 0;
+    top:220px;
+    left: 365px;
+    cursor: pointer;
 }

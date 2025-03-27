@@ -8,6 +8,8 @@ import {ProfileInfoService} from "../../../../../services/profile.info.service";
 import SexualOrientation, {Orientation} from "../../../adminPage/form/modal/sexualOrientation/sexualOrientation";
 import { AxiosError } from 'axios';
 import {logout} from "../../../../../services/auth.service";
+import ArrowLeft from "../../Chat/img/Arrow-left.svg";
+import ArrowRight from "../../Chat/img/Arrow-right.svg";
 
 interface EditProps {
     onClose: () => void;
@@ -87,6 +89,17 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
         fetchProfile();
     }, []);
 
+    useEffect(() => {
+        return () => {
+            // Очищаємо об'єктні URL при видаленні компонента
+            images.forEach(image => {
+                if (image instanceof File) {
+                    URL.revokeObjectURL(URL.createObjectURL(image));
+                }
+            });
+        };
+    }, [images]);
+
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
@@ -135,7 +148,6 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
     const handleOrientationSelect = (orientation: Orientation) => {
         setSelectedOrientation(orientation);
         setShowOrientationDropdown(false);
-        // Here you would typically save the selection to the backend
     };
 
     const handleLookingForSelect = (orientation: Orientation) => {
@@ -143,10 +155,10 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
         setShowLookingForDropdown(false);
     };
 
+
     const handleSaveChanges = async () => {
         if (!profile) return;
 
-        console.log(selectedJobTitleId)
         try {
             // Validate required fields
             const missingFields = [];
@@ -159,35 +171,20 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
                 throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
             }
 
-            // Перевіряємо чи selectedJobTitleId є числом
-            if (typeof selectedJobTitleId !== 'number') {
-                const updateData = {
-                    jobPositionId: selectedJobTitleId!.id,
-                    genderId: profile.gender.id,
-                    interestedInId: profile.interestedIn.id,
-                    lookingForId: selectedLookingFor!.id,
-                    sexualOrientationId: selectedOrientation!.id,
-                    images: images.filter((img): img is File => img instanceof File),
-                    interestIds: selectedInterestIds,
-                    profileDescription: description
-                };
+            const updateData = {
+                jobPositionId: typeof selectedJobTitleId !== 'number' ? selectedJobTitleId!.id : Number(selectedJobTitleId),
+                genderId: profile.gender.id,
+                interestedInId: profile.interestedIn.id,
+                lookingForId: selectedLookingFor!.id,
+                sexualOrientationId: selectedOrientation!.id,
+                images: images.filter((img): img is File => img instanceof File),
+                interestIds: selectedInterestIds,
+                profileDescription: description
+            };
 
-                await ProfileService.updateProfileWithData(profile.userId, updateData);
-                alert("Profile updated successfully!");
-            } else {
-                const updateData = {
-                    jobPositionId: Number(selectedJobTitleId),
-                    genderId: profile.gender.id,
-                    interestedInId: profile.interestedIn.id,
-                    lookingForId: selectedLookingFor!.id,
-                    sexualOrientationId: selectedOrientation!.id,
-                    images: images.filter((img): img is File => img instanceof File),
-                    interestIds: selectedInterestIds,
-                    profileDescription: description
-                };
-                await ProfileService.updateProfileWithData(profile.userId, updateData);
-                alert("Profile updated successfully!");
-            }
+            await ProfileService.updateProfileWithData(profile.userId, updateData);
+            alert("Profile updated successfully!");
+            onClose(); // Додаємо закриття після успішного оновлення
         } catch (error) {
             let errorMessage = "Failed to update profile";
             if (error instanceof Error) {
@@ -211,13 +208,18 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
                 <div className="Edit-Profile-Element">
                     <h2 className="Edit-Profile-Title">Add/change profile pictures</h2>
                     <div className="Edit-Profile-Upload-Block">
+                        // Оновлений код для відображення фото
                         {images.map((image, i) => (
                             <div key={i} className="Edit-Profile-Upload-Item">
                                 <div className="">
                                     {image ? (
                                         <>
                                             <img
-                                                src={`http://localhost:7034${typeof image === "string" ? image : image instanceof File ? URL.createObjectURL(image) : ""}`}
+                                                src={
+                                                    typeof image === "string"
+                                                        ? `http://localhost:7034${image}`
+                                                        : URL.createObjectURL(image)
+                                                }
                                                 alt={`Uploaded ${i}`}
                                                 className="Edit-Profile-Upload-Item-Img"
                                             />
@@ -374,8 +376,8 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
                     <button className="Edit-Profile-Btn" onClick={handleSaveChanges}>
                         <div className="Edit-Profile-Btn-Text">Save changes</div>
                     </button>
-                    <button className="Edit-Profile-Btn">
-                        <div className="Edit-Profile-Btn-Text">Preview</div>
+                    <button className="Edit-Profile-Btn" onClick={onClose}>
+                        <div className="Edit-Profile-Btn-Text">Cancel</div>
                     </button>
                 </div>
 
