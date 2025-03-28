@@ -15,7 +15,7 @@ export interface Profile {
     jobPosition?:{
         id: number;
         name: string;
-    }
+    };
     lookingFor: {
         id: number;
         name: string;
