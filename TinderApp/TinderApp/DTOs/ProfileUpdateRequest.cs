@@ -4,8 +4,6 @@ namespace TinderApp.DTOs
 {
     public class ProfileUpdateRequest
     {
-
-        [Required]
         public int? JobPositionId { get; set; }
 
         [Required]

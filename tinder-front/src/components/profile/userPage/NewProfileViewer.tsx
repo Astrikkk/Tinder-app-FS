@@ -516,21 +516,7 @@ const NewProfileViewer: React.FC = () => {
                         <div className="key-box">
                             <img src={Like} />
                         </div>
-                        <span className="key-text">super like</span>
-                    </div>
-
-                    <div className="key">
-                        <div className="key-box">
-                            <img src={Open} />
-                        </div>
-                        <span className="key-text">open profile</span>
-                    </div>
-
-                    <div className="key">
-                        <div className="key-box">
-                            <img src={Close} />
-                        </div>
-                        <span className="key-text">close profile</span>
+                        <span className="key-text">like</span>
                     </div>
 
                     <div className="key">
@@ -539,6 +525,20 @@ const NewProfileViewer: React.FC = () => {
                         </div>
                         <span className="key-text">super like</span>
                     </div>
+
+                    {/* <div className="key">
+                        <div className="key-box">
+                            <img src={Close} />
+                        </div>
+                        <span className="key-text">close profile</span>
+                    </div> */}
+
+                    {/* <div className="key">
+                        <div className="key-box">
+                            <img src={SuperLike} />
+                        </div>
+                        <span className="key-text">super like</span>
+                    </div> */}
 
                     <div className="key">
                         <div className="key-box">
