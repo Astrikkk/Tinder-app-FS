@@ -17,6 +17,24 @@ import LeftHeader from "./SidePanel/LeftHeader";
 import classNames from "classnames";
 import MyProfileCard from "./MyProfile/MyProfileCard";
 import EditMyProfile from "./MyProfile/Edit/EditMyProfile";
+import Nope from "./img/keys/nope.svg";
+import Like from "./img/keys/like.svg";
+import Close from "./img/keys/close.svg";
+import SuperLike from "./img/keys/super-like.svg";
+import Open from "./img/keys/open.svg";
+import NextPh from "./img/keys/next.svg";
+
+    import LookingForLove1 from "./img/LookingForLoveImg1.svg";
+import LookingForLove2 from "./img/LookingForLoveImg2.svg";
+
+import FreeTonight1 from "./img/FreeTonightImg1.svg";
+import FreeTonight2 from "./img/FreeTonightImg2.svg";
+
+import LetsBeFriends1 from "./img/LetsBeFriendsImg1.svg";
+import LetsBeFriends2 from "./img/LetsBeFriendsImg2.svg";
+
+import CoffeeDate1 from "./img/CoffeeDateImg1.svg";
+import CoffeeDate2 from "./img/CoffeeDateImg2.svg";
 
 
 export interface ChatDTO {
@@ -51,6 +69,8 @@ const NewProfileViewer: React.FC = () => {
 
     const [isEditingProfile, setIsEditingProfile] = useState(false);
 
+
+    const [selectedCategory, setSelectedCategory] = useState("Coffee Date");
 
 
 
@@ -341,7 +361,12 @@ const NewProfileViewer: React.FC = () => {
             case "Chats":
                 return <Chats userChats={userChats} activeChat={activeChat} openChat={openChat} />;
             case "Explore":
-                return <Explore setProfiles={setProfiles} setCurrentProfileIndex={setCurrentProfileIndex} setViewingCategoryProfiles={setViewingCategoryProfiles} />;
+                return <Explore
+                    setProfiles={setProfiles}
+                    setCurrentProfileIndex={setCurrentProfileIndex}
+                    setViewingCategoryProfiles={setViewingCategoryProfiles}
+                    setSelectedCategory={setSelectedCategory}
+                />;
             default:
                 return null;
         }
@@ -431,6 +456,7 @@ const NewProfileViewer: React.FC = () => {
                                 onSuperLike={handleSuperLike}
                                 onInfoClick={showInfoModal}
                             />
+
                         </div>
                     </>
                 ) : (
@@ -438,6 +464,90 @@ const NewProfileViewer: React.FC = () => {
                 )}
             </div>
 
+            {!activeChat && selectedButton === "Explore" && viewingCategoryProfiles && (
+                <>
+                    <div className="Explore-group-looking">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M2.90039 12H20.9004M2.90039 12L8.90039 18M2.90039 12L8.90039 6" stroke="#FFCC7E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div className="Explore-group-looking-text">
+                            {selectedCategory}
+                        </div>
+                    </div>
+
+                    {selectedCategory === 'Looking for Love' && (
+                        <>
+                            <div className="bg-img1"><img src={LookingForLove1} alt="Looking for Love"/></div>
+                            <div className="bg-img2"><img src={LookingForLove2} alt="Looking for Love"/></div>
+                        </>
+                    )}
+                    {selectedCategory === 'Free Tonight' && (
+                        <>
+                            <div className="bg-img1"><img src={FreeTonight1} alt="Free Tonight"/></div>
+                            <div className="bg-img2"><img src={FreeTonight2} alt="Free Tonight"/></div>
+                        </>
+                    )}
+                    {selectedCategory === "Let's Be Friends" && (
+                        <>
+                            <div className="bg-img1"><img src={LetsBeFriends1} alt="Let's Be Friends"/></div>
+                            <div className="bg-img2"><img src={LetsBeFriends2} alt="Let's Be Friends"/></div>
+                        </>
+                    )}
+                    {selectedCategory === 'Coffee Date' && (
+                        <>
+                            <div className="bg-img1"><img src={CoffeeDate1} alt="Coffee Date"/></div>
+                            <div className="bg-img2"><img src={CoffeeDate2} alt="Coffee Date"/></div>
+                        </>
+                    )}
+                </>
+            )}
+
+
+            {!activeChat && !isMyProfileCard && !isEditingProfile && (
+                <div className="keys">
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={Nope} />
+                        </div>
+                        <span className="key-text">nope</span>
+                    </div>
+
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={Like} />
+                        </div>
+                        <span className="key-text">super like</span>
+                    </div>
+
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={Open} />
+                        </div>
+                        <span className="key-text">open profile</span>
+                    </div>
+
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={Close} />
+                        </div>
+                        <span className="key-text">close profile</span>
+                    </div>
+
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={SuperLike} />
+                        </div>
+                        <span className="key-text">super like</span>
+                    </div>
+
+                    <div className="key">
+                        <div className="key-box">
+                            <img src={NextPh} />
+                        </div>
+                        <span className="key-text">next photo</span>
+                    </div>
+                </div>
+            )}
 
 
             {isMatch && (

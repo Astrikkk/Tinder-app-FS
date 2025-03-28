@@ -16,7 +16,7 @@ namespace TinderApp.DTOs
         public string Name { get; set; }
         public string ImagePath { get; set; } = string.Empty;
         public Gender Gender { get; set; }
-        public JobPosition JobPosition { get; set; }
+        public JobPositionDTO JobPosition { get; set; }
         public LookingFor LookingFor{ get; set; }
         public InterestedIn InterestedIn{ get; set; }
         public SexualOrientation SexualOrientation { get; set; }

@@ -52,8 +52,7 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
                     setProfile(userProfile || null);
 
                     if (userProfile?.photos && Array.isArray(userProfile.photos)) {
-                        const formattedImages = userProfile.photos.map((img) => img || null);
-                        setImages([...formattedImages, ...Array(4 - formattedImages.length).fill(null)]);
+                        setImages(Array(4).fill(null));
                     }
 
                     if (userProfile?.profileDescription) {
@@ -142,7 +141,6 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
     const handleJobTitleSelect = (selectedId: number | Orientation | null) => {
         setSelectedJobTitleId(selectedId);
         setShowJobTitleModal(false);
-        // Тут можна додати логіку для збереження вибраної посади
     };
 
     const handleOrientationSelect = (orientation: Orientation) => {
@@ -164,27 +162,30 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
             const missingFields = [];
             if (!profile.gender?.id) missingFields.push('Gender');
             if (!profile.interestedIn?.id) missingFields.push('Interested In');
-            if (selectedLookingFor === null) missingFields.push('Looking For');
-            if (selectedOrientation === null) missingFields.push('Sexual Orientation');
+            if (!selectedLookingFor) missingFields.push('Looking For');
+            if (!selectedOrientation) missingFields.push('Sexual Orientation');
 
             if (missingFields.length > 0) {
                 throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
             }
 
             const updateData = {
-                jobPositionId: typeof selectedJobTitleId !== 'number' ? selectedJobTitleId!.id : Number(selectedJobTitleId),
+                ...(selectedJobTitleId !== null && {
+                    jobPositionId: typeof selectedJobTitleId !== 'number'
+                        ? selectedJobTitleId?.id
+                        : Number(selectedJobTitleId)
+                }),
                 genderId: profile.gender.id,
                 interestedInId: profile.interestedIn.id,
-                lookingForId: selectedLookingFor!.id,
-                sexualOrientationId: selectedOrientation!.id,
+                lookingForId: selectedLookingFor!.id, // Гарантовано number, бо перевірено вище
+                sexualOrientationId: selectedOrientation!.id, // Гарантовано number, бо перевірено вище
                 images: images.filter((img): img is File => img instanceof File),
                 interestIds: selectedInterestIds,
                 profileDescription: description
             };
 
             await ProfileService.updateProfileWithData(profile.userId, updateData);
-            alert("Profile updated successfully!");
-            onClose(); // Додаємо закриття після успішного оновлення
+            onClose();
         } catch (error) {
             let errorMessage = "Failed to update profile";
             if (error instanceof Error) {

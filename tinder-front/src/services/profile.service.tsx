@@ -219,7 +219,7 @@ export interface Profile {
         updateProfileWithData: async (
             profileId: number,
             updateData: {
-                jobPositionId: number;
+                jobPositionId?: number;
                 genderId: number;
                 interestedInId: number;
                 lookingForId: number;
@@ -232,7 +232,7 @@ export interface Profile {
             const formData = new FormData();
 
             // Required fields
-            formData.append('JobPositionId', updateData.jobPositionId.toString());
+            formData.append('JobPositionId', updateData.jobPositionId!.toString());
             formData.append('GenderId', updateData.genderId.toString());
             formData.append('InterestedInId', updateData.interestedInId.toString());
             formData.append('LookingForId', updateData.lookingForId.toString());

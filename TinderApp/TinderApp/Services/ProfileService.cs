@@ -688,41 +688,5 @@ namespace TinderApp.Services
 
 
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateProfile(int id, [FromForm] ProfileUpdateRequest model)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    var entity = await _dbContext.Profiles
-        //        .Include(p => p.ProfilePhotos)
-        //        .FirstOrDefaultAsync(p => p.Id == id);
-
-        //    if (entity == null)
-        //        return NotFound(new { Message = $"Profile with ID {id} not found." });
-
-        //    _mapper.Map(model, entity);
-
-        //    if (model.Image != null)
-        //    {
-        //        string imageName = $"{Guid.NewGuid()}.jpg";
-        //        var dir = _configuration["ImageDir"];
-        //        var fileSave = Path.Combine(Directory.GetCurrentDirectory(), dir, imageName);
-
-        //        await using var stream = new FileStream(fileSave, FileMode.Create);
-        //        await model.Image.CopyToAsync(stream);
-
-        //        var existingPrimaryPhoto = entity.ProfilePhotos.FirstOrDefault(p => p.IsPrimary);
-        //        if (existingPrimaryPhoto != null)
-        //            existingPrimaryPhoto.IsPrimary = false;
-
-        //        entity.ProfilePhotos.Add(new ProfilePhoto
-        //        {
-        //            Path = imageName,
-        //            IsPrimary = true,
-        //            ProfileId = entity.Id
-        //        });
-        //    }
-
     }
 }

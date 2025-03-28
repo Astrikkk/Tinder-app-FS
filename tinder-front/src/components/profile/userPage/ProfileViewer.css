@@ -142,7 +142,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    top: 38px;
+    top: 1%;
 
 
 
@@ -463,5 +463,40 @@ body{
     animation: swipe-right 0.4s ease-out forwards;
 }
 
+
+.Explore-group-looking{
+    display: inline-flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    position: absolute;
+    right: 350px;
+}
+
+.Explore-group-looking-text{
+    color: #FFCC7E;
+    text-align: center;
+
+    /* Akatab-Bold-20 */
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: capitalize;
+}
+
+.bg-img1{
+ position: absolute;
+    top: 20%;
+    left: 30%
+}
+.bg-img2{
+    position: absolute;
+    bottom: 10%;
+    right: 8%
+}
 
 
