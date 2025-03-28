@@ -7,6 +7,7 @@ import Star from "./img/icon_star-super-like.svg";
 import Like from "./img/icon_like.svg";
 import Return from "./img/Return.svg";
 import {Profile} from "../../../../services/profile.service";
+import ShowProfile from "../Chat/ShowProfile/ShowProfile";
 
 interface CardProps {
     profile: Profile;
@@ -32,11 +33,20 @@ export const calculateAge = (birthDate: Date): number => {
 
 const Card: React.FC<CardProps> = ({ profile, onReturn, onDislike, onLike, onSuperLike, onInfoClick }) => {
     const [photoIndex, setPhotoIndex] = useState(0);
+    const [showProfileModal, setShowProfileModal] = useState(false);
 
     const handleNextPhoto = () => {
         if (profile.photos.length > 1) {
             setPhotoIndex((prevIndex) => (prevIndex + 1) % profile.photos.length);
         }
+    };
+    const handleProfileToggle = () => {
+        setShowProfileModal(!showProfileModal);
+    };
+
+    const handleInfoClick = () => {
+        handleProfileToggle();
+        onInfoClick(profile.id);  // Keep this if you still need the original prop functionality
     };
 
     useEffect(() => {
@@ -125,9 +135,15 @@ const Card: React.FC<CardProps> = ({ profile, onReturn, onDislike, onLike, onSup
                 ))}
             </div>
 
-            <button className="card-info-icon" onClick={() => onInfoClick(profile.id)}>
+            <button className="card-info-icon" onClick={handleInfoClick}>
                 <img src={Group} alt="More Info" />
             </button>
+            {showProfileModal && (
+                <ShowProfile 
+                    profile={profile} 
+                    onClose={() => setShowProfileModal(false)}
+                />
+            )}
 
             <div className="card-name-status">
                 <div className={profile.isOnline ? "card-status-online" : "card-status-offline"}>
