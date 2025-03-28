@@ -209,7 +209,6 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
                 <div className="Edit-Profile-Element">
                     <h2 className="Edit-Profile-Title">Add/change profile pictures</h2>
                     <div className="Edit-Profile-Upload-Block">
-                        // Оновлений код для відображення фото
                         {images.map((image, i) => (
                             <div key={i} className="Edit-Profile-Upload-Item">
                                 <div className="">

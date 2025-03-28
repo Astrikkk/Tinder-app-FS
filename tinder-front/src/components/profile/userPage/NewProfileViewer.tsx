@@ -138,7 +138,8 @@ const NewProfileViewer: React.FC = () => {
 
     const handleBackToMainProfiles = async () => {
         setViewingMatches(false);
-        await fetchProfiles(); // Завантажуємо звичайні профілі
+        setViewingCategoryProfiles(false); // Додаємо цей рядок
+        await fetchProfiles();
         setCurrentProfileIndex(0);
     };
 
@@ -433,7 +434,7 @@ const NewProfileViewer: React.FC = () => {
                     />
                 ) : profiles.length > 0 ? (
                     <>
-                        {(viewingMatches || viewingCategoryProfiles) && (
+                        {( viewingCategoryProfiles) && (
                             <button onClick={handleBackToMainProfiles} className="back-button">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
                                     <path
