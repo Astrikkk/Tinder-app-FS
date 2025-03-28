@@ -203,6 +203,7 @@ namespace TinderApp.Services
             likedByUser.Matches ??= new List<UserProfile>();
 
             bool alreadySuperLiked = likedUser.SuperLikedBy.Any(u => u.Id == request.LikedByUserId);
+            bool alreadyLiked = likedUser.LikedBy.Any(u => u.Id == request.LikedByUserId);
             if (!alreadySuperLiked)
             {
                 likedByUser.LikedUsers.Add(likedUser);

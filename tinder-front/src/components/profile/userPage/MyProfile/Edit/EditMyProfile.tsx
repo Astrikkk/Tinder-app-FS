@@ -281,18 +281,30 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
                     </div>
                 </div>
                 <div className="Edit-Profile-Element">
-                    <div className="Edit-Profile-Title">Job title</div>
-                    <div className="Edit-Profile-Interests-Block">
-                        <button
-                            className="Edit-Profile-Job-Item"
-                            onClick={() => setShowJobTitleModal(true)}
-                        >
-                            <div className="Edit-Profile-Interests-Block-Item-Text">
-                                {selectedJobTitleId ? "Change Job Title" : "+ Add Job Title"}
-                            </div>
-                        </button>
-                    </div>
-                </div>
+    <div className="Edit-Profile-Title">Job title (optional)</div>
+    <div className="Edit-Profile-Interests-Block">
+        <button
+            className="Edit-Profile-Job-Item"
+            onClick={() => setShowJobTitleModal(true)}
+        >
+            <div className="Edit-Profile-Interests-Block-Item-Text">
+                {selectedJobTitleId ? 
+                    (typeof selectedJobTitleId === 'object' ? 
+                        selectedJobTitleId.name : 
+                        "Selected Job") 
+                    : "+ Add Job Title"}
+            </div>
+        </button>
+        {selectedJobTitleId && (
+            <button 
+                className="Edit-Profile-Remove-Job-Btn"
+                onClick={() => setSelectedJobTitleId(null)}
+            >
+                ×
+            </button>
+        )}
+    </div>
+</div>
                 <div className="Edit-Profile-Element">
                     <div className="Edit-Profile-Title">I am</div>
                     <div className="orientation-dropdown-container">

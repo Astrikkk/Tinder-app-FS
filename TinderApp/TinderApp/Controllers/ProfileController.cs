@@ -93,7 +93,7 @@ public class ProfileController : ControllerBase
         }
     }
 
-    [HttpGet("{id}/FilteredProfiles")]  // Fixed spelling from "Flitered" to "Filtered"
+    [HttpGet("{id}/FilteredProfiles")] 
     public async Task<IActionResult> GetFilteredProfiles(int id)
     {
         var profiles = await _profileService.GetFilteredProfiles(id);

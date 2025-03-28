@@ -9,7 +9,5 @@ namespace TinderApp.Data.Entities.ProfileProp
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-
-        public ICollection<UserProfile> UserProfiles { get; set; }
     }
 }

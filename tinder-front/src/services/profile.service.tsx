@@ -60,26 +60,11 @@ export interface Profile {
         return response.data;
     },
 
-        getFilteredProfilesById: async (id: string): Promise<Profile[]> => {
-            try {
-                const response = await axios.get<Profile[]>(`${API_URL}/${id}/FilteredProfiles`);
-                return response.data;
-            } catch (error: unknown) {
-                if (axios.isAxiosError(error)) {
-                    if (error.response?.status === 500) {
-                        console.error("Server error:", error.response.data);
-                        // Return empty array instead of throwing error
-                        return [];
-                    }
-                    // Handle other axios errors
-                    console.error("Axios error:", error.message);
-                    return [];
-                }
-                // Handle non-axios errors
-                console.error("Unexpected error:", error);
-                return [];
-            }
-        },
+    getFilteredProfilesById: async (id: string): Promise<Profile[]> => {
+        const response = await axios.get(`${API_URL}/${id}/FliteredProfiles`);
+        return response.data;
+    },
+
 
     getProfilesByLookingFor: async (id: string): Promise<Profile[]> => {
         const token = localStorage.getItem("token");
@@ -216,61 +201,65 @@ export interface Profile {
         return response.data;
     },
 
-        updateProfileWithData: async (
-            profileId: number,
-            updateData: {
-                jobPositionId?: number;
-                genderId: number;
-                interestedInId: number;
-                lookingForId: number;
-                sexualOrientationId: number;
-                images?: File[];
-                interestIds?: number[];
-                profileDescription?: string;
+    updateProfileWithData: async (
+        profileId: number,
+        updateData: {
+            jobPositionId?: number; // Зроблено необов'язковим
+            genderId: number;
+            interestedInId: number;
+            lookingForId: number;
+            sexualOrientationId: number;
+            images?: File[];
+            interestIds?: number[];
+            profileDescription?: string;
+        }
+    ): Promise<void> => {
+        const formData = new FormData();
+    
+        // Додаємо тільки, якщо значення є
+        if (updateData.jobPositionId !== undefined) {
+            formData.append('JobPositionId', updateData.jobPositionId.toString());
+        }
+    
+        formData.append('GenderId', updateData.genderId.toString());
+        formData.append('InterestedInId', updateData.interestedInId.toString());
+        formData.append('LookingForId', updateData.lookingForId.toString());
+        formData.append('SexualOrientationId', updateData.sexualOrientationId.toString());
+    
+        // Додаємо опис профілю, якщо є
+        if (updateData.profileDescription) {
+            formData.append('ProfileDescription', updateData.profileDescription);
+        }
+    
+        // Обробка зображень
+        if (updateData.images) {
+            updateData.images.forEach((file) => {
+                formData.append('Images', file);
+            });
+        }
+    
+        // Обробка інтересів
+        if (updateData.interestIds) {
+            updateData.interestIds.forEach(id => {
+                formData.append('InterestIds', id.toString());
+            });
+        }
+    
+        try {
+            const response = await axios.put(`${API_URL}/${profileId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                console.error('Full error:', error.response?.data);
+                throw new Error(error.response?.data?.message || 'Profile update failed');
             }
-        ): Promise<void> => {
-            const formData = new FormData();
-
-            // Required fields
-            formData.append('JobPositionId', updateData.jobPositionId!.toString());
-            formData.append('GenderId', updateData.genderId.toString());
-            formData.append('InterestedInId', updateData.interestedInId.toString());
-            formData.append('LookingForId', updateData.lookingForId.toString());
-            formData.append('SexualOrientationId', updateData.sexualOrientationId.toString());
-
-            // Optional fields
-            if (updateData.profileDescription) {
-                formData.append('ProfileDescription', updateData.profileDescription);
-            }
-
-            // Handle images
-            if (updateData.images) {
-                updateData.images.forEach((file) => {
-                    formData.append('Images', file);
-                });
-            }
-
-            // Handle interests
-            if (updateData.interestIds) {
-                updateData.interestIds.forEach(id => {
-                    formData.append('InterestIds', id.toString());
-                });
-            }
-
-            try {
-                const response = await axios.put(`${API_URL}/${profileId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-                return response.data;
-            } catch (error) {
-                if (error instanceof AxiosError) {
-                    console.error('Full error:', error.response?.data);
-                    throw new Error(error.response?.data?.message || 'Profile update failed');
-                }
-                throw error;
-            }
-        },
+            throw error;
+        }
+    },
+    
 
     };

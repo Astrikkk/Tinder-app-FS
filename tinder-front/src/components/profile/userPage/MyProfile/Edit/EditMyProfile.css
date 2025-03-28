@@ -277,3 +277,17 @@
     line-height: normal;
     text-transform: capitalize;
 }
+
+.Edit-Profile-Remove-Job-Btn {
+    background: none;
+    border: none;
+    color: #ff4444;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 0 5px;
+}
+
+.Edit-Profile-Remove-Job-Btn:hover {
+    color: #cc0000;
+}

@@ -239,7 +239,7 @@ namespace TinderApp.Data
 
             modelBuilder.Entity<UserProfile>()
                     .HasOne(p => p.JobPosition)
-                    .WithMany(j => j.UserProfiles)
+                    .WithMany()
                     .HasForeignKey(p => p.JobPositionId);
 
 

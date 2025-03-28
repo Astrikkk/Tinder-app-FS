@@ -854,7 +854,7 @@ namespace TinderApp.Migrations
                         .IsRequired();
 
                     b.HasOne("TinderApp.Data.Entities.ProfileProp.JobPosition", "JobPosition")
-                        .WithMany("UserProfiles")
+                        .WithMany()
                         .HasForeignKey("JobPositionId");
 
                     b.HasOne("TinderApp.Data.Entities.ProfileProp.Country", "Location")
@@ -1008,11 +1008,6 @@ namespace TinderApp.Migrations
                     b.Navigation("Profile");
 
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("TinderApp.Data.Entities.ProfileProp.JobPosition", b =>
-                {
-                    b.Navigation("UserProfiles");
                 });
 
             modelBuilder.Entity("UserProfile", b =>
