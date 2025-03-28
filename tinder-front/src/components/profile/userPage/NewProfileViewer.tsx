@@ -434,7 +434,7 @@ const NewProfileViewer: React.FC = () => {
                     />
                 ) : profiles.length > 0 ? (
                     <>
-                        {( viewingCategoryProfiles) && (
+                        {(viewingMatches || viewingCategoryProfiles) && (
                             <button onClick={handleBackToMainProfiles} className="back-button">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
                                     <path
