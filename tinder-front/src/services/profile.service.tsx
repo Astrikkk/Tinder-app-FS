@@ -61,8 +61,21 @@ export interface Profile {
     },
 
     getFilteredProfilesById: async (id: string): Promise<Profile[]> => {
-        const response = await axios.get(`${API_URL}/${id}/FliteredProfiles`);
-        return response.data;
+        try {
+            const response = await axios.get<Profile[]>(`${API_URL}/${id}/FilteredProfiles`);
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 500) {
+                    console.error("Server error:", error.response.data);
+                    return [];
+                }
+                console.error("Axios error:", error.message);
+                return [];
+            }
+            console.error("Unexpected error:", error);
+            return [];
+        }
     },
 
 
