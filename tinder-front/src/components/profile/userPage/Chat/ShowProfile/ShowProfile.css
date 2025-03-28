@@ -7,11 +7,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Прозоре затемнення */
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000; /* Високий рівень, щоб бути поверх усього */
+    z-index: 1000;
+    overflow-y: auto; /* Дозволяє скролити весь оверлей, якщо контент не вміщується */
 }
 
 /* Контейнер модального вікна */
@@ -24,38 +25,39 @@
     width: 90%;
     text-align: center;
     animation: fadeIn 0.3s ease-in-out;
+    margin: 20px 0; /* Додаємо відступи зверху та знизу для скролу */
 }
-
 /* Фон картки */
 .Card-bg {
-    position: relative; /* Робимо контейнер відносним для абсолютного позиціонування дочірніх елементів */
+    position: relative;
     width: 560px;
-    height: auto;
+    max-height: 90vh; /* Обмежуємо висоту до висоти екрана */
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: hidden; /* Щоб нічого не виходило за межі */
+    overflow: hidden;
+    border-radius: 12px;
 }
 /* Фото профілю */
 .card-photo {
     width: 560px;
     height: 380px;
     object-fit: cover;
-    border-radius: 12px 12px 0 0; /* Закруглення тільки верхніх кутів */
+    border-radius: 12px 12px 0 0;
+    flex-shrink: 0; /* Забороняємо зменшення висоти фото */
 }
 
 
 
 .BG-color {
     width: 560px;
-    min-height: auto; /* Автоматичне підлаштування висоти */
+    max-height: calc(90vh - 380px); /* Висота з урахуванням фото */
     background: #240000;
-    border-radius: 0 0 12px 12px; /* Закруглення тільки нижніх кутів */
-    display: flex; /* Вирівнювання дочірніх елементів */
-    flex-direction: column; /* Розміщення елементів вертикально */
-    align-items: center; /* Центрування вмісту */
-    justify-content: space-between; /* Рівномірний розподіл */
-    padding: 30px; /* Відступи для внутрішніх елементів */
+    border-radius: 0 0 12px 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    overflow-y: auto; /* Дозволяє скролити вміст інформації */
 }
 
 .BG-color-Gradient {
@@ -256,4 +258,54 @@
     top:130px;
     left: 480px;
     cursor: pointer;
+}
+
+.Desciption-Text{
+    color: #B1A4A4;
+
+    /* Akatab-Regular-18 */
+    font-family: Akatab;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+
+/* Прибираємо стандартний скролбар для кращого вигляду */
+.BG-color::-webkit-scrollbar {
+    width: 6px;
+}
+
+.BG-color::-webkit-scrollbar-track {
+    background: #320000;
+    border-radius: 3px;
+}
+
+.BG-color::-webkit-scrollbar-thumb {
+    background: #751123;
+    border-radius: 3px;
+}
+
+.BG-color-Gradient {
+    display: none; /* Прибираємо градієнт, так як він заважає скролу */
+}
+
+.Full-Info {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    width: 100%;
+    min-height: min-content; /* Мінімальна висота - за вмістом */
+}
+
+/* Решта стилів залишаються незмінними */
+.Name-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    align-self: stretch;
 }

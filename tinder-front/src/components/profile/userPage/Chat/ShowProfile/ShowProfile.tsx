@@ -130,6 +130,12 @@ const ShowProfile: React.FC<ShowProfileProps> = ({ profile, onClose }) => {
                                 <div className="Card-hr" />
 
                             </div>
+
+                            {profile.profileDescription && (
+                                <div className="Desciption-Text">
+                                    {profile.profileDescription}
+                                </div>
+                            )}
                             <div className="Interests-box">
                                 <div className="Interests-title">Interests</div>
                                 <div className="show-prof-interests">
@@ -140,6 +146,17 @@ const ShowProfile: React.FC<ShowProfileProps> = ({ profile, onClose }) => {
                                     ))}
                                 </div>
                             </div>
+
+                            {profile.jobPosition?.name && (
+                                <div className="Relationship-Goal">
+                                    <div className="Interests-title">Profession</div>
+                                    <div className="Relationship-Goal-details">
+                                        <div className="Relationship-Goal-details-text">
+                                            {profile.jobPosition.name}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="Relationship-Goal">
                                 <div className="Interests-title">I’m looking for</div>
