@@ -56,10 +56,11 @@ const SexualOrientation: React.FC<SexualOrientationProps> = ({ onClose, initialS
     return (
         <div className="modal">
             <div className="modal-content">
-                <h2 className="modal-text">
-                    {isJobTitle ? "What is your job title?" : "What is your sexual orientation?"}
-                </h2>
+
                 <div className="sexual-orientation-list">
+                    <h2 className="modal-text">
+                        {isJobTitle ? "What is your job title?" : "What is your sexual orientation?"}
+                    </h2>
                     {sexualOrientations.map((option) => (
                         <button
                             key={option.id}

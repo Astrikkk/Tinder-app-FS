@@ -1,10 +1,11 @@
-.sexual-orientation-list{
+.sexual-orientation-list {
     display: flex;
     width: 444px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 24px;
+    margin-top: 1400px; /* Додаємо відступ зверху */
 }
 
 .sexual-orientation{
