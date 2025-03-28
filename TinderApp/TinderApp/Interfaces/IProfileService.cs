@@ -1,6 +1,7 @@
 ﻿using TinderApp.DTOs;
 using TinderApp.Data.Entities;
 using TinderApp.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TinderApp.Interfaces
 {
