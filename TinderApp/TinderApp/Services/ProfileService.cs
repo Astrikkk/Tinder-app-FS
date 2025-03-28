@@ -194,36 +194,8 @@ namespace TinderApp.Services
             if (likedUser == null || likedByUser == null)
                 return false;
 
-            likedUser.LikedBy ??= new List<UserProfile>();
-            likedUser.SuperLikedBy ??= new List<UserProfile>();
-            likedUser.Matches ??= new List<UserProfile>();
-
-            likedByUser.LikedBy ??= new List<UserProfile>();
-            likedByUser.SuperLikedBy ??= new List<UserProfile>();
-            likedByUser.Matches ??= new List<UserProfile>();
-
-            bool alreadySuperLiked = likedUser.SuperLikedBy.Any(u => u.Id == request.LikedByUserId);
-            bool alreadyLiked = likedUser.LikedBy.Any(u => u.Id == request.LikedByUserId);
-            if (!alreadySuperLiked)
-            {
-                likedByUser.LikedUsers.Add(likedUser);
-                likedUser.SuperLikedBy.Add(likedByUser);
-            }
-
-            bool isMatch = likedByUser.LikedBy.Any(u => u.UserId == request.LikedUserId)
-                        || likedByUser.SuperLikedBy.Any(u => u.UserId == request.LikedUserId);
-
-            if (isMatch)
-            {
                 likedUser.Matches.Add(likedByUser);
                 likedByUser.Matches.Add(likedUser);
-
-                likedUser.LikedBy.Remove(likedByUser);
-                likedByUser.LikedBy.Remove(likedUser);
-                likedUser.SuperLikedBy.Remove(likedByUser);
-                likedByUser.SuperLikedBy.Remove(likedUser);
-                likedUser.LikedUsers.Remove(likedByUser);
-                likedByUser.LikedUsers.Remove(likedUser);
 
                 _dbContext.Attach(likedUser);
                 _dbContext.Attach(likedByUser);
@@ -242,13 +214,11 @@ namespace TinderApp.Services
 
                 await _chatHub.Clients.User(request.LikedByUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
                 await _chatHub.Clients.User(request.LikedUserId.ToString()).SendAsync("NewChatCreated", chatRoomId.ToString());
-            }
-
             _dbContext.Attach(likedUser);
             _dbContext.Attach(likedByUser);
             await _dbContext.SaveChangesAsync();
 
-            return isMatch;
+            return true;
         }
 
 
