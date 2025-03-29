@@ -137,6 +137,9 @@
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
+    left: auto; /* Remove fixed left position */
+    right: 32px; /* Fix position from right side */
+    z-index: 3;
 }
 
 .card-name-status {
@@ -149,6 +152,7 @@
     justify-content: start;
     align-items: start;
     gap: 4px;
+    max-width: 300px;
 }
 
 .card-status-online {
@@ -176,6 +180,10 @@
     font-size: 28px;
     font-family: 'Akatab', sans-serif;
     font-weight: 800;
+    max-width: 200px; /* Limit name width */
+    white-space: nowrap; /* Keep name in single line */
+    overflow: hidden;
+    text-overflow: ellipsis
 }
 
 .card-age {
