@@ -37,7 +37,7 @@
 .card-buttons {
     position: absolute;
     left: 43px;
-    top: 740px;
+    top: 741px;
 
     display: flex;
     width: 246px;
@@ -45,8 +45,7 @@
     align-items: center;
     gap: 24px;
     flex-shrink: 0;
-    z-index: 2; /* Ensure buttons stay on top */
-    top: 730px;
+    z-index: 2;
 }
 
 .dislike{
