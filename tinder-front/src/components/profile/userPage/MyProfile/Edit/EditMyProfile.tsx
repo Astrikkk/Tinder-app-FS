@@ -10,6 +10,7 @@ import { AxiosError } from 'axios';
 import {logout} from "../../../../../services/auth.service";
 import ArrowLeft from "../../Chat/img/Arrow-left.svg";
 import ArrowRight from "../../Chat/img/Arrow-right.svg";
+import JobPosition from "./JobPosition/JobPosition";
 
 interface EditProps {
     onClose: () => void;
@@ -280,7 +281,7 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
                     </div>
                 </div>
                 <div className="Edit-Profile-Element">
-    <div className="Edit-Profile-Title">Job title (optional)</div>
+    <div className="Edit-Profile-Title">Job title</div>
     <div className="Edit-Profile-Interests-Block">
         <button
             className="Edit-Profile-Job-Item"
@@ -397,10 +398,9 @@ const EditMyProfile: React.FC<EditProps> = ({ onClose }) => {
 
 
                 {showJobTitleModal && (
-                    <SexualOrientation
+                    <JobPosition
                         onClose={handleJobTitleSelect}
                         initialSelected={selectedJobTitleId}
-                        isJobTitle={true}
                     />
                 )}
                 {showInterestsModal && (

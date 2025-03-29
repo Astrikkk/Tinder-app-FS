@@ -104,6 +104,16 @@ const MyProfileCard: React.FC<EditProps> = ({ onEditProfile, onClose }) => {
                 )}
             </div>
 
+            <div className="card-name-status">
+                <div className="card-status-online">
+                    ♡ Online
+                </div>
+                <div className="card-name-age">
+                    <div className="card-name">{profile.name}</div>
+                    <div className="card-age">{calculateAge(profile.birthDay)}</div>
+                </div>
+            </div>
+
             {profile.interests?.length > 0 && (
                 <div className="card-interests">
                     {profile.interests.map((interest, index) => (
@@ -114,15 +124,7 @@ const MyProfileCard: React.FC<EditProps> = ({ onEditProfile, onClose }) => {
                 </div>
             )}
 
-            <div className="card-name-status">
-                <div className="card-status-online">
-                    ♡ Online
-                </div>
-                <div className="card-name-age">
-                    <div className="card-name">{profile.name}</div>
-                    <div className="card-age">{calculateAge(profile.birthDay)}</div>
-                </div>
-            </div>
+
 
             <button className="Bnt-profile-edit">
                 <div className="Bnt-profile-edit-text" onClick={onEditProfile}>Edit info</div>
