@@ -45,6 +45,8 @@
     align-items: center;
     gap: 24px;
     flex-shrink: 0;
+    z-index: 2; /* Ensure buttons stay on top */
+    top: 730px;
 }
 
 .dislike{
@@ -101,6 +103,9 @@
 
     align-items: flex-start;
     align-content: flex-start;
+    max-height: 130px;
+    overflow-y: auto;
+    z-index: 1;
 }
 
 .card-interest {
