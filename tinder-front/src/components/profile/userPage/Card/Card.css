@@ -2,7 +2,7 @@
 
 .card {
     width: 414px;
-    height: 803px;
+    min-height: 803px;
     position: relative;
     margin-left: -380px;
 }
@@ -21,12 +21,12 @@
     border-radius: 12px;
     background: lightgray 50% / cover no-repeat;
 
-    
+
 }
 
 .card-overlay {
     width: 414px;
-    height: 360px;
+    height: 380px;
     position: absolute;
     left: 0;
     top: 429px;
@@ -37,7 +37,7 @@
 .card-buttons {
     position: absolute;
     left: 43px;
-    top: 710px;
+    top: 740px;
 
     display: flex;
     width: 246px;
@@ -45,6 +45,8 @@
     align-items: center;
     gap: 24px;
     flex-shrink: 0;
+    z-index: 2; /* Ensure buttons stay on top */
+    top: 730px;
 }
 
 .dislike{
@@ -101,6 +103,9 @@
 
     align-items: flex-start;
     align-content: flex-start;
+    max-height: 130px;
+    overflow-y: auto;
+    z-index: 1;
 }
 
 .card-interest {
@@ -132,6 +137,9 @@
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
+    left: auto; /* Remove fixed left position */
+    right: 32px; /* Fix position from right side */
+    z-index: 3;
 }
 
 .card-name-status {
@@ -144,6 +152,7 @@
     justify-content: start;
     align-items: start;
     gap: 4px;
+    max-width: 300px;
 }
 
 .card-status-online {
@@ -171,6 +180,10 @@
     font-size: 28px;
     font-family: 'Akatab', sans-serif;
     font-weight: 800;
+    max-width: 200px; /* Limit name width */
+    white-space: nowrap; /* Keep name in single line */
+    overflow: hidden;
+    text-overflow: ellipsis
 }
 
 .card-age {
