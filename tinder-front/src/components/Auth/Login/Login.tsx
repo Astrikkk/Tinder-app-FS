@@ -123,7 +123,6 @@ const Login: React.FC = () => {
                                     />
                                     Remember me
                                 </label>
-                                <a href="/ForgotPassword" className="forgot-password">Forgot password?</a>
                             </div>
                         </div>
                     </div>

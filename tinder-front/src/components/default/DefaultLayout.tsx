@@ -42,18 +42,18 @@ const DefPage: React.FC = () => {
                             >
                                 How It Works
                             </Text>
-                            <Text 
-                                className="menu-item"
-                                onClick={() => navigate("/SubscriptionTiers")}
-                            >
-                                Subscription Tiers
-                            </Text>
+                            {/*<Text */}
+                            {/*    className="menu-item"*/}
+                            {/*    onClick={() => navigate("/SubscriptionTiers")}*/}
+                            {/*>*/}
+                            {/*    Subscription Tiers*/}
+                            {/*</Text>*/}
                     </nav>
                 </div>
                 <div className="lang-login-header">
-                    <button className="language-header">
-                        <img src={language}/>
-                    </button>
+                    {/*<button className="language-header">*/}
+                    {/*    <img src={language}/>*/}
+                    {/*</button>*/}
                     <button className="log-in-header" onClick={() => navigate("/login")}>Log In</button>
                 </div>
             </header>
