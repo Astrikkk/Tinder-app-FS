@@ -2,7 +2,7 @@
 
 .card {
     width: 414px;
-    height: 803px;
+    min-height: 803px;
     position: relative;
     margin-left: -380px;
 }
@@ -21,12 +21,12 @@
     border-radius: 12px;
     background: lightgray 50% / cover no-repeat;
 
-    
+
 }
 
 .card-overlay {
     width: 414px;
-    height: 360px;
+    height: 380px;
     position: absolute;
     left: 0;
     top: 429px;
@@ -37,7 +37,7 @@
 .card-buttons {
     position: absolute;
     left: 43px;
-    top: 710px;
+    top: 740px;
 
     display: flex;
     width: 246px;

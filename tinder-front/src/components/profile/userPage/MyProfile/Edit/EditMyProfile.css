@@ -284,10 +284,13 @@
     color: #ff4444;
     font-size: 20px;
     cursor: pointer;
-    margin-left: 10px;
     padding: 0 5px;
+    margin-left: -35px;
+    margin-top: 2px;
 }
 
 .Edit-Profile-Remove-Job-Btn:hover {
     color: #cc0000;
 }
+
+

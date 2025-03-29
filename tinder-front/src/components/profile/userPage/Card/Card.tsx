@@ -88,20 +88,18 @@ const Card: React.FC<CardProps> = ({ profile, onReturn, onDislike, onLike, onSup
 
     return (
         <div className="card">
-            {profile.photos.length > 1 && (
-                <div className="photo-indicators">
-                    {profile.photos.map((_, index) => (
-                        <div
-                            key={index}
-                            className={`photo-indicator ${index === photoIndex ? "active" : ""}`}
-                            style={{ width: `${100 / profile.photos.length}%` }}
-                        />
-                    ))}
-                </div>
-            )}
-
-
-            <div className="card-background">
+            <div className="card-image-container">
+                {profile.photos.length > 1 && (
+                    <div className="photo-indicators">
+                        {profile.photos.map((_, index) => (
+                            <div
+                                key={index}
+                                className={`photo-indicator ${index === photoIndex ? "active" : ""}`}
+                                style={{ width: `${100 / profile.photos.length}%` }}
+                            />
+                        ))}
+                    </div>
+                )}
                 <img
                     className="card-image"
                     src={`http://localhost:7034${profile.photos[photoIndex]}`}
@@ -110,50 +108,52 @@ const Card: React.FC<CardProps> = ({ profile, onReturn, onDislike, onLike, onSup
                 <div className="card-overlay" />
             </div>
 
-            <div className="card-buttons">
-                <button className="star-like" onClick={onReturn}>
-                    <img src={Return} alt="Return" />
-                </button>
-                <button className="dislike" onClick={onDislike}>
-                    <img src={Dislike} alt="Dislike" />
-                </button>
-
-                <button className="star-like" >
-                    <img src={Star} alt="Super Like" onClick={onSuperLike}/>
-                </button>
-
-                <button className="message-button" onClick={onLike}>
-                    <img src={Like} alt="Like" />
-                </button>
-            </div>
-
-            <div className="card-interests">
-                {profile.interests.map((interest, index) => (
-                    <div key={`${interest.id}-${index}`} className="card-interest">
-                        {interest.name}
+            <div className="card-content">
+                <div className="card-name-status">
+                    <div className={profile.isOnline ? "card-status-online" : "card-status-offline"}>
+                        {profile.isOnline ? "♡ Online" : "♡ Offline"}
                     </div>
-                ))}
+                    <div className="card-name-age">
+                        <div className="card-name">{profile.name}</div>
+                        <div className="card-age">{calculateAge(profile.birthDay)}</div>
+                    </div>
+                </div>
+
+                <div className="card-interests">
+                    {profile.interests.map((interest, index) => (
+                        <div key={`${interest.id}-${index}`} className="card-interest">
+                            {interest.name}
+                        </div>
+                    ))}
+                </div>
+
+                <div className="card-actions">
+                    <button className="card-info-icon" onClick={handleInfoClick}>
+                        <img src={Group} alt="More Info" />
+                    </button>
+                    <div className="card-buttons">
+                        <button className="star-like" onClick={onReturn}>
+                            <img src={Return} alt="Return" />
+                        </button>
+                        <button className="dislike" onClick={onDislike}>
+                            <img src={Dislike} alt="Dislike" />
+                        </button>
+                        <button className="star-like" onClick={onSuperLike}>
+                            <img src={Star} alt="Super Like" />
+                        </button>
+                        <button className="message-button" onClick={onLike}>
+                            <img src={Like} alt="Like" />
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <button className="card-info-icon" onClick={handleInfoClick}>
-                <img src={Group} alt="More Info" />
-            </button>
             {showProfileModal && (
-                <ShowProfile 
-                    profile={profile} 
+                <ShowProfile
+                    profile={profile}
                     onClose={() => setShowProfileModal(false)}
                 />
             )}
-
-            <div className="card-name-status">
-                <div className={profile.isOnline ? "card-status-online" : "card-status-offline"}>
-                    {profile.isOnline ? "♡ Online" : "♡ Offline"}
-                </div>
-                <div className="card-name-age">
-                    <div className="card-name">{profile.name}</div>
-                    <div className="card-age">{calculateAge(profile.birthDay)}</div>
-                </div>
-            </div>
         </div>
     );
 };
