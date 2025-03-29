@@ -221,20 +221,32 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, onClose, sendMessage, con
                     className="chat-messages"
 
                 >
-                    {localMessages.map((msg, index) => (
-                        <div key={index} className={`message ${msg.sender.id === chat.profile.userId ? "mine" : "theirs"}`}>
-                            {msg.content}
-                        </div>
-                    ))}
+                    {localMessages.map((msg, index) => {
+                        // Переконуємось, що createdAt є об'єктом Date
+                        const messageDate = new Date(msg.createdAt);
+
+                        return (
+                            <div key={index} className={`message ${msg.sender.id === chat.profile.userId ? "mine" : "theirs"}`}>
+                                {msg.content}
+                                <div className="message-date">
+                                    {messageDate.toLocaleTimeString('uk-UA', {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false // 24-годинний формат
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             )}
 
             <div className="chat-form">
                 <div className="chat-form1">
-                    <div className="import-file">
-                        <button><img src={OutlineLink} alt="attach" /></button>
-                        <button><img src={Fluent} alt="gif" /></button>
-                    </div>
+                    {/*<div className="import-file">*/}
+                    {/*    <button><img src={OutlineLink} alt="attach" /></button>*/}
+                    {/*    <button><img src={Fluent} alt="gif" /></button>*/}
+                    {/*</div>*/}
                     <input
                         type="text"
                         className="input-text"
